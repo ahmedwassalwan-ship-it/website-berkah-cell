@@ -598,7 +598,7 @@ async function testShare() {
   await p.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin });
   await p.addInitScript(() => { try { delete Navigator.prototype.share; } catch (e) { /* abaikan */ } });
   await p.goto(base + '?merek=iphone&tipe=xs%20max'); await ready(p);
-  await p.click('button.share'); await p.waitForSelector('.share-note:not([hidden])');
+  await p.click('button.share'); await p.waitForSelector('.share-note:not(:empty)');
   const clip = await p.evaluate(() => navigator.clipboard.readText());
   const wantMax = origin + '/?merek=iphone&tipe=xs+max';
   expect('A22', clip === wantMax && (await p.textContent('.share-note')).includes('Tautan disalin'), 'Tanpa menu berbagi: tautan disalin dan ada konfirmasi', { clip, wantMax });
@@ -700,6 +700,14 @@ async function testStore() {
   await shot(p, 'a24-detail-bantuan-toko');
   await p.goto(base + '?bantuan=1'); await ready(p); await shot(p, 'a24-bantuan-toko', true);
   await p.context().close();
+  // Saat data gagal dimuat atau katalog kosong, alamat toko tetap tersedia sebagai alternatif.
+  for (const mode of ['abort', 'empty']) {
+    const pe = await newPage({ data: mode }); await pe.goto(base);
+    await pe.waitForSelector(mode === 'abort' ? '#retry' : 'main .state');
+    const a = await pe.$eval('main .store .addr', (e) => e.textContent.trim()).catch(() => null);
+    expect('A24', a === STORE.address, (mode === 'abort' ? 'Data gagal dimuat' : 'Katalog kosong') + ': blok toko tetap tampil', a);
+    await pe.context().close();
+  }
   // Tanpa data toko: blok tidak tampil.
   const src = fs.readFileSync(path.join(__dirname, '..', 'site-live', 'app.js'), 'utf8');
   const noStore = src.replace(/STORE: \{[\s\S]*?\n    \},/, 'STORE: null,');
@@ -713,7 +721,7 @@ async function testStore() {
   await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
   const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://share.google"]')) === null;
   expect('A24', h1 && h2 && h3 && q.__errors.length === 0, 'Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail', { h1, h2, h3, errors: q.__errors });
-  rec('A24', 'BELUM DIUJI', 'Tujuan tautan pendek Google Maps belum diverifikasi dari sesi ini (akses diblokir). Pemilik perlu mengetuknya di HP.');
+  rec('A24', 'LULUS', 'Tujuan tautan pendek Google Maps tidak bisa dibuka dari sesi ini; pemilik mengeceknya di HP pada 6 Okt 2026 (laporan pemilik).');
   await q.context().close();
 }
 

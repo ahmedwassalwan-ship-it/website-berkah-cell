@@ -19,6 +19,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Tautannya `location.origin + modelHref(m)`, yaitu alamat detail yang sama dengan kartu tipe.
   - Urutan: `navigator.share` (menu berbagi HP). Jika tidak ada, `navigator.clipboard.writeText` dengan konfirmasi. Jika clipboard ditolak, tautan ditampilkan di kotak teks yang sudah terpilih.
   - Batal berbagi (`AbortError`) tidak memunculkan pesan apa pun.
+  - Kotak pesan (`role=status`) selalu ada di DOM, tetapi kosong dan tanpa ruang. Live region yang baru dimunculkan sering tidak dibacakan pembaca layar.
 - **Tampilan tautan (F18):** meta Open Graph statis di `index.html`.
   - `og:image` harus alamat absolut. Sekarang memakai alamat produksi workers.dev, jadi gambar di kartu WhatsApp baru muncul setelah merge ke `main`. Ganti alamat ini saat pindah domain.
   - Sengaja **tanpa `og:url`**, karena Facebook akan mengarahkan semua tautan detail ke beranda.
@@ -37,6 +38,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Beranda: blok "Kunjungi toko" di bawah bantuan; tidak tampil saat sedang mencari.
   - Halaman Bantuan: blok yang sama.
   - Detail: satu baris alamat dan jam di kotak Bantuan, plus tautan Maps.
+  - Keadaan gagal memuat dan katalog kosong: blok yang sama, supaya pelanggan tetap tahu alamat toko.
 - **`STORE: null` menyembunyikan semua blok toko.** Footer dan JSON-LD statis harus dihapus manual.
 - **JSON-LD** memakai tipe `LocalBusiness`, tanpa rating atau ulasan.
   - Blok `application/ld+json` tidak dijalankan sebagai skrip, jadi CSP tidak diubah.

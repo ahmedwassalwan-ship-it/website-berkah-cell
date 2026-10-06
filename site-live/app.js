@@ -555,7 +555,7 @@
   // F11: bagikan tautan detail lewat menu berbagi HP; cadangan salin tautan.
   async function shareModel(m, note) {
     const url = location.origin + modelHref(m);
-    note.hidden = true; note.textContent = '';
+    note.textContent = ''; // live region tetap ada di DOM supaya pesan dibacakan pembaca layar
     if (navigator.share) {
       try {
         await navigator.share({ title: 'Harga servis ' + m.fullName + ' — BERKAH CELL', text: 'Cek harga servis ' + m.fullName + ' di BERKAH CELL:', url });
@@ -570,11 +570,9 @@
     } catch (e) {
       const input = h('input', { type: 'text', readonly: true, value: url, 'aria-label': 'Tautan harga ' + m.fullName });
       appendAll(note, h('span', { text: 'Salin tautan ini:' }), input);
-      note.hidden = false;
       input.focus(); input.select();
       return;
     }
-    note.hidden = false;
   }
 
   function renderDetail(r) {
@@ -583,7 +581,7 @@
     const b = m.brand;
     const gantiBtn = (cls) => h('button', { type: 'button', class: cls, onclick: () => navigate(brandHref(b), { ganti: m.key }) }, icon('swap', 16), cls.includes('sm') ? 'Ganti tipe' : 'Ganti tipe HP');
     const h1 = h('h1', { text: m.fullName });
-    const shareNote = h('div', { class: 'share-note', role: 'status', hidden: true });
+    const shareNote = h('div', { class: 'share-note', role: 'status' });
     const devHead = h('section', { class: 'dev', 'aria-label': 'Perangkat' }, h('div', { class: 'wrap' },
       h('p', { class: 'eb', text: b.name }),
       h('div', { class: 'row1' }, h1, gantiBtn('btn-sec')),
@@ -739,14 +737,16 @@
       h('p', { text: 'Coba lagi atau hubungi BERKAH CELL.' }),
       h('div', { class: 'acts' },
         h('button', { type: 'button', class: 'btn-pri', id: 'retry', onclick: () => loadData() }, icon('refresh', 20), 'Coba lagi'),
-        h('button', { type: 'button', class: 'btn-ghost', onclick: () => openPanel({ kind: 'error' }) }, waIcon(), 'Hubungi via WhatsApp')))));
+        h('button', { type: 'button', class: 'btn-ghost', onclick: () => openPanel({ kind: 'error' }) }, waIcon(), 'Hubungi via WhatsApp'))),
+      storeBlock()));
   }
   function renderEmpty() {
     setView('Daftar harga belum tersedia', h('div', { class: 'wrap' }, h('div', { class: 'state' },
       h('div', { class: 'ico' }, icon('list', 30)),
       h('h1', { text: 'Daftar harga belum tersedia' }),
       h('p', { text: 'Tanyakan harga servis langsung ke BERKAH CELL.' }),
-      h('div', { class: 'acts' }, h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya servis via WhatsApp')))));
+      h('div', { class: 'acts' }, h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya servis via WhatsApp'))),
+      storeBlock()));
   }
 
   async function loadData() {

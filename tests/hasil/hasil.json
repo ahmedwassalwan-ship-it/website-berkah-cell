@@ -21,7 +21,7 @@
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 18 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 24 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -274,7 +274,7 @@
     ]
   },
   "A24": {
-    "status": "BELUM DIUJI",
+    "status": "LULUS",
     "notes": [
       "✓ Beranda: blok \"Kunjungi toko\" dengan alamat dan jam persis data pemilik",
       "✓ Beranda: tombol \"Buka di Google Maps\" ke tautan pemilik, tab baru, rel=noopener",
@@ -288,9 +288,11 @@
       "✓ Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps",
       "✓ Tanpa pelanggaran CSP dan tanpa error JS",
       "✓ Tidak ada permintaan jaringan baru (tautan Maps hanya dibuka saat diketuk)",
+      "✓ Data gagal dimuat: blok toko tetap tampil",
+      "✓ Katalog kosong: blok toko tetap tampil",
       "✓ Fixture tanpa data toko berhasil dibuat",
       "✓ Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail",
-      "• Tujuan tautan pendek Google Maps belum diverifikasi dari sesi ini (akses diblokir). Pemilik perlu mengetuknya di HP."
+      "✓ Tujuan tautan pendek Google Maps tidak bisa dibuka dari sesi ini; pemilik mengeceknya di HP pada 6 Okt 2026 (laporan pemilik)."
     ]
   },
   "A11": {
