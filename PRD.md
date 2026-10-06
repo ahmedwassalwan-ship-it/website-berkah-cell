@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.2 · 5 Oktober 2026 · Bahasa Indonesia
+Versi 0.3 · 6 Oktober 2026 · Bahasa Indonesia
 
-**Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026 untuk dimasukkan ke PRD. Desain visual final, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
+**Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat beserta empat keputusan pendukungnya (bagian 5 dan 9). Mockup final, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.2 menggantikan versi 0.1 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.3 menggantikan versi 0.2 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -62,13 +62,13 @@ Halaman detail perangkat menyediakan “Layanan yang kamu cari belum ada? Tanyak
 
 ### Pelanggan yang menanyakan kebutuhan servis
 
-Sebelum berpindah ke WhatsApp, pelanggan boleh memilih “Ganti LCD atau layar”, “Ganti baterai”, “Layanan lainnya”, atau “Belum tahu, ingin menjelaskan keluhan”. Pilihan ini opsional dan tombol langsung ke WhatsApp tetap tersedia. Masukan tambahan, bila disediakan, juga opsional. Pilihan keluhan tidak dianggap sebagai diagnosis otomatis.
+Sebelum berpindah ke WhatsApp untuk pertanyaan umum, pelanggan boleh memilih “Ganti LCD atau layar”, “Ganti baterai”, “Layanan lainnya”, atau “Belum tahu, ingin menjelaskan keluhan”. Pilihan ini opsional dan tombol langsung ke WhatsApp tetap tersedia. Pertanyaan umum mencakup tombol utama tanpa pilihan harga, bantuan layanan yang belum tercantum, tipe tidak ditemukan, dan bantuan umum. Jika pelanggan sudah memilih satu layanan dan kualitas pada detail harga, WhatsApp langsung memakai konteks layanan tersebut tanpa menampilkan pilihan kebutuhan. Masukan tambahan, bila disediakan, juga opsional. Pilihan keluhan tidak dianggap sebagai diagnosis otomatis.
 
 Pesan membawa tipe yang dicari atau perangkat yang dipilih, ditambah kebutuhan servis jika tersedia. Website tidak menebak harga untuk tipe atau layanan yang belum memiliki data. Pelanggan meninjau dan mengirim sendiri pesannya.
 
 ### Pelanggan yang ingin mengonfirmasi perbedaan harga
 
-Informasi bantuan menjelaskan cara menghubungi owner. Pesan yang disiapkan menyebut perangkat dan layanan jika konteks tersebut tersedia. Pemisahan nomor toko dan owner masih perlu dipastikan sebelum rilis.
+Tindakan utama pada detail harga adalah “Tanya servis via WhatsApp”. “Komplen ke Owner” atau konfirmasi perbedaan harga ditempatkan sebagai bantuan terpisah, bukan tombol utama. Informasi bantuan menjelaskan cara menghubungi owner. Pesan yang disiapkan menyebut perangkat dan layanan jika konteks tersebut tersedia. Pemisahan nomor toko dan owner masih perlu dipastikan sebelum rilis.
 
 ### Pemilik atau pengelola data
 
@@ -125,7 +125,7 @@ P0 adalah kebutuhan wajib untuk rilis pertama. P1 adalah peningkatan yang dikerj
 | F14 | P0 | “Ganti tipe HP” membuka pilihan model dalam merek yang sama. Pemilihan model lain memperbarui identitas, daftar layanan, harga, dan konteks WhatsApp. |
 | F15 | P0 | Bila tipe tidak ditemukan setelah data berhasil dimuat, tampilkan kata pencarian, penjelasan harga belum tercantum, serta “Tanyakan lewat WhatsApp” dan “Cari tipe lain”. |
 | F16 | P0 | Detail perangkat menyediakan “Layanan yang kamu cari belum ada? Tanyakan ke kami.” Pertanyaan membawa konteks perangkat walaupun layanan belum ada dalam katalog. |
-| F17 | P0 | Sebelum WhatsApp, tawarkan kebutuhan LCD atau layar, baterai, layanan lainnya, atau belum tahu dan ingin menjelaskan keluhan. Pelanggan dapat melewati pilihan dan langsung membuka WhatsApp. |
+| F17 | P0 | Untuk pertanyaan umum, sebelum WhatsApp tawarkan kebutuhan LCD atau layar, baterai, layanan lainnya, atau belum tahu dan ingin menjelaskan keluhan. Pelanggan dapat melewati pilihan dan langsung membuka WhatsApp. Jika layanan sudah dipilih pada detail harga, WhatsApp langsung memakai konteks layanan tersebut. |
 
 ### Pesan bantuan dan konteks WhatsApp
 
@@ -218,9 +218,15 @@ Kesan mewah diwujudkan melalui komposisi, tipografi, ruang kosong, keselarasan, 
 6. Efek cahaya, bayangan, gradien, dan animasi digunakan secukupnya. Gerakan harus dapat berkurang sesuai preferensi pengguna.
 7. Tampilan desktop memanfaatkan ruang dengan susunan yang disengaja. Tampilan HP disusun ulang sesuai keterbatasan ruangnya.
 
-### Yang masih berupa usulan
+### Arah desain yang disetujui (6 Oktober 2026)
 
-Preview lokal saat ini mencoba kombinasi navy, krem, aksen emas, dan judul serif. Pilihan font serif, dominasi krem, bentuk kartu, komposisi pembuka, dan penempatan maskot belum menjadi standar final. Preview tersebut harus dinilai pemilik sebelum dijadikan referensi wajib oleh AI berikutnya.
+1. **Katalog Bertingkat:** Beranda, Merek, Tipe, dan Detail harga sebagai layar yang berurutan, dengan pencarian besar di halaman awal.
+2. **Warna:** header navy; area katalog dan harga terang; aksen emas secukupnya.
+3. **Tindakan kontak:** tombol utama “Tanya servis via WhatsApp”; “Komplen ke Owner” menjadi bantuan terpisah.
+4. **Maskot:** aksen kecil yang tidak menutupi konten atau tombol.
+5. **Pilihan kebutuhan F17:** ditawarkan untuk pertanyaan umum dan tetap dapat dilewati; jika layanan sudah dipilih, WhatsApp langsung memakai konteks layanan tersebut.
+
+Persetujuan ini menetapkan arah, bukan tampilan final. Mockup HP, font, nilai warna, bentuk komponen, dan penempatan detail masih menunggu review pemilik (D01). Mockup untuk review disimpan di `design/mockup-v1/`.
 
 ### Bukti persetujuan visual
 
@@ -283,7 +289,7 @@ Tabel ini menjadi daftar pemeriksaan untuk developer dan AI. Status setiap pemer
 | A17 | Ganti tipe | Dari iPhone 11, gunakan “Ganti tipe HP”, lalu pilih model lain. Identitas, layanan, harga, dan pesan WhatsApp semuanya sesuai model baru. |
 | A18 | Tipe tidak ditemukan | Setelah katalog termuat, gunakan pencarian yang tidak cocok. Pesan menyebut pencarian dan harga belum tercantum; kedua tindakan berfungsi. “Cari tipe lain” membuka akses pencarian yang dapat diedit atau dihapus. |
 | A19 | Layanan belum tercantum | Pada model yang tersedia, akses bantuan layanan tetap ada tanpa memerlukan filter P1. Pesan membawa model benar tanpa menyatakan perangkat tidak ditemukan atau menebak harga. |
-| A20 | Pilihan kebutuhan opsional | Uji keempat pilihan, pilihan lainnya atau keluhan tanpa teks tambahan, dan langsung ke WhatsApp tanpa memilih. Tidak ada isian wajib yang menghalangi; pesan membawa konteks yang tersedia dan tidak mengirim otomatis. |
+| A20 | Pilihan kebutuhan opsional | Uji keempat pilihan, pilihan lainnya atau keluhan tanpa teks tambahan, dan langsung ke WhatsApp tanpa memilih. Tidak ada isian wajib yang menghalangi; pesan membawa konteks yang tersedia dan tidak mengirim otomatis. Setelah memilih satu layanan dan kualitas pada detail, WhatsApp langsung membawa layanan tersebut tanpa menampilkan pilihan kebutuhan. |
 | A21 | Keadaan katalog dan pemulihan | Bedakan katalog sah yang kosong, hasil kosong, dan kegagalan jaringan atau data. “Coba lagi” memuat ulang data; pemulihan menampilkan katalog aktual tanpa harga contoh. |
 
 ### Pemetaan kebutuhan tambahan ke pengujian
@@ -353,15 +359,19 @@ Pada 5 Oktober 2026, pemilik menyetujui seluruh tujuh ide dan aturan pendukung y
 
 Aturan pendukung yang disetujui meliputi sifat katalog yang bertambah saat ada servis masuk, pembedaan hasil kosong dan kegagalan pemuatan, tombol “Coba lagi”, larangan menebak harga, perilaku Kembali yang tidak menjebak pengguna, serta pemeriksaan semua alur melalui preview HP. Kebutuhan tersebut masuk prioritas P0. Persetujuan ini tidak memilih desain visual final atau menandai fitur sebagai sudah diimplementasikan.
 
+### Arah desain yang disetujui pada 6 Oktober 2026
+
+Setelah membandingkan dua arah desain, pemilik menyetujui arah Katalog Bertingkat beserta keputusan warna, tindakan kontak, maskot, dan aturan pilihan kebutuhan F17 seperti tercatat pada bagian 5. Persetujuan ini tidak memilih mockup final dan tidak mengubah prioritas P0/P1; F11 tetap P1. Pengelompokan merek, arti nilai “Tidak Ada” dan “Jasa”, nomor tujuan kontak, serta ketentuan harga dan garansi tetap terbuka.
+
 ### Keputusan yang masih terbuka
 
 Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang terkait diterapkan atau dipublikasikan. Hindari mengubah pertanyaan yang belum terjawab menjadi asumsi pasti.
 
 | ID | Keputusan | Status awal |
 | --- | --- | --- |
-| D01 | Pilihan tampilan final, font, warna pendukung, kartu, dan penggunaan maskot | Menunggu peninjauan preview |
+| D01 | Mockup final, font, nilai warna, dan bentuk komponen | Arah desain disetujui 6 Okt 2026 (bagian 5); mockup HP menunggu review pemilik |
 | D02 | Apakah harga sudah termasuk jasa serta apakah ada biaya pemeriksaan atau tambahan | Belum ditetapkan dalam percakapan |
-| D03 | Syarat garansi dan cara menampilkan layanan tanpa informasi garansi | Mengikuti data yang ada; ketentuan lengkap perlu konfirmasi |
+| D03 | Syarat garansi, cara menampilkan layanan tanpa informasi garansi, serta arti nilai “Tidak Ada” dan “Jasa” | Mengikuti data yang ada; ketentuan lengkap perlu konfirmasi |
 | D04 | Nomor toko dan owner serta apakah keduanya memakai nomor yang sama | Tujuan lama tercatat; perlu verifikasi |
 | D05 | Pemetaan merek dan model serta penanganan salah ketik | Usulan normalisasi tersedia; aturan final perlu ditetapkan |
 | D06 | Siapa pengelola Sheet, sumber publik yang aman, dan aturan pembaruan harga | Alur kerja perlu didokumentasikan |
@@ -381,6 +391,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 
 - **Versi 0.1, 5 Oktober 2026:** susunan awal kebutuhan, panduan visual awal, 12 kriteria uji, dan keputusan terbuka.
 - **Versi 0.2, 5 Oktober 2026:** memasukkan tujuh ide dan semua aturan pendukung yang disetujui pemilik. Memperjelas F05 sampai F07; menambah F13 sampai F17; memperbarui A07 dan menambah A13 sampai A21. Menyesuaikan perjalanan pelanggan, panduan UI, konteks katalog, status persetujuan, serta petunjuk GitHub. Total 17 kebutuhan fungsional dan 21 kriteria penerimaan. F11 dan F12 tetap P1.
+- **Versi 0.3, 6 Oktober 2026:** mencatat arah desain Katalog Bertingkat yang disetujui pemilik beserta keputusan warna, tindakan kontak utama, maskot, dan aturan pemicu F17. Memperjelas F17 dan A20; memperbarui bagian 2, 5, dan 9 serta status D01 dan cakupan D03. Mockup final masih menunggu review. Prioritas P0/P1 tidak berubah.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -396,7 +407,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi 0.1 dapat disimpan sebagai arsip; developer dan AI memakai versi 0.2 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.3 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 
