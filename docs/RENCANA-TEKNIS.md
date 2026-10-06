@@ -4,7 +4,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 
 ## Hosting dan navigasi
 
-- **Hosting tetap sama:** Cloudflare Workers dengan static assets dari `site-live/` (`wrangler.jsonc`). Konfigurasi **tidak diubah**.
+- **Hosting tetap sama:** Cloudflare Workers dengan static assets dari `site-live/` (`wrangler.jsonc`). Satu-satunya tambahan adalah blok `"previews": {}` yang kosong, karena build preview Cloudflare (`wrangler preview`) mewajibkannya. Perilaku produksi tidak berubah (lihat README, bagian Pengaturan build Cloudflare).
 - **Navigasi memakai query string di halaman yang sama (`/`).** Konfigurasi sekarang tidak punya fallback SPA, jadi alamat path seperti `/iphone/11` akan menghasilkan 404. Query string bekerja tanpa perubahan konfigurasi:
   - Beranda: `/` atau `/?q=iphone+11` (kata pencarian disimpan di alamat).
   - Daftar tipe: `/?merek=iphone`

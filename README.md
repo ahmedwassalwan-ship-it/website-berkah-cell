@@ -25,23 +25,25 @@ Di dashboard: Workers & Pages → `website-berkah-cell` → Settings → Build.
 | --- | --- |
 | Branch produksi | `main` (jangan diganti ke branch kerja) |
 | Tab **Production** → Deploy command | `npx wrangler deploy` |
-| Tab **Previews** → Builds for Preview branches | Aktif |
-| Tab **Previews** → Preview command | `npx wrangler versions upload` |
+| Tab **Previews Base** → Builds for Preview branches | Aktif |
 | Build command | Kosong (tidak perlu build, file statis) |
 | Root directory | `/` |
 
 Catatan:
 
-- `npx wrangler preview` **bukan** perintah yang valid di Wrangler v4. Jika
-  dipakai, semua build preview gagal.
-- `versions upload` hanya mengunggah versi baru dengan link preview. Website
-  publik tidak berubah. Website publik hanya berubah lewat `wrangler deploy`
-  dari `main`.
+- Build branch selain `main` menjalankan `npx wrangler preview` (Worker
+  Previews, open beta). Pada 6 Okt 2026 perintah ini tetap dipakai walaupun
+  tab Previews Base sudah diisi `npx wrangler versions upload`.
+- `wrangler preview` wajib menemukan blok `previews` di `wrangler.jsonc`. Tanpa
+  blok itu, build otomatis selalu gagal. Blok itu sudah ada dan sengaja kosong
+  karena Worker ini tidak punya binding. Jangan dihapus.
+- Build preview tidak mengubah website publik. Website publik hanya berubah
+  lewat `wrangler deploy` dari `main`.
 - Setelah mengubah pengaturan, picu build baru dengan push commit baru ke
-  branch. Jangan andalkan **Retry build**: pada 6 Okt 2026, build yang di-retry
-  masih menjalankan perintah lama.
-- Link preview muncul sebagai komentar bot Cloudflare di PR dan di tab
-  Deployments.
+  branch.
+- Daftar Build history di dashboard hanya memuat build `main`. Build preview
+  dibuka lewat tautan **View logs** pada komentar bot Cloudflare di PR. Link
+  preview juga muncul di komentar itu.
 
 ## Sumber data
 

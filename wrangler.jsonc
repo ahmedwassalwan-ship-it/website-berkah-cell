@@ -9,5 +9,8 @@
   "assets": {
     // Hanya folder ini yang dipublikasikan; PRD.md dan file lain tidak ikut.
     "directory": "./site-live"
-  }
+  },
+  // Wajib untuk `wrangler preview` (build branch non-main). Boleh kosong karena
+  // Worker ini tidak punya binding; aset tetap diambil dari "assets" di atas.
+  "previews": {}
 }
