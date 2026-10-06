@@ -1,0 +1,53 @@
+Sumber: tests/fixtures/price_list_publik_2026-10-06.csv
+Jumlah baris: 157
+
+== Nilai Kualitas ==
+  Incel: 82
+  Premium: 62
+  OLED: 6
+  Tidak Ada: 2
+  Jasa: 2
+  Spy: 2
+  Bening: 1
+
+== Baris dengan Kualitas 'Jasa' atau 'Tidak Ada' ==
+  baris 14: iphone | 8 Plus | Buka Kunci | Kualitas=Tidak Ada | Rp150.000 | Garansi=Tidak Ada
+  baris 37: iphone | 7 | Buka Kunci | Kualitas=Jasa | Rp50.000 | Garansi=Tidak Ada
+  baris 40: iphone | 7 plus | Bypass | Kualitas=Tidak Ada | Rp60.000 | Garansi=Tidak Ada
+  baris 91: iphone | 8 | Bypass | Kualitas=Jasa | Rp100.000 | Garansi=Tidak Ada
+
+== Nilai Garansi ==
+  7 hari: 113
+  1 bulan: 23
+  Tidak Ada: 18
+  14 hari: 1
+  30 hari: 1
+  3 hari: 1
+
+== Garansi 'Tidak Ada' per layanan ==
+  Anti Gores: {'Tidak Ada': 3}
+  Backdoor/Backglass: {'Tidak Ada': 10}
+  Buka Kunci: {'Tidak Ada': 2}
+  Bypass: {'Tidak Ada': 2}
+  Ganti LCD: {'7 hari': 92, 'Tidak Ada': 1, '14 hari': 1}
+
+== Model yang sama setelah huruf besar-kecil/spasi disamakan (dalam satu merek) ==
+  iphone / xs: {'XS ': 1, 'XS': 1}
+  oppo / a77s: {'A77S': 1, 'A77s': 1}
+  redmi / note 11 pro: {'Note 11 Pro': 1, 'note 11 pro': 1}
+  vivo / y15s: {'Y15s': 1, 'Y15S': 2}
+  vivo / y91: {'Y91': 2, 'y91': 1}
+
+== Model yang mungkin sama di merek berbeda (keluarga Xiaomi/Redmi/Poco, perlu dicek pemilik) ==
+  9a: ['redmi', 'xiaomi']
+  m3: ['poco', "redmi (model ditulis 'Poco M3')"]
+  note 9: ['redmi', "xiaomi (model ditulis 'Redmi Note 9')"]
+
+== Baris identik / bertentangan (merek+model+layanan+kualitas sama) ==
+  (tidak ada)
+
+== Harga tidak valid / nol / kosong ==
+  (tidak ada)
+
+== Nilai dengan spasi berlebih ==
+  baris 5: model='XS '
