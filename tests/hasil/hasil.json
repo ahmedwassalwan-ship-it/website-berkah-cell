@@ -1,0 +1,255 @@
+{
+  "A01": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Grid merek dan jumlah tipe sesuai data (Xiomi → Xiaomi, Redmi & Poco terpisah)",
+      "✓ Total 111 tipe tercatat setelah penyeragaman huruf model",
+      "✓ Tombol × tersembunyi saat pencarian kosong; grid tanpa bullet",
+      "✓ Daftar tipe iPhone berisi 18 tipe",
+      "✓ Daftar tipe Vivo berisi 15 tipe",
+      "✓ Daftar tipe Xiaomi berisi 5 tipe",
+      "✓ Model dari merek \"xiomi\" tampil di bawah Xiaomi"
+    ]
+  },
+  "A02": {
+    "status": "LULUS",
+    "notes": [
+      "✓ \"iPhone 11\" menemukan iPhone 11 di urutan pertama",
+      "✓ \"  IPHONE 11  \" menemukan iPhone 11 di urutan pertama",
+      "✓ \"iphone 11\" menemukan iPhone 11 di urutan pertama",
+      "✓ Angka pendek \"11\" menghasilkan beberapa merek dengan nama merek + model",
+      "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
+      "✓ Y15s/Y15S tampil sebagai satu tipe",
+      "✓ Pencarian kosong kembali ke grid merek",
+      "✓ Hasil pencarian muncul dalam 21 ms (target < 300 ms, emulasi desktop)"
+    ]
+  },
+  "A03": {
+    "status": "LULUS",
+    "notes": [
+      "✓ iPhone 11 menampilkan 7 pilihan harga (6 layanan)",
+      "✓ Anti Gores: dua varian (Spy, Bening) tidak digabung",
+      "✓ Tidak ada harga dari tipe lain",
+      "✓ Samsung A50S: Incel dan OLED tampil sebagai dua pilihan"
+    ]
+  },
+  "A04": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Ganti LCD: Incel, Rp 300.000, 30 menit, 7 hari sesuai sumber",
+      "✓ Garansi \"Tidak Ada\" → \"Tanpa garansi\"",
+      "✓ Kualitas \"Jasa\" tampil sebagai label \"Jasa servis\", bukan harga atau gratis",
+      "✓ Kualitas \"Tidak Ada\" tidak tampil sebagai label kualitas"
+    ]
+  },
+  "KEAMANAN": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Nama model berisi HTML tampil sebagai teks",
+      "✓ Tidak ada elemen atau skrip dari data yang dijalankan",
+      "✓ Nama layanan berisi tag tampil sebagai teks",
+      "✓ Tidak ada error JavaScript"
+    ]
+  },
+  "A05": {
+    "status": "LULUS",
+    "notes": [
+      "✓ \"Rp0\" tidak ditampilkan sebagai Rp 0 atau gratis",
+      "✓ \"250rb\" (format tidak dikenal) → \"Tanyakan harga\"",
+      "✓ Garansi kosong tidak dianggap \"Tidak Ada\"",
+      "✓ Baris identik tampil sekali; harga berbeda tidak ditimpa",
+      "✓ Pemisah ribuan koma \"Rp300,000\" tidak mengubah nilai",
+      "✓ Harga negatif → \"Tanyakan harga\"",
+      "✓ Tidak ada \"Rp 0\" atau kata gratis"
+    ]
+  },
+  "A06": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Respons koneksi gagal → pesan gagal yang jujur",
+      "✓ Tidak ada harga contoh; gagal tidak disebut \"belum tercantum\"",
+      "✓ Pencarian dinonaktifkan selama data gagal",
+      "✓ Respons rusak (halaman login) → pesan gagal yang jujur",
+      "✓ Tidak ada harga contoh; gagal tidak disebut \"belum tercantum\"",
+      "✓ Pencarian dinonaktifkan selama data gagal",
+      "✓ Pemulihan setelah gagal tanpa harga contoh"
+    ]
+  },
+  "A21": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Katalog sah tapi kosong → \"belum tersedia\", bukan gangguan koneksi",
+      "✓ Hasil kosong dibedakan dari kegagalan",
+      "✓ \"Coba lagi\" memuat ulang dan menampilkan katalog asli"
+    ]
+  },
+  "A07": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Tautan ke wa.me/6289625050525",
+      "✓ Layanan terpilih → pesan berisi tipe, layanan, kualitas, harga",
+      "✓ Konfirmasi ke owner memakai nomor yang sama dengan isi sesuai tujuan",
+      "✓ Semua tautan WhatsApp menuju satu nomor toko",
+      "✓ Baris \"Jasa\" → pesan tanpa menyebut kualitas komponen",
+      "✓ Tidak ada pesan yang terkirim otomatis (WhatsApp tidak dibuka tanpa ketukan)"
+    ]
+  },
+  "A08": {
+    "status": "LULUS",
+    "notes": [
+      "✓ beranda 360px: tanpa gulir ke samping",
+      "✓ detail 360px: tanpa gulir ke samping",
+      "✓ detail 360px: tombol bawah tidak menutupi konten terakhir",
+      "✓ tipe 360px: tanpa gulir ke samping",
+      "✓ beranda 390px: tanpa gulir ke samping",
+      "✓ detail 390px: tanpa gulir ke samping",
+      "✓ detail 390px: tombol bawah tidak menutupi konten terakhir",
+      "✓ tipe 390px: tanpa gulir ke samping",
+      "✓ beranda 768px: tanpa gulir ke samping",
+      "✓ detail 768px: tanpa gulir ke samping",
+      "✓ detail 768px: tombol bawah tidak menutupi konten terakhir",
+      "✓ tipe 768px: tanpa gulir ke samping",
+      "✓ beranda 1440px: tanpa gulir ke samping",
+      "✓ detail 1440px: tanpa gulir ke samping",
+      "✓ detail 1440px: tombol bawah tidak menutupi konten terakhir",
+      "✓ tipe 1440px: tanpa gulir ke samping",
+      "✓ Layar pendek 360×640: kotak pencarian terlihat tanpa menggulir",
+      "✓ Simulasi keyboard terbuka (tinggi 360): kotak pencarian dan hasil pertama tetap terlihat",
+      "✓ Panel dengan keyboard (tinggi 360): isian keterangan terlihat dan panel bisa digulir",
+      "✓ Emulasi Pixel 7 (Chromium, sentuh): alur ketuk merek → tipe → harga → Back berjalan",
+      "✓ Emulasi iPhone 13 (Chromium, sentuh): alur ketuk merek → tipe → harga → Back berjalan",
+      "✓ Catatan: emulasi Chromium (ukuran, sentuh, user agent). Bukan Android/iPhone sungguhan; Safari/WebKit belum diuji."
+    ]
+  },
+  "A09": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Tab mencapai kotak pencarian lalu kartu merek",
+      "✓ Fokus keyboard terlihat (outline)",
+      "✓ Enter pada kartu merek membuka daftar tipe",
+      "✓ Setelah pindah layar, fokus berada di judul halaman",
+      "✓ Kotak cari tipe punya label untuk alat bantu",
+      "✓ Area sentuh ≥ 44 px (beranda)",
+      "✓ Area sentuh ≥ 44 px (?merek=iphone)",
+      "✓ Area sentuh ≥ 44 px (?merek=iphone&tipe=11)",
+      "✓ Kontras teks ≥ 4,5:1 pada elemen detail yang diperiksa"
+    ]
+  },
+  "A13": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Back dari detail → daftar tipe Oppo dengan posisi gulir sama",
+      "✓ Back berikutnya → Beranda dengan posisi gulir grid sama",
+      "✓ Back ketiga keluar ke halaman sebelum website (tidak keluar terlalu awal)",
+      "✓ Forward mengikuti riwayat yang sama dan memulihkan posisi gulir",
+      "✓ Tidak ada error JavaScript",
+      "✓ Catatan: diuji dengan Back/Forward Chromium (emulasi). Gestur Back Android dan geser tepi iPhone belum diuji di perangkat sungguhan."
+    ]
+  },
+  "A14": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Back → kata pencarian dan daftar hasil pulih",
+      "✓ Posisi gulir hasil pulih",
+      "✓ Keyboard tidak muncul sendiri (kotak pencarian tidak difokus)",
+      "✓ Satu kali Back lagi keluar; huruf yang diketik tidak menambah riwayat"
+    ]
+  },
+  "A15": {
+    "status": "BELUM DIUJI",
+    "notes": [
+      "✓ Link langsung ke detail menampilkan iPhone 11",
+      "✓ Back mengikuti riwayat asli (tidak ada layar merek/tipe buatan)",
+      "✓ \"Semua merek\" berfungsi setelah masuk langsung",
+      "✓ Mengetik 10 huruf lalu satu Back langsung keluar dari layar (tanpa riwayat per huruf)",
+      "✓ Link ke tipe yang tidak ada → pesan \"belum tercantum\" + \"Semua merek\" (F11 lengkap tetap P1)",
+      "• Membuka link dari aplikasi WhatsApp sungguhan belum diuji (hanya emulasi lewat about:blank)."
+    ]
+  },
+  "A16": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Nama model panjang terbaca utuh di detail (360 px)",
+      "✓ Header kecil muncul saat menggulir dan nama panjang tetap utuh",
+      "✓ Elemen yang mendapat fokus tidak tertutup header kecil maupun tombol bawah"
+    ]
+  },
+  "A17": {
+    "status": "LULUS",
+    "notes": [
+      "✓ \"Ganti tipe HP\" membuka daftar iPhone dengan tanda tipe asal",
+      "✓ Identitas dan daftar layanan berganti ke iPhone XR",
+      "✓ Panel WhatsApp memakai konteks iPhone XR",
+      "✓ Pesan layanan terpilih memakai iPhone XR",
+      "✓ Back → daftar tipe (layar yang dilalui)",
+      "✓ Back berikutnya → detail iPhone 11"
+    ]
+  },
+  "A18": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Pesan menyebut kata pencarian dan harga belum tercantum",
+      "✓ \"Tanyakan lewat WhatsApp\" → pesan sesuai PRD",
+      "✓ Dengan kebutuhan LCD → pesan sesuai contoh PRD",
+      "✓ \"Cari tipe lain\" memfokuskan pencarian dengan teks terpilih (siap diubah/dihapus)",
+      "✓ Tombol × menghapus pencarian"
+    ]
+  },
+  "A19": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Pesan membawa iPhone 11 tanpa menyebut tipe tidak ditemukan atau menebak harga",
+      "✓ Bantuan layanan tersedia tanpa filter (F12 tetap P1)"
+    ]
+  },
+  "A20": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Empat pilihan kebutuhan sesuai PRD",
+      "✓ \"Lewati\" langsung ke WhatsApp tanpa memilih",
+      "✓ Setiap pilihan menghasilkan pesan berkonteks; \"Belum tahu\" tanpa teks tambahan tetap bisa dikirim",
+      "✓ Tidak ada isian wajib",
+      "✓ Keterangan tambahan masuk ke pesan",
+      "✓ Layanan terpilih: tombol utama langsung ke WhatsApp tanpa panel"
+    ]
+  },
+  "PANEL": {
+    "status": "LULUS",
+    "notes": [
+      "✓ X menutup panel; perangkat dan posisi gulir tetap",
+      "✓ Fokus kembali ke tombol pembuka setelah X",
+      "✓ Isian dipertahankan selama perangkat sama",
+      "✓ Escape menutup panel tanpa mengubah posisi gulir",
+      "✓ Ketuk area gelap menutup panel",
+      "✓ Tab tetap berada di dalam panel",
+      "✓ Tombol Tutup: label aksesibel dan area 44×44 px",
+      "✓ Panel bertanda dialog modal",
+      "✓ Back pertama menutup panel saja",
+      "✓ Back berikutnya kembali ke daftar tipe (tidak terjebak)",
+      "✓ Forward tidak membuka panel lagi",
+      "✓ Pilihan layanan tetap setelah panel ditutup",
+      "✓ Isian dibersihkan saat perangkat berubah",
+      "✓ Tidak ada error JavaScript"
+    ]
+  },
+  "A10": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Satu-satunya permintaan luar adalah file publik (bukan file utama)",
+      "✓ Aset publik tidak memuat Harga_Modal atau ID file utama",
+      "✓ Respons asli file publik diperiksa terpisah: ekspor 6 Okt 2026 hanya 7 kolom pelanggan; file utama berakses Dibatasi (dicek lewat Google Drive)."
+    ]
+  },
+  "A11": {
+    "status": "BELUM DIUJI",
+    "notes": [
+      "• Butuh review pemilik atas preview (beranda, katalog, detail, keadaan gagal)."
+    ]
+  },
+  "A12": {
+    "status": "BELUM BERLAKU",
+    "notes": [
+      "• Belum ada rilis produksi pada tahap ini; PR tidak di-merge."
+    ]
+  }
+}
