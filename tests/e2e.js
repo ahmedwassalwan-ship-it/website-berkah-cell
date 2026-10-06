@@ -90,6 +90,7 @@ async function run() {
     await testNetwork();
     await testShare();
     await testMeta();
+    await testStore();
   } finally {
     await browser.close(); srv.srv.close();
   }
@@ -657,6 +658,63 @@ async function testMeta() {
   expect('A23', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru selain sumber data', ext);
   rec('A23', 'BELUM DIUJI', 'Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main.');
   await p.context().close();
+}
+
+/* ---------- A24: Informasi toko (F19) ---------- */
+// Data persis dari pemilik, 6 Okt 2026.
+const STORE = { address: 'Avava Jodoh, Lantai Dasar, Batam', hours: 'Setiap hari, 11.00–20.00 WIB', maps: 'https://share.google/xDIH18tkS00piTNIv' };
+async function testStore() {
+  const linkOk = (l) => l && l.href === STORE.maps && l.target === '_blank' && /noopener/.test(l.rel);
+  const readLink = (p, sel) => p.$eval(sel, (a) => ({ href: a.href, target: a.target, rel: a.rel })).catch(() => null);
+  const p = await newPage();
+  const csp = []; p.on('console', (m) => { if (/Content Security Policy/i.test(m.text())) csp.push(m.text()); });
+  await p.goto(base); await ready(p);
+  // Beranda
+  const home = await p.$eval('main .store', (s) => ({ addr: s.querySelector('.addr').textContent.trim(), hours: s.querySelector('.hours').textContent.trim(), title: s.querySelector('h2').textContent }));
+  expect('A24', home.addr === STORE.address && home.hours === STORE.hours && home.title === 'Kunjungi toko', 'Beranda: blok "Kunjungi toko" dengan alamat dan jam persis data pemilik', home);
+  expect('A24', linkOk(await readLink(p, 'main .store a')), 'Beranda: tombol "Buka di Google Maps" ke tautan pemilik, tab baru, rel=noopener');
+  const box = await (await p.$('main .store a')).boundingBox();
+  expect('A24', box.height >= 44, 'Tombol Maps area sentuh ≥ 44 px', box);
+  await p.fill('#q', 'iphone 11'); await sleep(150);
+  expect('A24', (await p.$('main .store')) === null, 'Saat mencari, blok toko tidak mengganggu hasil pencarian');
+  // Footer (statis, terbaca tanpa JavaScript)
+  const ftr = await p.$eval('.ftr', (f) => ({ addr: f.querySelector('.addr').textContent.trim(), hours: f.querySelector('.hours').textContent.trim() }));
+  expect('A24', ftr.addr === STORE.address && ftr.hours === STORE.hours && linkOk(await readLink(p, '.ftr a')), 'Footer: alamat, jam, dan tautan Maps sama', ftr);
+  // JSON-LD
+  const ld = await p.$eval('script[type="application/ld+json"]', (s) => s.textContent).then((x) => { try { return JSON.parse(x); } catch (e) { return null; } });
+  const oh = ld && ld.openingHoursSpecification && ld.openingHoursSpecification[0];
+  expect('A24', ld && ld.name === 'BERKAH CELL' && ld.address.streetAddress + ', ' + ld.address.addressLocality === STORE.address && ld.hasMap === STORE.maps && ld.telephone === '+6289625050525',
+    'Data lokal (JSON-LD) valid: nama, alamat, Maps, dan telepon sama', ld);
+  expect('A24', oh && oh.opens === '11:00' && oh.closes === '20:00' && oh.dayOfWeek.length === 7, 'JSON-LD: buka setiap hari 11:00–20:00', oh);
+  expect('A24', !('aggregateRating' in (ld || {})) && !('review' in (ld || {})), 'Tanpa rating atau ulasan karangan');
+  // Bantuan dan detail
+  await p.goto(base + '?bantuan=1'); await ready(p);
+  const help = await p.$eval('main .store .addr', (e) => e.textContent.trim()).catch(() => null);
+  expect('A24', help === STORE.address && linkOk(await readLink(p, 'main .store a')), 'Bantuan: blok toko dan tautan Maps tampil');
+  await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
+  const mini = await p.$eval('main .store-mini', (e) => e.textContent).catch(() => '');
+  expect('A24', mini.includes(STORE.address) && mini.includes(STORE.hours) && linkOk(await readLink(p, 'main a.link-btn[href^="https://share.google"]')), 'Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps');
+  expect('A24', csp.length === 0 && p.__errors.length === 0, 'Tanpa pelanggaran CSP dan tanpa error JS', { csp, errors: p.__errors });
+  const ext = p.__requests.filter((u) => !u.startsWith(base) && !u.startsWith('data:'));
+  expect('A24', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru (tautan Maps hanya dibuka saat diketuk)', ext);
+  await shot(p, 'a24-detail-bantuan-toko');
+  await p.goto(base + '?bantuan=1'); await ready(p); await shot(p, 'a24-bantuan-toko', true);
+  await p.context().close();
+  // Tanpa data toko: blok tidak tampil.
+  const src = fs.readFileSync(path.join(__dirname, '..', 'site-live', 'app.js'), 'utf8');
+  const noStore = src.replace(/STORE: \{[\s\S]*?\n    \},/, 'STORE: null,');
+  const q = await newPage();
+  expect('A24', noStore !== src, 'Fixture tanpa data toko berhasil dibuat');
+  await q.route('**/app.js*', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: noStore }));
+  await q.goto(base); await ready(q);
+  const h1 = (await q.$('main .store')) === null;
+  await q.goto(base + '?bantuan=1'); await ready(q);
+  const h2 = (await q.$('main .store')) === null;
+  await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
+  const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://share.google"]')) === null;
+  expect('A24', h1 && h2 && h3 && q.__errors.length === 0, 'Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail', { h1, h2, h3, errors: q.__errors });
+  rec('A24', 'BELUM DIUJI', 'Tujuan tautan pendek Google Maps belum diverifikasi dari sesi ini (akses diblokir). Pemilik perlu mengetuknya di HP.');
+  await q.context().close();
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });

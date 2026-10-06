@@ -28,6 +28,20 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Tidak ada service worker atau cache offline, supaya harga lama tidak tampil.
 - **Aset dibuat ulang** dengan `node tools/buat_aset.js <folder-font-inter>` dari `design/sumber-aset/` (logo dan maskot resolusi asli dari website lama).
 
+## Versi 3.2: informasi toko (F19)
+
+- **Sumber data:** `CONFIG.STORE` di `app.js` (alamat, jam, tautan Maps) dari pemilik pada 6 Okt 2026.
+  - Nilai yang sama ditulis statis di footer dan JSON-LD `index.html`, supaya terbaca tanpa JavaScript dan oleh mesin pencari.
+  - **Jika data toko berubah, ubah ketiganya.** Uji A24 memeriksa ketiganya sama.
+- **Tampil di:**
+  - Beranda: blok "Kunjungi toko" di bawah bantuan; tidak tampil saat sedang mencari.
+  - Halaman Bantuan: blok yang sama.
+  - Detail: satu baris alamat dan jam di kotak Bantuan, plus tautan Maps.
+- **`STORE: null` menyembunyikan semua blok toko.** Footer dan JSON-LD statis harus dihapus manual.
+- **JSON-LD** memakai tipe `LocalBusiness`, tanpa rating atau ulasan.
+  - Blok `application/ld+json` tidak dijalankan sebagai skrip, jadi CSP tidak diubah.
+  - `addressRegion` "Kepulauan Riau" dan zona WIB adalah fakta lokasi Batam, bukan data bisnis.
+
 ## Riwayat, Back, dan posisi gulir
 
 - `history.scrollRestoration = 'manual'`.

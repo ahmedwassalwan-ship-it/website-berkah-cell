@@ -136,6 +136,10 @@ body.searching .hero .searchbox{margin-top:6px}
 .box h2{font-size:15px}
 .box p,.box li{font-size:14px;color:var(--ink-2);margin-top:4px}
 .box ul{padding-left:18px;margin-top:4px}
+.store .store-line{display:flex;align-items:flex-start;gap:8px;color:var(--ink);margin-top:8px}
+.store .store-line svg{flex:none;margin-top:2px;color:var(--gold-text)}
+.store .acts{margin-top:12px}
+.store-mini{margin-top:10px}
 .sticky-dev{position:fixed;left:0;right:0;top:0;z-index:30;background:rgba(255,255,255,.98);border-bottom:1px solid var(--line);box-shadow:0 4px 14px rgba(10,26,51,.07)}
 .sticky-dev .wrap{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:6px;padding-bottom:6px}
 .sticky-dev .nm{font-weight:800;font-size:16.5px;letter-spacing:-.2px;line-height:1.2;min-width:0;overflow-wrap:anywhere}
@@ -171,6 +175,9 @@ body.searching .hero .searchbox{margin-top:6px}
 .ftr{border-top:1px solid var(--line);color:var(--ink-2);font-size:13px;text-align:center;padding:22px 0 26px}
 .ftr b{color:var(--ink)}
 .ftr .ver{color:var(--ink-3)}
+.ftr .store-ftr{display:block;margin-top:6px}
+.ftr .store-ftr .addr,.ftr .store-ftr .hours{white-space:nowrap}
+.ftr a{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:600}
 body.has-cta .ftr{padding-bottom:calc(var(--cta-h) + 20px)}
 body.has-cta main{padding-bottom:28px}
 

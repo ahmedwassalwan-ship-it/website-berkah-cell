@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.1 (preview)
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.2 (preview)
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
@@ -15,6 +15,13 @@
     WA_DISPLAY: '089625050525',
     LOAD_TIMEOUT_MS: 15000,
     URL_DEBOUNCE_MS: 300,
+    // Data toko dari pemilik (6 Okt 2026). Harus sama dengan footer dan JSON-LD di index.html.
+    // Kosongkan (null) untuk menyembunyikan blok toko.
+    STORE: {
+      address: 'Avava Jodoh, Lantai Dasar, Batam',
+      hours: 'Setiap hari, 11.00–20.00 WIB',
+      mapsUrl: 'https://share.google/xDIH18tkS00piTNIv',
+    },
   };
 
   // Nama tampilan merek, sama dengan daftar bot Telegram (Price List Manager).
@@ -321,7 +328,7 @@
   function setView(title, ...nodes) {
     main.textContent = '';
     appendAll(main, nodes);
-    document.title = title ? title + ' | BERKAH CELL' : 'BERKAH CELL — Daftar Harga Servis HP';
+    document.title = title ? title + ' | BERKAH CELL' : 'BERKAH CELL — Daftar Harga Servis HP Batam';
     const help = document.querySelector('.btn-help');
     if (help) { if (readRoute().name === 'help') help.setAttribute('aria-current', 'page'); else help.removeAttribute('aria-current'); }
   }
@@ -342,6 +349,24 @@
       h('div', { class: 'wrap' }, h('ol', null, items.map((it) => h('li', null,
         it.href ? h('a', { href: it.href, 'data-nav': true }, it.label) : h('span', { 'aria-current': 'page' }, it.label))))));
   }
+  // F19: informasi toko. Tidak merender apa pun tanpa data dari pemilik.
+  const hasStore = () => !!(CONFIG.STORE && CONFIG.STORE.address && CONFIG.STORE.mapsUrl);
+  const mapsLink = (cls, label) => h('a', { class: cls, href: CONFIG.STORE.mapsUrl, target: '_blank', rel: 'noopener' }, icon('pin', 16), label);
+  function storeBlock() {
+    if (!hasStore()) return null;
+    const s = CONFIG.STORE;
+    return h('section', { class: 'box store', 'aria-labelledby': 'judul-toko' },
+      h('h2', { id: 'judul-toko', text: 'Kunjungi toko' }),
+      h('p', { class: 'store-line addr' }, icon('pin', 16), s.address),
+      s.hours ? h('p', { class: 'store-line hours' }, icon('clock', 16), s.hours) : null,
+      h('div', { class: 'acts' }, mapsLink('btn-sec', 'Buka di Google Maps')));
+  }
+  function storeLine() {
+    if (!hasStore()) return null;
+    const s = CONFIG.STORE;
+    return h('p', { class: 'store-mini' }, 'Toko: ', h('span', { class: 'addr', text: s.address }), s.hours ? ' · ' + s.hours : '');
+  }
+
   function helpCard(title, text, label, onclick) {
     return h('div', { class: 'helpcard' }, h('h2', { text: title }), h('p', { text }),
       h('button', { type: 'button', class: 'link-btn', onclick }, label, icon('chev', 16)));
@@ -410,7 +435,7 @@
       if (!n) {
         status.hidden = true; status.textContent = '';
         appendAll(body, brandGrid(), helpCard('Tipe HP kamu belum ada?', 'Daftar harga terus dilengkapi. Tanyakan langsung ke kami.',
-          'Tanya servis via WhatsApp', () => openPanel({ kind: 'general' })));
+          'Tanya servis via WhatsApp', () => openPanel({ kind: 'general' })), storeBlock());
         return;
       }
       const res = search(n);
@@ -609,7 +634,9 @@
           h('li', { text: 'Pemeriksaan tidak dikenakan biaya.' }),
           h('li', { text: 'Garansi dan estimasi mengikuti keterangan setiap layanan. Estimasi adalah perkiraan.' })),
         h('p', { text: 'Harga berbeda dari yang ditagih? Sampaikan ke owner lewat WhatsApp toko.' }),
-        complaintLink));
+        complaintLink,
+        storeLine(),
+        hasStore() ? mapsLink('link-btn', 'Buka lokasi toko di Google Maps') : null));
 
     setView(m.fullName + ' — Harga Servis',
       crumb([{ label: 'Semua merek', href: urlFor({ name: 'home' }) }, { label: b.name, href: brandHref(b) }, { label: m.name }]),
@@ -689,6 +716,7 @@
           h('p', null, 'WhatsApp BERKAH CELL: ', h('span', { class: 'phone-no', text: CONFIG.WA_DISPLAY })),
           h('div', { class: 'acts' },
             h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya servis via WhatsApp'))),
+        storeBlock(),
         h('section', { class: 'box' },
           h('h2', { text: 'Harga berbeda dari yang ditagih?' }),
           h('p', { text: 'Sampaikan ke owner lewat WhatsApp toko yang sama. Sebutkan tipe HP dan layanannya.' }),

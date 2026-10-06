@@ -21,7 +21,7 @@
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 31 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 18 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -271,6 +271,26 @@
       "✓ Tanpa service worker atau cache offline (harga lama tidak tampil)",
       "✓ Tidak ada permintaan jaringan baru selain sumber data",
       "• Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main."
+    ]
+  },
+  "A24": {
+    "status": "BELUM DIUJI",
+    "notes": [
+      "✓ Beranda: blok \"Kunjungi toko\" dengan alamat dan jam persis data pemilik",
+      "✓ Beranda: tombol \"Buka di Google Maps\" ke tautan pemilik, tab baru, rel=noopener",
+      "✓ Tombol Maps area sentuh ≥ 44 px",
+      "✓ Saat mencari, blok toko tidak mengganggu hasil pencarian",
+      "✓ Footer: alamat, jam, dan tautan Maps sama",
+      "✓ Data lokal (JSON-LD) valid: nama, alamat, Maps, dan telepon sama",
+      "✓ JSON-LD: buka setiap hari 11:00–20:00",
+      "✓ Tanpa rating atau ulasan karangan",
+      "✓ Bantuan: blok toko dan tautan Maps tampil",
+      "✓ Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps",
+      "✓ Tanpa pelanggaran CSP dan tanpa error JS",
+      "✓ Tidak ada permintaan jaringan baru (tautan Maps hanya dibuka saat diketuk)",
+      "✓ Fixture tanpa data toko berhasil dibuat",
+      "✓ Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail",
+      "• Tujuan tautan pendek Google Maps belum diverifikasi dari sesi ini (akses diblokir). Pemilik perlu mengetuknya di HP."
     ]
   },
   "A11": {

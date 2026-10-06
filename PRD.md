@@ -385,7 +385,7 @@ Pemilik menyetujui mockup revisi sebagai acuan implementasi preview dan menetapk
 Setelah meninjau preview v3 di HP dan melaporkan semua fitur berjalan baik, pemilik memilih paket peningkatan berikut:
 
 1. **Paket 1, dikerjakan:** tombol “Bagikan harga ini” pada detail harga (F11 naik dari P1 ke P0), tampilan tautan saat dibagikan, dan ikon layar utama HP (F18).
-2. **Paket 2, dikerjakan setelah data diterima:** informasi toko dan data lokal untuk mesin pencari (F19). Toko sudah terdaftar di Google Maps; alamat, jam buka, dan tautan Maps dikirim pemilik dan tidak boleh ditebak.
+2. **Paket 2:** informasi toko dan data lokal untuk mesin pencari (F19). Data dari pemilik, 6 Oktober 2026: alamat “Avava Jodoh, Lantai Dasar, Batam”; buka setiap hari pukul 11.00–20.00 WIB; tautan Google Maps https://share.google/xDIH18tkS00piTNIv. Data ini tidak boleh diubah tanpa konfirmasi pemilik. Rating dan ulasan tidak ditampilkan sampai pemilik memberikan datanya.
 3. **Ditunda:** domain sendiri dinilai sangat dibutuhkan, tetapi belum sekarang (D08). Pengukuran pengunjung dan Meta Pixel belum dipilih (D09).
 
 ### Keputusan yang masih terbuka
@@ -420,7 +420,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.2, 5 Oktober 2026:** memasukkan tujuh ide dan semua aturan pendukung yang disetujui pemilik. Memperjelas F05 sampai F07; menambah F13 sampai F17; memperbarui A07 dan menambah A13 sampai A21. Menyesuaikan perjalanan pelanggan, panduan UI, konteks katalog, status persetujuan, serta petunjuk GitHub. Total 17 kebutuhan fungsional dan 21 kriteria penerimaan. F11 dan F12 tetap P1.
 - **Versi 0.3, 6 Oktober 2026:** mencatat arah desain Katalog Bertingkat yang disetujui pemilik beserta keputusan warna, tindakan kontak utama, maskot, dan aturan pemicu F17. Memperjelas F17 dan A20; memperbarui bagian 2, 5, dan 9 serta status D01 dan cakupan D03. Mockup final masih menunggu review. Prioritas P0/P1 tidak berubah.
 - **Versi 0.4, 6 Oktober 2026:** mencatat persetujuan mockup revisi sebagai acuan implementasi preview serta lima keputusan pemilik: harga termasuk jasa pemasangan dan pemeriksaan tanpa biaya, aturan garansi “Tidak Ada” dan kolom kosong, arti “Jasa”, satu nomor WhatsApp untuk servis dan komplain, serta normalisasi merek Xiomi → Xiaomi dengan Redmi dan Poco terpisah. Memperbarui bagian 2, 3, 4, 8, dan 9 serta status D01 sampai D05. Pajak, biaya tambahan lain, syarat garansi lengkap, dan model yang berpotensi ganda tetap terbuka. Prioritas P0/P1 tidak berubah.
-- **Versi 0.5, 6 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Informasi toko menunggu data dari pemilik.
+- **Versi 0.5, 6 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Data toko untuk F19 diterima pada hari yang sama.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
