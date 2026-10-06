@@ -166,14 +166,18 @@ const IMG_CONFUSED = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVIAAAGzCAYA
 // 1) Nomor WhatsApp OWNER (format: 62 + nomor tanpa 0 depan)
 const WA_OWNER = "6289625050525";
 
-// 2) Link Google Sheets CSV sheet "Price_List". Kosongkan "" untuk pakai data contoh.
-//    Format: https://docs.google.com/spreadsheets/d/ID_SHEET/gviz/tq?tqx=out:csv&sheet=Price_List
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1XliPDpr5B6P03NsWQmt-E_nswskXbnOj2XVz2SbRHi8/gviz/tq?tqx=out:csv&sheet=Price_List";
+// 2) Link CSV dari file PUBLIK "Berkah Cell - Harga Publik (website)".
+//    File publik ini menyalin kolom pelanggan dari file utama lewat IMPORTRANGE.
+//    JANGAN arahkan ke file utama: file utama berisi Harga_Modal dan log bot.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1mgN8N15Tu-KvNLs2IblKTKVbbtoIiaPOBd-MiFoL5gA/gviz/tq?tqx=out:csv&gid=0";
+
+// Batas waktu memuat data (ms) sebelum menampilkan pesan gagal.
+const LOAD_TIMEOUT_MS = 15000;
 
 /* ============================================================
-   STRUKTUR KOLOM SHEET (huruf besar/kecil bebas):
-   Brand | Model | Layanan | Kualitas | Harga_Modal | Harga_Jual | Estimasi_Waktu | Garansi
-   → Harga_Modal SENGAJA TIDAK diambil → tidak akan pernah tampil di website (rahasia toko).
+   STRUKTUR KOLOM FILE PUBLIK (huruf besar/kecil bebas):
+   Brand | Model | Layanan | Kualitas | Harga_Jual | Estimasi_Waktu | Garansi
+   → Harga_Modal tidak ada di file publik, jadi tidak pernah terkirim ke browser.
    ============================================================ */
 
 const SERVICE_ICONS = [
@@ -198,20 +202,8 @@ function qualClass(q){
   return "";
 }
 
-const SAMPLE_DATA=[
-  {brand:"iphone",model:"11",layanan:"Ganti LCD",kualitas:"Incel",harga_jual:"300.000",estimasi:"30 menit",garansi:"7 hari"},
-  {brand:"iphone",model:"11",layanan:"Ganti Kamera",kualitas:"Premium",harga_jual:"350.000",estimasi:"60 menit",garansi:"30 hari"},
-  {brand:"iphone",model:"XS Max",layanan:"Ganti LCD",kualitas:"Incel",harga_jual:"400.000",estimasi:"30 menit",garansi:"7 hari"},
-  {brand:"iphone",model:"XS Max",layanan:"Ganti Batrai",kualitas:"Premium",harga_jual:"350.000",estimasi:"40 menit",garansi:"7 hari"},
-  {brand:"iphone",model:"XS Max",layanan:"Backdoor/Backglass",kualitas:"Premium",harga_jual:"200.000",estimasi:"40 menit",garansi:"Tidak Ada"},
-  {brand:"samsung",model:"A50S",layanan:"Ganti LCD",kualitas:"Incel",harga_jual:"280.000",estimasi:"30 menit",garansi:"7 hari"},
-  {brand:"samsung",model:"A50S",layanan:"Ganti LCD",kualitas:"OLED",harga_jual:"700.000",estimasi:"30 menit",garansi:"7 hari"},
-  {brand:"xiaomi",model:"Redmi Note 9",layanan:"Backdoor/Backglass",kualitas:"Premium",harga_jual:"90.000",estimasi:"40 menit",garansi:"Tidak Ada"},
-  {brand:"oppo",model:"A3S",layanan:"Ganti LCD",kualitas:"Premium",harga_jual:"200.000",estimasi:"30 menit",garansi:"7 hari"},
-  {brand:"vivo",model:"Y20",layanan:"Ganti LCD",kualitas:"Premium",harga_jual:"230.000",estimasi:"30 menit",garansi:"7 hari"},
-];
-
 let DATA=[];
+let LOAD_OK=false; // true hanya setelah katalog berhasil dimuat
 const view=document.getElementById('view');
 const crumb=document.getElementById('crumb');
 const searchInput=document.getElementById('search');
@@ -254,7 +246,6 @@ function rowsToData(rows){
       brand,model,
       layanan:get("layanan"),
       kualitas:get("kualitas"),
-      // Harga_Modal SENGAJA tidak diambil
       harga_jual:get("harga_jual"),
       estimasi:get("estimasi_waktu")||get("estimasi"),
       garansi:get("garansi"),
@@ -264,21 +255,48 @@ function rowsToData(rows){
 }
 
 async function loadData(){
-  if(!SHEET_CSV_URL){DATA=SAMPLE_DATA;renderBrands();return;}
+  LOAD_OK=false;
   view.innerHTML=`<div class="state"><div class="spinner"></div>Memuat daftar harga…</div>`;
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),LOAD_TIMEOUT_MS);
+  let rows;
   try{
-    const res=await fetch(SHEET_CSV_URL);
+    const res=await fetch(SHEET_CSV_URL,{signal:ctrl.signal,cache:"no-store"});
     if(!res.ok)throw new Error("fetch");
-    DATA=rowsToData(parseCSV(await res.text()));
-    if(!DATA.length)throw new Error("empty");
-    renderBrands();
+    rows=parseCSV(await res.text());
+    // Respons yang bukan tabel harga (mis. halaman login Google) dianggap gagal, bukan katalog kosong.
+    const header=(rows[0]||[]).map(h=>h.trim().toLowerCase());
+    if(!header.includes("brand")||!header.includes("model"))throw new Error("format");
   }catch(e){
-    DATA=SAMPLE_DATA;
-    view.innerHTML=`<div class="state"><div class="st-ic">⚠️</div>
-      <div class="st-title">Gagal memuat data dari Google Sheets</div>
-      <div>Menampilkan data contoh. Cek link CSV & pastikan Sheet sudah di-publish.</div></div>`;
-    setTimeout(renderBrands,1800);
+    clearTimeout(timer);
+    DATA=[];
+    renderLoadError();
+    return;
   }
+  clearTimeout(timer);
+  DATA=rowsToData(rows);
+  LOAD_OK=true;
+  if(!DATA.length){renderEmptyCatalog();return;}
+  renderBrands();
+}
+
+function renderLoadError(){
+  setCrumb(null);
+  view.innerHTML=`<div class="state"><div class="st-ic">⚠️</div>
+    <div class="st-title">Daftar harga belum berhasil dimuat</div>
+    <div>Coba lagi atau hubungi Berkah Cell.</div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="wa-btn" style="border:none;cursor:pointer;background:var(--blue);color:#fff" onclick="loadData()">Coba lagi</button>
+      <a class="wa-btn" target="_blank" href="${waLink("Halo Berkah Cell, saya mau tanya harga service HP. Daftar harga di website belum bisa dibuka.")}">Tanya via WhatsApp</a>
+    </div></div>`;
+}
+
+function renderEmptyCatalog(){
+  setCrumb(null);
+  view.innerHTML=`<div class="state"><div class="st-ic">📋</div>
+    <div class="st-title">Daftar harga belum tersedia</div>
+    <div>Tanyakan harga service langsung ke Berkah Cell.</div>
+    <div style="margin-top:16px"><a class="wa-btn" target="_blank" href="${waLink("Halo Berkah Cell, saya mau tanya harga service HP.")}">Tanya via WhatsApp</a></div></div>`;
 }
 
 function fmtPrice(v){
@@ -391,7 +409,9 @@ searchInput.addEventListener('input',e=>{
   const q=e.target.value.trim();
   clearTimeout(searchTimer);
   searchTimer=setTimeout(()=>{
-    if(q.length===0){renderBrands();searchHint.textContent="Ketik tipe HP untuk cari cepat lintas semua merek.";}
+    // Hasil kosong hanya boleh dinyatakan setelah katalog berhasil dimuat.
+    if(!LOAD_OK){if(view.querySelector('.spinner'))return;renderLoadError();return;}
+    if(q.length===0){if(DATA.length)renderBrands();else renderEmptyCatalog();searchHint.textContent="Ketik tipe HP untuk cari cepat lintas semua merek.";}
     else if(q.length<2){searchHint.textContent="Ketik minimal 2 huruf…";}
     else{searchHint.textContent="";renderSearch(q);}
   },180);
