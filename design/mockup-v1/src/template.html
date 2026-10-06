@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup HP BERKAH CELL v1</title>
+<style>
+:root{
+  --navy-900:#0A1A33; --navy-800:#10284D; --navy-700:#1A3A6B; --navy-200:#B9C6DD;
+  --ink:#0F1B2D; --ink-2:#4F5B6E; --ink-3:#667085;
+  --bg:#F6F4EF; --card:#FFFFFF; --line:#E6E1D6; --line-2:#EFEBE3;
+  --gold:#C9A54E; --gold-text:#8A6614; --gold-on-navy:#D8B566;
+  --blue:#1F5FBF; --sel:#EEF3FB;
+  --r-lg:18px; --r-md:14px; --r-sm:10px;
+  --pin:#D61F69;
+  --ok:#1E7B4F; --prop:#1F5FBF; --open:#A35F00;
+  --page:#E9ECF1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter","Segoe UI",Roboto,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;background:var(--page);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+.doc{max-width:1320px;margin:0 auto;padding:32px 20px 80px}
+.doc-head{background:var(--navy-900);color:#fff;border-radius:20px;padding:28px 28px 24px;margin-bottom:28px}
+.doc-head h1{font-size:26px;letter-spacing:-.3px}
+.doc-head p{color:var(--navy-200);font-size:14.5px;max-width:900px;margin-top:6px}
+.doc-head .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:13px;color:#fff}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:20px;vertical-align:middle;white-space:nowrap}
+.t-ok{background:#E3F4EA;color:var(--ok)} .t-prop{background:#E5EEFB;color:var(--prop)} .t-open{background:#FDF0DC;color:var(--open)}
+.doc-head .tag{border:1px solid rgba(255,255,255,.15)}
+.pin-legend{display:inline-flex;align-items:center;gap:6px}
+.sec{background:#fff;border-radius:20px;padding:26px;margin-bottom:24px;box-shadow:0 1px 2px rgba(16,24,40,.06)}
+.sec>h2{font-size:20px;letter-spacing:-.2px}
+.sec>.sub{color:var(--ink-2);font-size:14px;margin:4px 0 20px;max-width:900px}
+.row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.notes{flex:1 1 300px;min-width:280px;font-size:14px}
+.notes ol{list-style:none;display:flex;flex-direction:column;gap:12px}
+.notes li{display:flex;gap:10px;align-items:flex-start}
+.notes li .n{flex:0 0 22px;height:22px;border-radius:50%;background:var(--pin);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.notes li b{font-weight:700}
+.notes .msg{background:#F3F6F2;border:1px solid #DDE7DA;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:6px;white-space:pre-wrap}
+.notes h3{font-size:15px;margin:18px 0 8px}
+.cap{font-size:12.5px;color:var(--ink-3);text-align:center;margin-top:10px;font-weight:600}
+.phone-wrap{display:flex;flex-direction:column;align-items:center}
+
+/* ===== Phone frame ===== */
+.phone{width:390px;height:844px;border:10px solid #0B0F17;border-radius:46px;overflow:hidden;position:relative;background:var(--bg);box-shadow:0 18px 40px rgba(10,26,51,.18);box-sizing:content-box;flex:0 0 auto}
+.phone.short{height:560px}
+.screen{position:absolute;inset:0;overflow:hidden;display:flex;flex-direction:column}
+.ph-box{position:relative}
+.rail{position:absolute;left:-36px;top:0;bottom:0;width:30px}
+.pin{position:absolute;left:0;z-index:60;width:22px;height:22px;border-radius:50%;background:var(--pin);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(214,31,105,.2)}
+.pin::after{content:"";position:absolute;left:22px;top:10px;width:12px;border-top:2px dotted var(--pin)}
+.annot-on .phone-wrap{padding-left:36px}
+
+/* ===== App UI ===== */
+.hdr{background:var(--navy-900);color:#fff;height:58px;flex:0 0 58px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.brandmark{display:flex;align-items:center;gap:10px}
+.brandmark img{width:32px;height:32px}
+.brandmark span{font-weight:800;letter-spacing:1.6px;font-size:14.5px}
+.btn-help{height:36px;padding:0 12px;border-radius:18px;border:1px solid rgba(216,181,102,.55);color:var(--gold-on-navy);font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;background:transparent}
+.hero{background:var(--navy-900);color:#fff;padding:6px 16px 22px;position:relative;margin-top:-1px}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:1.6px;color:var(--gold-on-navy)}
+.hero h1{font-size:25px;line-height:1.25;letter-spacing:-.3px;margin-top:6px;max-width:270px}
+.hero p{color:var(--navy-200);font-size:14.5px;margin-top:6px;max-width:280px}
+.hero .mascot{position:absolute;right:12px;top:-2px;width:66px}
+.search{margin-top:16px;height:56px;background:#fff;border-radius:var(--r-md);display:flex;align-items:center;gap:10px;padding:0 8px 0 16px;color:var(--ink);font-size:16px;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.search svg{flex:0 0 auto}
+.search .ph{color:var(--ink-3)}
+.search .val{font-weight:600;flex:1}
+.search .clear{width:44px;height:44px;border-radius:22px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.search.focus{box-shadow:0 0 0 3px var(--gold)}
+.search.disabled{background:#E9ECF1;color:var(--ink-3)}
+.body{flex:1;overflow:hidden;padding:18px 16px 0}
+.sec-title{font-size:12px;font-weight:700;letter-spacing:1.4px;color:var(--ink-2);text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+.sec-title small{font-size:12px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--ink-3)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);height:76px;padding:12px;display:flex;flex-direction:column;justify-content:center}
+.tile b{font-size:15.5px;font-weight:700;letter-spacing:-.1px}
+.tile span{font-size:12.5px;color:var(--ink-3)}
+.tile.flag{border-style:dashed;border-color:var(--open)}
+.helpcard{margin-top:16px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--r-md);padding:14px 14px 14px 14px}
+.helpcard b{font-size:14.5px;display:block}
+.helpcard p{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.link-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-weight:700;font-size:14px;color:var(--blue);min-height:44px}
+.list{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+.li{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:58px;padding:9px 14px;border-top:1px solid var(--line-2)}
+.li:first-child{border-top:0}
+.li .t{font-size:16px;font-weight:650;font-weight:600}
+.li .s{font-size:12.5px;color:var(--ink-3)}
+.li .b{font-size:11.5px;color:var(--gold-text);font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.li.cur{background:var(--sel)}
+.badge-cur{font-size:11px;font-weight:700;color:var(--navy-700);background:#DCE6F7;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+.chev{color:var(--ink-3)}
+.meta-line{font-size:13px;color:var(--ink-3);margin:0 2px 10px}
+.crumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);height:40px;padding:0 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.crumb a{color:var(--blue);font-weight:600;text-decoration:none}
+.page-title{padding:16px 16px 4px}
+.page-title .eb{font-size:11.5px;font-weight:700;letter-spacing:1.5px;color:var(--gold-text);text-transform:uppercase}
+.page-title h2{font-size:26px;letter-spacing:-.4px;line-height:1.2;margin-top:2px}
+.page-title .m{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.filter{height:46px;margin:12px 16px 12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--ink-3);font-size:15px}
+.notice{margin:0 16px 12px;background:var(--sel);border-radius:var(--r-sm);padding:9px 12px;font-size:13px;color:var(--navy-700);display:flex;gap:8px;align-items:center}
+
+/* detail */
+.dev{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px 16px}
+.dev .eb{font-size:11.5px;font-weight:700;letter-spacing:1.5px;color:var(--gold-text);text-transform:uppercase}
+.dev .row1{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.dev h2{font-size:28px;letter-spacing:-.5px;line-height:1.15}
+.dev .m{font-size:13.5px;color:var(--ink-2);margin-top:4px}
+.btn-sec{height:44px;padding:0 14px;border-radius:22px;border:1.5px solid var(--navy-700);color:var(--navy-700);font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;background:#fff;white-space:nowrap}
+.btn-sec.sm{height:38px;padding:0 12px;font-size:13px}
+.hint{font-size:12.5px;color:var(--ink-3);padding:10px 16px 0}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);margin:10px 16px 0;overflow:hidden}
+.svc-h{display:flex;align-items:center;gap:10px;padding:12px 14px 10px;font-weight:700;font-size:15.5px}
+.svc-h .ic{width:32px;height:32px;border-radius:9px;background:#F7F1E3;color:var(--gold-text);display:flex;align-items:center;justify-content:center}
+.var{display:flex;align-items:flex-start;gap:12px;padding:11px 14px 12px;border-top:1px solid var(--line-2);min-height:62px}
+.radio{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid #B7BFCC;margin-top:2px;display:flex;align-items:center;justify-content:center}
+.var .main{flex:1}
+.var .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.q{font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--navy-700);background:#E8EEF8;padding:2px 9px;border-radius:20px}
+.price{font-size:19px;font-weight:800;letter-spacing:-.3px;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.sub{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--ink-2);margin-top:5px}
+.sub span{display:inline-flex;align-items:center;gap:5px}
+.var.selected{background:var(--sel);box-shadow:inset 3px 0 0 var(--navy-700)}
+.var.selected .radio{border-color:var(--navy-700);background:var(--navy-700)}
+.cta{position:absolute;left:0;right:0;bottom:0;z-index:20;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:10px 16px 18px;box-shadow:0 -6px 18px rgba(10,26,51,.06)}
+.cta .ctx{font-size:12.5px;color:var(--ink-2);margin-bottom:6px;display:flex;justify-content:space-between}
+.cta .ctx b{color:var(--ink)}
+.btn-pri{height:52px;border-radius:26px;background:var(--navy-900);color:#fff;font-weight:700;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:9px;width:100%}
+.btn-pri .wa{width:24px;height:24px;border-radius:12px;background:#25D366;display:flex;align-items:center;justify-content:center}
+.btn-ghost{height:48px;border-radius:24px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.sticky-dev{position:absolute;left:0;right:0;top:0;z-index:15;height:56px;background:rgba(255,255,255,.98);border-bottom:1px solid var(--line);box-shadow:0 4px 14px rgba(10,26,51,.07);display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 16px}
+.sticky-dev .nm{font-weight:800;font-size:16.5px;letter-spacing:-.2px}
+.sticky-dev .nm small{display:block;font-size:11px;font-weight:700;letter-spacing:1.3px;color:var(--gold-text);text-transform:uppercase;line-height:1.1}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);margin:12px 16px 0;padding:14px}
+.box.gold{border-left:3px solid var(--gold)}
+.box h4{font-size:14.5px}
+.box p{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.box .open{margin-top:8px;border:1px dashed var(--open);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--open);background:#FFF9EF}
+.state{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 22px 0}
+.state img{width:78px}
+.state .ico{width:64px;height:64px;border-radius:32px;background:#F7F1E3;color:var(--gold-text);display:flex;align-items:center;justify-content:center}
+.state h3{font-size:19px;line-height:1.3;margin-top:12px;letter-spacing:-.2px}
+.state p{font-size:14.5px;color:var(--ink-2);margin-top:6px}
+.state .acts{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.chip{height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;display:flex;align-items:center}
+.kbd{position:absolute;left:0;right:0;bottom:0;height:270px;background:#D3D7DE;display:flex;align-items:center;justify-content:center;color:#7A8293;font-size:13px;font-weight:600;letter-spacing:.5px}
+.skel{background:linear-gradient(90deg,#ECE8DF,#F5F2EC,#ECE8DF);border-radius:10px}
+/* sheet */
+.scrim{position:absolute;inset:0;background:rgba(10,26,51,.48);z-index:30}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:40;background:#fff;border-radius:22px 22px 0 0;padding:8px 16px 18px}
+.grab{width:40px;height:5px;border-radius:3px;background:#D5D9E0;margin:4px auto 12px}
+.sheet h3{font-size:19px;letter-spacing:-.2px}
+.sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.x-btn{flex:0 0 44px;width:44px;height:44px;margin:-6px -2px 0 0;border-radius:22px;border:0;background:#EEF1F5;color:var(--ink);display:flex;align-items:center;justify-content:center}
+.x-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.sheet .lead{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.opt{display:flex;align-items:center;gap:12px;min-height:50px;padding:0 12px;border:1px solid var(--line);border-radius:12px;margin-top:8px;font-size:15px;font-weight:600}
+.opt.on{border-color:var(--navy-700);background:var(--sel)}
+.opt.on .radio{border-color:var(--navy-700);background:var(--navy-700)}
+.ta{margin-top:10px;border:1px solid var(--line);border-radius:12px;height:58px;padding:10px 12px;font-size:14px;color:var(--ink-3)}
+.preview{margin-top:10px;background:#F3F6F2;border:1px solid #DDE7DA;border-radius:12px;padding:10px 12px;font-size:13px;color:#24412F}
+.preview b{display:block;font-size:11px;letter-spacing:1px;color:#4E6B57;text-transform:uppercase;margin-bottom:2px}
+.skip{display:flex;align-items:center;justify-content:center;min-height:44px;font-weight:700;font-size:14.5px;color:var(--blue);margin-top:4px}
+.fine{font-size:12px;color:var(--ink-3);text-align:center}
+
+/* flow diagrams */
+.flows{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px}
+.flow{border:1px solid var(--line);border-radius:16px;padding:16px;background:#FCFBF8}
+.flow h3{font-size:15.5px}
+.flow .why{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px}
+.st{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:600}
+.st small{display:block;font-size:11px;color:var(--ink-3);font-weight:500}
+.st.navy{background:var(--navy-900);color:#fff;border-color:var(--navy-900)} .st.navy small{color:var(--navy-200)}
+.arr{color:var(--ink-3);font-size:13px}
+.back{margin-top:10px;font-size:13px;background:#FFF;border-left:3px solid var(--gold);border-radius:6px;padding:8px 10px}
+.back b{color:var(--navy-700)}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}
+.tbl th{font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3)}
+code{font-family:"DejaVu Sans Mono",Consolas,monospace;font-size:12.5px;background:#F1F3F6;padding:1px 5px;border-radius:5px}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.sw{width:118px;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:12px}
+.sw i{display:block;height:46px}
+.sw div{padding:6px 8px}
+@media (max-width:480px){.phone{zoom:.84}.doc{padding:16px 10px 60px}.sec{padding:16px}}
+</style>
+</head>
+<body class="annot-on">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 7h11l-3-3M17 17H6l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.3a2.5 2.5 0 014.8.9c0 1.7-2.4 2.1-2.4 3.6M12 17h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-screen" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 18.5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-battery" viewBox="0 0 24 24"><rect x="3" y="7" width="16" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M21 10.5v3M6.5 10v4M9.5 10v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v5M15 3v5M7 8h10v3a5 5 0 01-10 0zM12 16v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="8.5" y="5" width="4" height="4" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 4l8 4-8 4-8-4 8-4zM4 12l8 4 8-4M4 16l8 4 8-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-btn" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.5 8v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M5 9h3l4-3.5v13L8 15H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.5 9.5a3.5 3.5 0 010 5M18 7a7 7 0 010 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19 8a7.5 7.5 0 10.6 6M19 3.5V8h-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cloudoff" viewBox="0 0 24 24"><path d="M7 18h10.5a3.5 3.5 0 00.6-6.95A6 6 0 006.4 9.6 4.2 4.2 0 007 18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="#fff" d="M12 3.2a8.7 8.7 0 00-7.5 13.1L3.3 20.8l4.6-1.2A8.7 8.7 0 1012 3.2zm0 15.9c-1.3 0-2.6-.4-3.7-1l-.3-.2-2.7.7.7-2.6-.2-.3A7.2 7.2 0 1112 19.1zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a5.9 5.9 0 01-2.9-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4a.8.8 0 00-.6.3 2.5 2.5 0 00-.8 1.9 4.4 4.4 0 00.9 2.3 10 10 0 003.8 3.4c1.4.6 2 .7 2.7.6.4-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1l-.5-.2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="doc">
+  <!--A--><header class="doc-head">
+    <h1>Mockup HP: Website Daftar Harga BERKAH CELL (versi anotasi)</h1>
+    <p>Revisi 2 · 6 Oktober 2026 · Arah <b>Katalog Bertingkat</b> (disetujui pemilik). Ini <b>bahan review, bukan website resmi</b>. Harga dan model berasal dari file publik Price_List yang diunduh pemilik pada 6 Okt 2026, tanpa diubah. Logo dan maskot berasal dari aset website saat ini. Untuk menilai tampilan tanpa catatan, buka <b>mockup-bersih.html</b>.</p>
+    <div class="legend">
+      <span><span class="tag t-ok">Disetujui</span> keputusan yang sudah disetujui atau kebutuhan PRD</span>
+      <span><span class="tag t-prop">Usulan</span> usulan desain, perlu persetujuan</span>
+      <span><span class="tag t-open">Terbuka</span> keputusan pemilik yang belum ditetapkan</span>
+      <span class="pin-legend"><span style="width:20px;height:20px;border-radius:50%;background:var(--pin);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">1</span> nomor catatan, diletakkan di luar bingkai HP</span>
+    </div>
+  </header><!--/A-->
+  <!--C--><header class="doc-head">
+    <h1>Mockup HP: Website Daftar Harga BERKAH CELL (versi bersih)</h1>
+    <p>Revisi 2 · 6 Oktober 2026 · Tampilan untuk menilai pengalaman pelanggan, tanpa catatan review. Ini <b>bahan review, bukan website resmi</b>. Harga berasal dari file publik Price_List 6 Okt 2026, tanpa diubah. Catatan, status keputusan, dan keputusan yang masih terbuka ada di <b>mockup.html</b> (versi anotasi).</p>
+  </header><!--/C-->
+
+  <!-- ================= 1. BERANDA ================= -->
+  <section class="sec" id="beranda">
+    <h2>1 · Beranda: pencarian besar dan pilihan merek</h2>
+    <!--A--><p class="sub">Header navy dengan logo. Pencarian langsung terlihat di layar pertama. Area katalog terang. Maskot kecil sebagai aksen dan tidak menutupi apa pun. Tidak ada lagi tombol WhatsApp yang melayang.</p><!--/A-->
+    <div class="row">
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt="Logo BERKAH CELL"><span>BERKAH CELL</span></div>
+            <div class="btn-help"><svg width="16" height="16"><use href="#i-help"/></svg>Bantuan</div></div>
+          <div class="hero">
+            <img class="mascot" src="__WAVE__" alt="">
+            <div class="eyebrow">DAFTAR HARGA SERVIS HP</div>
+            <h1>Cari harga servis untuk HP kamu</h1>
+            <p>Ketik tipe HP atau pilih merek di bawah.</p>
+            <div class="search"><svg width="22" height="22" style="color:var(--ink-2)"><use href="#i-search"/></svg><span class="ph">Ketik tipe HP, mis. iPhone 11</span></div>
+          </div>
+          <div class="body">
+            <div class="sec-title">Pilih merek <small>115 tipe tercatat</small></div>
+            <div class="grid3">
+              <div class="tile"><b>Infinix</b><span>4 tipe</span></div>
+              <div class="tile"><b>iPhone</b><span>18 tipe</span></div>
+              <div class="tile"><b>Itel</b><span>3 tipe</span></div>
+              <div class="tile"><b>Oppo</b><span>25 tipe</span></div>
+              <div class="tile"><b>Poco</b><span>3 tipe</span></div>
+              <div class="tile"><b>Realme</b><span>6 tipe</span></div>
+              <div class="tile"><b>Redmi</b><span>14 tipe</span></div>
+              <div class="tile"><b>Samsung</b><span>20 tipe</span></div>
+              <div class="tile"><b>Vivo</b><span>17 tipe</span></div>
+              <div class="tile"><b>Xiaomi</b><span>4 tipe</span></div>
+              <div class="tile"><b>Xiomi</b><span>1 tipe</span></div>
+            </div>
+            <div class="helpcard"><b>Tipe HP kamu belum ada?</b><p>Daftar harga terus dilengkapi. Tanyakan langsung ke kami.</p>
+              <div class="link-btn">Tanya servis via WhatsApp <svg width="16" height="16"><use href="#i-chev"/></svg></div></div>
+          </div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:24px">1</span><span class="pin" style="top:160px">2</span><span class="pin" style="top:236px">3</span><span class="pin" style="top:342px">4</span><span class="pin" style="top:576px">5</span><span class="pin" style="top:650px">6</span></div><!--/A--></div>
+        <div class="cap">1a · Beranda (kondisi awal)</div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div>
+            <div class="btn-help"><svg width="16" height="16"><use href="#i-help"/></svg>Bantuan</div></div>
+          <div class="hero" style="padding-top:2px;padding-bottom:14px">
+            <div class="search focus" style="margin-top:6px"><svg width="22" height="22" style="color:var(--ink-2)"><use href="#i-search"/></svg><span class="val">iphone 11</span>
+              <span class="clear"><svg width="18" height="18"><use href="#i-x"/></svg></span></div>
+          </div>
+          <div class="body">
+            <p class="meta-line">3 tipe cocok dengan “iphone 11”</p>
+            <div class="list">
+              <div class="li"><div><div class="t">iPhone 11</div><div class="s">6 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">iPhone 11 Pro</div><div class="s">4 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">iPhone 11 Pro Max</div><div class="s">2 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+            </div>
+            <div class="helpcard" style="margin-top:12px"><b>Bukan tipe yang kamu cari?</b><p>Tanyakan tipe lain lewat WhatsApp.</p></div>
+          </div>
+          <div class="kbd">KEYBOARD HP</div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:94px">7</span><span class="pin" style="top:160px">8</span><span class="pin" style="top:196px">9</span></div><!--/A--></div>
+        <div class="cap">1b · Mengetik pencarian</div>
+      </div>
+
+      <!--A--><div class="notes">
+        <ol>
+          <li><span class="n">1</span><div><b>Header navy dengan logo dan tombol Bantuan.</b> Logo diambil dari aset website saat ini (197×200 px, latar transparan). <span class="tag t-ok">Disetujui</span> <span class="tag t-open">Terbuka</span> Untuk ketajaman maksimal, file logo resmi beresolusi lebih tinggi tetap dibutuhkan.</div></li>
+          <li><span class="n">2</span><div><b>Maskot kecil (66 px) di pojok hero</b>, tidak menutupi judul maupun pencarian. Ukuran gambar diperkecil dari ±210 KB menjadi ±16 KB. <span class="tag t-ok">Disetujui</span></div></li>
+          <li><span class="n">3</span><div><b>Pencarian besar (tinggi 56 px)</b> langsung terlihat tanpa menggulir. Contoh di placeholder: “iPhone 11”, sesuai contoh di PRD. <span class="tag t-ok">Disetujui</span></div></li>
+          <li><span class="n">4</span><div><b>Grid merek di area terang</b> dengan jumlah tipe dari data. Merek ditulis rapi (iPhone, bukan “Iphone”), sesuai daftar nama merek di bot Telegram (F10). <span class="tag t-prop">Usulan</span></div></li>
+          <li><span class="n">5</span><div><b>“Xiomi” tetap tampil apa adanya dari data,</b> tanpa tanda khusus di layar pelanggan. Penggabungan Xiaomi, Redmi, dan Poco, serta salah ketik, menunggu keputusan D05. <span class="tag t-open">Terbuka</span></div></li>
+          <li><span class="n">6</span><div><b>Bantuan umum</b> untuk tipe yang belum ada. Membuka panel kebutuhan WhatsApp (F17, pertanyaan umum). <span class="tag t-prop">Usulan</span></div></li>
+          <li><span class="n">7</span><div><b>Kata pencarian bisa dihapus dengan satu ketukan</b> (×, area sentuh 44 px). Hero menyusut saat mengetik supaya hasil terlihat di atas keyboard. <span class="tag t-ok">Disetujui</span> F15</div></li>
+          <li><span class="n">8</span><div><b>Hasil menyebut merek dan model lengkap.</b> Ketikan “iphone 11” <b>harus</b> menemukan iPhone 11, karena pencarian mencocokkan gabungan merek dan model. Di website sekarang ketikan ini gagal (bug F02). <span class="tag t-ok">Disetujui</span> F02</div></li>
+          <li><span class="n">9</span><div><b>Riwayat browser tidak bertambah setiap huruf.</b> Kata pencarian disimpan pada entri riwayat yang sama. Saat pelanggan membuka hasil, posisi gulir hasil ikut disimpan. Lihat bagian 7. <span class="tag t-ok">Disetujui</span> F06</div></li>
+        </ol>
+      </div><!--/A-->
+    </div>
+  </section>
+
+  <!-- ================= 2. DAFTAR TIPE ================= -->
+  <section class="sec" id="tipe">
+    <h2>2 · Daftar tipe (juga dipakai untuk “Ganti tipe HP”)</h2>
+    <!--A--><p class="sub">Layar penuh dengan alamat sendiri, misalnya <code>/iphone</code>. Saat dibuka dari tombol “Ganti tipe HP”, tipe yang sedang dilihat ditandai supaya pelanggan tahu posisinya.</p><!--/A-->
+    <div class="row">
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div>
+            <div class="btn-help"><svg width="16" height="16"><use href="#i-help"/></svg>Bantuan</div></div>
+          <div class="crumb"><a>Semua merek</a><svg width="14" height="14"><use href="#i-chev"/></svg><span>iPhone</span></div>
+          <div class="page-title"><div class="eb">Pilih tipe</div><h2>iPhone</h2><div class="m">18 tipe tercatat</div></div>
+          <div class="filter"><svg width="18" height="18"><use href="#i-search"/></svg>Cari tipe iPhone…</div>
+          <div class="notice"><svg width="16" height="16"><use href="#i-swap"/></svg><span>Ganti dari <b>iPhone 11</b>. Pilih tipe lain di bawah.</span></div>
+          <div style="padding:0 16px">
+            <div class="list">
+              <div class="li"><div><div class="t">6S Plus</div><div class="s">2 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">7</div><div class="s">2 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">7 plus</div><div class="s">1 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">8</div><div class="s">3 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">8 Plus</div><div class="s">2 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li cur"><div><div class="t">11 <span class="badge-cur">Sedang dilihat</span></div><div class="s">6 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">11 Pro</div><div class="s">4 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">11 Pro Max</div><div class="s">2 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+              <div class="li"><div><div class="t">12</div><div class="s">1 layanan</div></div><svg class="chev" width="20" height="20"><use href="#i-chev"/></svg></div>
+            </div>
+          </div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:80px">1</span><span class="pin" style="top:206px">2</span><span class="pin" style="top:264px">3</span><span class="pin" style="top:298px">4</span><span class="pin" style="top:436px">5</span></div><!--/A--></div>
+        <div class="cap">2 · Daftar tipe iPhone (dibuka dari “Ganti tipe HP”)</div>
+      </div>
+      <!--A--><div class="notes">
+        <ol>
+          <li><span class="n">1</span><div><b>Tautan “Semua merek”</b> selalu tersedia, juga saat pelanggan masuk langsung dari luar website. Tautan ini adalah navigasi biasa, bukan tombol Back palsu. <span class="tag t-ok">Disetujui</span> F06</div></li>
+          <li><span class="n">2</span><div><b>Filter di dalam merek</b> untuk merek dengan banyak tipe, misalnya Oppo dengan 25 tipe. <span class="tag t-prop">Usulan</span></div></li>
+          <li><span class="n">3</span><div><b>Penanda “Ganti dari iPhone 11”</b> hanya muncul jika layar dibuka dari tombol “Ganti tipe HP”. Memilih tipe lain membuka detail tipe itu, lengkap dengan identitas, layanan, harga, dan konteks WhatsApp yang baru (A17). <span class="tag t-ok">Disetujui</span> F14</div></li>
+          <li><span class="n">4</span><div><b>Urutan tipe alami</b> (6S Plus, 7, 8, 11, 12 … X, XR, XS). Jumlah layanan dihitung dari data. <span class="tag t-prop">Usulan</span></div></li>
+          <li><span class="n">5</span><div><b>“7 plus” dan “8 Plus” tampil sesuai penulisan di data.</b> Aturan penyeragaman penulisan model menunggu D05. <span class="tag t-open">Terbuka</span></div></li>
+        </ol>
+        <h3>Kenapa “Ganti tipe HP” memakai layar ini, bukan panel?</h3>
+        <p style="font-size:14px;color:var(--ink-2)">Supaya perilaku Back tetap mengikuti layar yang benar-benar dilalui, dan satu komponen dipakai untuk dua kebutuhan. Back dari detail tipe baru kembali ke daftar ini, lalu ke detail iPhone 11 (lihat alur D di bagian 7).</p>
+      </div><!--/A-->
+    </div>
+  </section>
+
+  <!-- ================= 3. DETAIL ================= -->
+  <section class="sec" id="detail">
+    <h2>3 · Detail harga, header identitas saat menggulir, dan bantuan layanan</h2>
+    <!--A--><p class="sub">Harga adalah elemen terkuat di setiap baris. Estimasi dan garansi tampil sesuai data dengan kontras yang cukup. Tombol utama di bawah: “Tanya servis via WhatsApp”. Saat pelanggan memilih satu harga, tombol itu langsung membawa konteks layanan tersebut.</p><!--/A-->
+    <div class="row">
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div>
+            <div class="btn-help"><svg width="16" height="16"><use href="#i-help"/></svg>Bantuan</div></div>
+          <div class="crumb"><a>Semua merek</a><svg width="14" height="14"><use href="#i-chev"/></svg><a>iPhone</a><svg width="14" height="14"><use href="#i-chev"/></svg><span>11</span></div>
+          <div class="dev"><div class="eb">iPhone</div>
+            <div class="row1"><h2>iPhone 11</h2><span class="btn-sec"><svg width="16" height="16"><use href="#i-swap"/></svg>Ganti tipe HP</span></div>
+            <div class="m">6 layanan · 7 pilihan harga</div></div>
+          <div class="hint">Ketuk satu pilihan untuk menanyakannya langsung.</div>
+          <div class="svc"><div class="svc-h"><span class="ic"><svg width="18" height="18"><use href="#i-screen"/></svg></span>Ganti LCD</div>
+            <div class="var"><span class="radio"></span><div class="main"><div class="top"><span class="q">Incel</span><span class="price">Rp 300.000</span></div>
+              <div class="sub"><span><svg width="15" height="15"><use href="#i-clock"/></svg>30 menit</span><span><svg width="15" height="15"><use href="#i-shield"/></svg>Garansi 7 hari</span></div></div></div></div>
+          <div class="svc"><div class="svc-h"><span class="ic"><svg width="18" height="18"><use href="#i-camera"/></svg></span>Ganti Kamera Belakang</div>
+            <div class="var"><span class="radio"></span><div class="main"><div class="top"><span class="q">Premium</span><span class="price">Rp 350.000</span></div>
+              <div class="sub"><span><svg width="15" height="15"><use href="#i-clock"/></svg>60 menit</span><span><svg width="15" height="15"><use href="#i-shield"/></svg>Garansi 30 hari</span></div></div></div></div>
+          <div class="svc"><div class="svc-h"><span class="ic"><svg width="18" height="18"><use href="#i-plug"/></svg></span>Connector Cas</div>
+            <div class="var"><span class="radio"></span><div class="main"><div class="top"><span class="q">Premium</span><span class="price">Rp 180.000</span></div>
+              <div class="sub"><span><svg width="15" height="15"><use href="#i-clock"/></svg>30 menit</span><span><svg width="15" height="15"><use href="#i-shield"/></svg>Garansi 3 hari</span></div></div></div></div>
+          <div class="svc"><div class="svc-h"><span class="ic"><svg width="18" height="18"><use href="#i-layers"/></svg></span>Anti Gores</div>
+            <div class="var"><span class="radio"></span><div class="main"><div class="top"><span class="q">Spy</span><span class="price">Rp 30.000</span></div></div></div></div>
+          <div class="cta"><div class="btn-pri"><span class="wa"><svg width="16" height="16"><use href="#i-wa"/></svg></span>Tanya servis via WhatsApp</div></div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:80px">1</span><span class="pin" style="top:156px">2</span><span class="pin" style="top:270px">3</span><span class="pin" style="top:328px">4</span><span class="pin" style="top:780px">5</span></div><!--/A--></div>
+        <div class="cap">3a · Detail iPhone 11 (posisi atas)</div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div style="position:relative;flex:1;overflow:hidden">
+            <div class="sticky-dev"><div class="nm"><small>iPhone</small>iPhone 11</div><span class="btn-sec sm"><svg width="15" height="15"><use href="#i-swap"/></svg>Ganti tipe</span></div>
+            <div style="padding-top:58px">
+              <div class="svc" style="margin-top:-36px"><div class="var" style="border-top:0"><span class="radio"></span><div class="main"><div class="top"><span class="q">Bening</span><span class="price">Rp 20.000</span></div>
+                  <div class="sub"><span><svg width="15" height="15"><use href="#i-clock"/></svg>10 menit</span><span><svg width="15" height="15"><use href="#i-shield"/></svg>Garansi: Tidak Ada</span></div></div></div></div>
+              <div class="svc"><div class="svc-h"><span class="ic"><svg width="18" height="18"><use href="#i-battery"/></svg></span>Ganti Batrai</div>
+                <div class="var selected"><span class="radio"><svg width="14" height="14"><use href="#i-check"/></svg></span><div class="main"><div class="top"><span class="q">Premium</span><span class="price">Rp 250.000</span></div>
+                  <div class="sub"><span><svg width="15" height="15"><use href="#i-clock"/></svg>1 jam</span><span><svg width="15" height="15"><use href="#i-shield"/></svg>Garansi 1 bulan</span></div></div></div></div>
+              <div class="svc"><div class="svc-h"><span class="ic"><svg width="18" height="18"><use href="#i-back"/></svg></span>Backdoor/Backglass</div>
+                <div class="var"><span class="radio"></span><div class="main"><div class="top"><span class="q">Premium</span><span class="price">Rp 200.000</span></div>
+                  <div class="sub"><span><svg width="15" height="15"><use href="#i-clock"/></svg>40 menit</span><span><svg width="15" height="15"><use href="#i-shield"/></svg>Garansi: Tidak Ada</span></div></div></div></div>
+              <div class="box gold"><h4>Layanan yang kamu cari belum ada?</h4><p>Tanyakan ke kami. Kami bantu cek untuk iPhone 11.</p>
+                <div class="link-btn" style="margin-top:2px">Tanyakan layanan lain <svg width="16" height="16"><use href="#i-chev"/></svg></div></div>
+              <div class="box"><h4>Bantuan</h4>
+                <p style="margin-top:4px">Harga berbeda dari yang ditagih? <span style="color:var(--blue);font-weight:700">Konfirmasi ke owner ›</span></p></div>
+              <div style="height:130px"></div>
+            </div>
+          </div>
+          <div class="cta"><div class="ctx"><span>Dipilih: <b>Ganti Batrai · Premium</b></span><b>Rp 250.000</b></div>
+            <div class="btn-pri"><span class="wa"><svg width="16" height="16"><use href="#i-wa"/></svg></span>Tanya servis ini via WhatsApp</div></div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:26px">6</span><span class="pin" style="top:82px">7</span><span class="pin" style="top:196px">8</span><span class="pin" style="top:488px">9</span><span class="pin" style="top:600px">10</span><span class="pin" style="top:736px">11</span></div><!--/A--></div>
+        <div class="cap">3b · Setelah menggulir dan memilih satu harga</div>
+      </div>
+
+      <!--A--><div class="notes">
+        <ol>
+          <li><span class="n">1</span><div><b>Navigasi naik:</b> Semua merek › iPhone › 11. Selalu ada, termasuk saat masuk dari link WhatsApp. <span class="tag t-ok">Disetujui</span> F06</div></li>
+          <li><span class="n">2</span><div><b>Identitas lengkap dan tombol “Ganti tipe HP”</b> di bagian atas detail. <span class="tag t-ok">Disetujui</span> F13, F14</div></li>
+          <li><span class="n">3</span><div><b>Petunjuk singkat</b> bahwa pilihan harga bisa diketuk. <span class="tag t-prop">Usulan</span></div></li>
+          <li><span class="n">4</span><div><b>Satu baris per pilihan kualitas:</b> label kualitas apa adanya dari data, harga besar rata kanan, lalu estimasi dan garansi (kontras ≥ 6:1, 13 px). Kualitas berbeda tampil sebagai pilihan berbeda, tidak digabung. <span class="tag t-ok">Disetujui</span> F03, F04</div></li>
+          <li><span class="n">5</span><div><b>Tombol utama “Tanya servis via WhatsApp”.</b> Tanpa pilihan harga, tombol ini membuka panel kebutuhan (layar 6). <span class="tag t-ok">Disetujui</span></div></li>
+          <li><span class="n">6</span><div><b>Header identitas menempel saat menggulir:</b> “iPhone 11” dan “Ganti tipe” (tinggi 56 px). Header navy ikut tergulir supaya ruang baca tidak berkurang, dan header identitas tidak menutupi harga, fokus, atau tombol. <span class="tag t-ok">Disetujui</span> F13, A16 <span class="tag t-prop">Usulan</span> cara penyembunyian header navy</div></li>
+          <li><span class="n">7</span><div><b>“Garansi: Tidak Ada”</b> ditampilkan persis seperti di data. Arti dan kalimat akhirnya menunggu keputusan. <span class="tag t-open">Terbuka</span> D03</div></li>
+          <li><span class="n">8</span><div><b>Pilihan yang diketuk ditandai</b> dengan warna, garis kiri, dan centang. Tidak hanya mengandalkan warna. <span class="tag t-ok">Disetujui</span> keputusan 5</div></li>
+          <li><span class="n">9</span><div><b>Bantuan layanan belum tercantum</b> di akhir daftar. Selalu tersedia, tidak bergantung filter (F12 tetap P1). Membuka panel kebutuhan dengan konteks iPhone 11, <b>tanpa</b> kalimat “tipe tidak ditemukan”. <span class="tag t-ok">Disetujui</span> F16, A19</div></li>
+          <li><span class="n">10</span><div><b>“Konfirmasi ke owner” jadi bantuan terpisah</b> yang lebih kecil, bukan tombol utama. <span class="tag t-ok">Disetujui</span><br><span class="tag t-open">Terbuka</span> Nomor tujuan menunggu <b>D04</b>. <span class="tag t-open">Terbuka</span> Ketentuan harga dan garansi (termasuk jasa? biaya cek? syarat garansi?) menunggu <b>D02/D03</b>. Ketentuan ini <b>tidak ditampilkan</b> ke pelanggan sampai diputuskan. Tempatnya nanti di kotak Bantuan ini, di bawah tautan konfirmasi.</div></li>
+          <li><span class="n">11</span><div><b>Tombol menyebut pilihan yang dipilih</b> dan langsung membuka WhatsApp tanpa panel:
+            <div class="msg">Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti Batrai (Premium). Harga di website Rp250.000.</div>
+            Harga hanya disertakan bila ada di data (F05). Pelanggan meninjau dan mengirim sendiri. <span class="tag t-ok">Disetujui</span> keputusan 5 <span class="tag t-prop">Usulan</span> kalimat</div></li>
+        </ol>
+      </div><!--/A-->
+    </div>
+  </section>
+
+  <!-- ================= 4. NOT FOUND ================= -->
+  <section class="sec" id="notfound">
+    <h2>4 · Tipe tidak ditemukan</h2>
+    <!--A--><p class="sub">Hanya muncul setelah katalog berhasil dimuat. Kalimatnya mengikuti PRD dan tidak menyatakan toko tidak bisa menangani tipe itu.</p><!--/A-->
+    <div class="row">
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div>
+            <div class="btn-help"><svg width="16" height="16"><use href="#i-help"/></svg>Bantuan</div></div>
+          <div class="hero" style="padding-top:2px;padding-bottom:14px">
+            <div class="search" style="margin-top:6px"><svg width="22" height="22" style="color:var(--ink-2)"><use href="#i-search"/></svg><span class="val">samsung a55</span>
+              <span class="clear"><svg width="18" height="18"><use href="#i-x"/></svg></span></div>
+          </div>
+          <div class="state">
+            <img src="__CONFUSED__" alt="">
+            <h3>Harga untuk “samsung a55” belum tercantum</h3>
+            <p>Daftar harga kami masih terus dilengkapi. Tanyakan ke BERKAH CELL untuk mengetahui pilihan layanan dan harganya.</p>
+            <div class="acts">
+              <div class="btn-pri"><span class="wa"><svg width="16" height="16"><use href="#i-wa"/></svg></span>Tanyakan lewat WhatsApp</div>
+              <div class="btn-ghost"><svg width="18" height="18"><use href="#i-search"/></svg>Cari tipe lain</div>
+            </div>
+            <p style="font-size:13px;margin-top:18px">Atau pilih merek:</p>
+            <div class="chips"><span class="chip">Samsung</span><span class="chip">iPhone</span><span class="chip">Oppo</span><span class="chip">Vivo</span><span class="chip">Semua merek</span></div>
+          </div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:94px">1</span><span class="pin" style="top:260px">2</span><span class="pin" style="top:462px">3</span><span class="pin" style="top:522px">4</span><span class="pin" style="top:630px">5</span></div><!--/A--></div>
+        <div class="cap">4 · Tipe tidak ditemukan</div>
+      </div>
+      <!--A--><div class="notes">
+        <ol>
+          <li><span class="n">1</span><div><b>Kata pencarian tetap terlihat dan bisa dihapus.</b> <span class="tag t-ok">Disetujui</span> F15</div></li>
+          <li><span class="n">2</span><div><b>Menyebut kata yang diketik pelanggan apa adanya,</b> tidak diklaim sebagai perangkat terverifikasi. Contoh “Samsung A55” diambil dari PRD. Di data 6 Okt memang belum ada. Maskot bingung sebagai aksen kecil. <span class="tag t-ok">Disetujui</span></div></li>
+          <li><span class="n">3</span><div><b>“Tanyakan lewat WhatsApp”</b> membuka panel kebutuhan (pertanyaan umum). Kalau dilewati, pesannya mengikuti PRD:
+            <div class="msg">Halo BERKAH CELL, saya mencari harga servis samsung a55, tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.</div>
+            Dengan kebutuhan:
+            <div class="msg">Halo BERKAH CELL, saya ingin menanyakan harga ganti LCD samsung a55. Harganya belum tercantum di website.</div>
+            <span class="tag t-ok">Disetujui</span> F15, F17</div></li>
+          <li><span class="n">4</span><div><b>“Cari tipe lain”</b> mengembalikan fokus ke kotak pencarian dengan teks terpilih, siap diubah atau dihapus (A18). <span class="tag t-ok">Disetujui</span></div></li>
+          <li><span class="n">5</span><div><b>Jalan pintas ke merek.</b> <span class="tag t-prop">Usulan</span></div></li>
+        </ol>
+      </div><!--/A-->
+    </div>
+  </section>
+
+  <!-- ================= 5. STATES ================= -->
+  <section class="sec" id="gagal">
+    <h2>5 · Gagal memuat data, dibedakan dari katalog kosong dan memuat</h2>
+    <!--A--><p class="sub">Tiga kondisi yang tampilannya sengaja dibuat berbeda. Tidak pernah menampilkan harga contoh, dan kegagalan tidak pernah disebut “tipe tidak ditemukan”.</p><!--/A-->
+    <div class="row">
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div>
+            <div class="btn-help"><svg width="16" height="16"><use href="#i-help"/></svg>Bantuan</div></div>
+          <div class="hero">
+            <div class="eyebrow">DAFTAR HARGA SERVIS HP</div>
+            <h1>Cari harga servis untuk HP kamu</h1>
+            <div class="search disabled"><svg width="22" height="22"><use href="#i-search"/></svg><span>Pencarian tersedia setelah data dimuat</span></div>
+          </div>
+          <div class="state" style="padding-top:34px">
+            <div class="ico"><svg width="32" height="32"><use href="#i-cloudoff"/></svg></div>
+            <h3>Daftar harga belum berhasil dimuat</h3>
+            <p>Coba lagi atau hubungi BERKAH CELL.</p>
+            <div class="acts">
+              <div class="btn-pri"><svg width="20" height="20"><use href="#i-refresh"/></svg>Coba lagi</div>
+              <div class="btn-ghost"><span class="wa" style="width:22px;height:22px;border-radius:11px;background:#25D366;display:flex;align-items:center;justify-content:center"><svg width="14" height="14"><use href="#i-wa"/></svg></span>Hubungi via WhatsApp</div>
+            </div>
+          </div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:196px">1</span><span class="pin" style="top:310px">2</span><span class="pin" style="top:550px">3</span></div><!--/A--></div>
+        <div class="cap">5a · Gagal memuat (koneksi atau data rusak)</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="phone-wrap">
+          <div class="ph-box"><div class="phone short"><div class="screen">
+            <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div></div>
+            <div class="hero" style="padding-bottom:16px"><div class="search disabled"><svg width="22" height="22"><use href="#i-search"/></svg><span>Memuat daftar harga…</span></div></div>
+            <div class="body">
+              <div class="sec-title">Pilih merek</div>
+              <div class="grid3"><div class="tile skel"></div><div class="tile skel"></div><div class="tile skel"></div><div class="tile skel"></div><div class="tile skel"></div><div class="tile skel"></div></div>
+            </div>
+          </div></div><!--A--><div class="rail"><span class="pin" style="top:110px">4</span></div><!--/A--></div>
+          <div class="cap">5b · Memuat</div>
+        </div>
+        <div class="phone-wrap">
+          <div class="ph-box"><div class="phone short"><div class="screen">
+            <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div></div>
+            <div class="state" style="padding-top:40px">
+              <div class="ico"><svg width="30" height="30"><use href="#i-list"/></svg></div>
+              <h3>Daftar harga belum tersedia</h3>
+              <p>Tanyakan harga servis langsung ke BERKAH CELL.</p>
+              <div class="acts"><div class="btn-pri"><span class="wa"><svg width="16" height="16"><use href="#i-wa"/></svg></span>Tanya servis via WhatsApp</div></div>
+            </div>
+          </div></div><!--A--><div class="rail"><span class="pin" style="top:160px">5</span></div><!--/A--></div>
+          <div class="cap">5c · Katalog sah tapi kosong</div>
+        </div>
+      </div>
+      <!--A--><div class="notes">
+        <ol>
+          <li><span class="n">1</span><div><b>Kerangka halaman tetap terbaca,</b> tapi pencarian dinonaktifkan supaya tidak muncul hasil kosong palsu. <span class="tag t-ok">Disetujui</span> F07</div></li>
+          <li><span class="n">2</span><div><b>Kalimat sesuai PRD.</b> Ikonnya berbeda dari layar “tidak ditemukan” supaya kedua kondisi tidak tertukar. <span class="tag t-ok">Disetujui</span> A06, A21</div></li>
+          <li><span class="n">3</span><div><b>“Coba lagi” memuat ulang data.</b> Kontak tetap tersedia. Batas waktu memuat 15 detik. <span class="tag t-ok">Disetujui</span> F07</div></li>
+          <li><span class="n">4</span><div><b>Kerangka abu-abu saat memuat,</b> tanpa angka atau harga sementara. <span class="tag t-prop">Usulan</span></div></li>
+          <li><span class="n">5</span><div><b>Katalog sah tapi kosong:</b> pesan “belum tersedia” dan kontak, <b>bukan</b> pesan gangguan koneksi. <span class="tag t-ok">Disetujui</span> bagian 4 PRD</div></li>
+        </ol>
+      </div><!--/A-->
+    </div>
+  </section>
+
+  <!-- ================= 6. PANEL WA ================= -->
+  <section class="sec" id="panel">
+    <h2>6 · Panel pilihan kebutuhan WhatsApp (F17)</h2>
+    <!--A--><p class="sub">Muncul untuk pertanyaan umum: tombol utama tanpa pilihan harga, bantuan layanan belum ada, tipe tidak ditemukan, dan bantuan umum di Beranda. Selalu bisa dilewati. Kalau pelanggan sudah memilih satu harga, panel ini <b>tidak</b> muncul.</p><!--/A-->
+    <div class="row">
+      <div class="phone-wrap">
+        <div class="ph-box"><div class="phone"><div class="screen">
+          <div class="hdr"><div class="brandmark"><img src="__LOGO__" alt=""><span>BERKAH CELL</span></div></div>
+          <div class="dev"><div class="eb">iPhone</div><div class="row1"><h2>iPhone 11</h2></div></div>
+          <div class="scrim"></div>
+          <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="judul-kebutuhan">
+            <div class="grab"></div>
+            <div class="sheet-head"><div><h3 id="judul-kebutuhan">Tanya servis iPhone 11</h3>
+              <div class="lead">Pilih kebutuhan kalau mau. Boleh dilewati.</div></div>
+              <button class="x-btn" type="button" aria-label="Tutup pilihan kebutuhan"><svg width="20" height="20" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+            <div class="opt on"><span class="radio"><svg width="14" height="14"><use href="#i-check"/></svg></span>Ganti LCD atau layar</div>
+            <div class="opt"><span class="radio"></span>Ganti baterai</div>
+            <div class="opt"><span class="radio"></span>Layanan lainnya</div>
+            <div class="opt"><span class="radio"></span>Belum tahu, ingin menjelaskan keluhan</div>
+            <div class="ta">Keterangan tambahan (opsional)</div>
+            <div class="preview"><b>Pesan yang disiapkan</b>Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11. Kebutuhan: ganti LCD atau layar.</div>
+            <div class="btn-pri" style="margin-top:12px"><span class="wa"><svg width="16" height="16"><use href="#i-wa"/></svg></span>Lanjut ke WhatsApp</div>
+            <div class="skip">Lewati, langsung ke WhatsApp</div>
+            <div class="fine">Pesan dikirim sendiri olehmu dari WhatsApp. Tidak ada yang terkirim otomatis.</div>
+          </div>
+        </div></div><!--A--><div class="rail"><span class="pin" style="top:242px">1</span><span class="pin" style="top:272px">2</span><span class="pin" style="top:332px">3</span><span class="pin" style="top:566px">4</span><span class="pin" style="top:628px">5</span><span class="pin" style="top:762px">6</span></div><!--/A--></div>
+        <div class="cap">6 · Panel kebutuhan (dari tombol utama di detail)</div>
+      </div>
+      <!--A--><div class="notes">
+        <ol>
+          <li><span class="n">1</span><div><b>Judul membawa konteks perangkat.</b> Dari layar “tidak ditemukan”, judulnya memakai kata yang dicari: “Tanya servis samsung a55”. Panel adalah dialog (<code>role="dialog"</code>, <code>aria-modal="true"</code>) yang diberi nama oleh judul ini. <span class="tag t-ok">Disetujui</span> F05</div></li>
+          <li><span class="n">2</span><div><b>Tombol Tutup (X) yang jelas</b> di kanan atas, dengan area sentuh <b>44 × 44 px</b>, latar abu-abu muda, dan label aksesibel <b>“Tutup pilihan kebutuhan”</b>. Menutup panel tidak membuka WhatsApp dan tidak berpindah layar. <span class="tag t-ok">Disetujui</span> revisi 2</div></li>
+          <li><span class="n">3</span><div><b>Empat pilihan persis dari PRD.</b> Opsional, satu ketukan untuk memilih atau membatalkan. Area sentuh tinggi 50 px. <span class="tag t-ok">Disetujui</span> F17</div></li>
+          <li><span class="n">4</span><div><b>Keterangan tambahan opsional.</b> Pilihan “Belum tahu” bukan diagnosis. <span class="tag t-ok">Disetujui</span></div></li>
+          <li><span class="n">5</span><div><b>Pratinjau pesan</b> supaya pelanggan tahu isi yang akan dikirim. Isinya selalu mengikuti konteks terbaru. <span class="tag t-prop">Usulan</span> pratinjau <span class="tag t-ok">Disetujui</span> konteks terbaru</div></li>
+          <li><span class="n">6</span><div><b>“Lewati, langsung ke WhatsApp”</b> selalu ada. Tidak ada isian wajib (A20). <span class="tag t-ok">Disetujui</span></div></li>
+        </ol>
+        <h3>Contoh pesan per kondisi <span class="tag t-prop">Usulan</span> kalimat</h3>
+        <table class="tbl">
+          <tr><th>Asal</th><th>Pesan (tanpa memilih kebutuhan)</th></tr>
+          <tr><td>Detail, tombol utama tanpa pilihan harga</td><td>Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11.</td></tr>
+          <tr><td>Bantuan “layanan belum ada”</td><td>Halo BERKAH CELL, saya ingin menanyakan layanan untuk iPhone 11 yang belum tercantum di website.</td></tr>
+          <tr><td>Tipe tidak ditemukan</td><td>Kalimat PRD (lihat layar 4).</td></tr>
+          <tr><td>Gagal memuat</td><td>Halo BERKAH CELL, saya ingin menanyakan harga servis HP. Daftar harga di website belum bisa dibuka.</td></tr>
+        </table>
+        <h3>Cara menutup panel dan yang harus tetap terjaga</h3>
+        <table class="tbl">
+          <tr><th>Cara menutup</th><th>Hasil</th></tr>
+          <tr><td>Ketuk <b>X</b> “Tutup pilihan kebutuhan”</td><td>Panel tertutup, kembali ke layar asal. <span class="tag t-ok">Disetujui</span></td></tr>
+          <tr><td><b>Back</b> HP atau browser</td><td>Satu kali Back menutup panel. Back berikutnya mengikuti layar sebelumnya. Tidak menahan Back berulang (F06). <span class="tag t-prop">Usulan</span></td></tr>
+          <tr><td><b>Escape</b> di keyboard</td><td>Menutup panel, sama seperti X. <span class="tag t-ok">Disetujui</span></td></tr>
+          <tr><td>Ketuk area gelap di luar panel</td><td>Menutup panel. <span class="tag t-prop">Usulan</span></td></tr>
+        </table>
+        <p style="font-size:14px;color:var(--ink-2);margin-top:10px"><b>Yang tetap sama setelah panel ditutup:</b> perangkat yang dilihat, kata pencarian, pilihan harga yang sedang ditandai, dan posisi gulir. Panel hanya lapisan di atas layar, jadi tidak ada layar yang dimuat ulang. <span class="tag t-ok">Disetujui</span></p>
+        <p style="font-size:14px;color:var(--ink-2);margin-top:6px"><b>Fokus:</b> saat panel terbuka, fokus pindah ke judul panel dan tetap di dalam panel. Saat ditutup, fokus kembali ke tombol yang membukanya, misalnya “Tanya servis via WhatsApp” atau “Tanyakan layanan lain”. <span class="tag t-ok">Disetujui</span></p>
+        <p style="font-size:14px;color:var(--ink-2);margin-top:6px"><b>Pilihan di dalam panel</b> (kebutuhan dan keterangan) disimpan selama pelanggan masih di perangkat yang sama, lalu dikosongkan saat ganti perangkat. <span class="tag t-prop">Usulan</span></p>
+      </div><!--/A-->
+    </div>
+  </section>
+
+  <!-- ================= 7. BACK FLOW ================= -->
+  <!--A--><section class="sec" id="back">
+    <h2>7 · Alur Back yang memulihkan pencarian dan posisi gulir</h2>
+    <!--A--><p class="sub">Setiap layar punya alamat sendiri. <b>Alamat yang berbeda saja belum membuktikan Back benar.</b> Pemulihan kata pencarian, hasil, dan posisi gulir harus disimpan dan diuji di HP sungguhan. Rencananya ada di bawah, buktinya dikumpulkan saat implementasi.</p><!--/A-->
+    <div class="flows">
+      <div class="flow"><h3>A · Menelusuri merek (A13)</h3><div class="why">Merek → iPhone → iPhone 11</div>
+        <div class="steps"><span class="st navy">Beranda<small>gulir grid merek</small></span><span class="arr">→</span><span class="st">Daftar iPhone<small>gulir ke “11”</small></span><span class="arr">→</span><span class="st">Detail iPhone 11</span></div>
+        <div class="back"><b>Back 1×</b> → Daftar iPhone, posisi gulir sama.<br><b>Back 2×</b> → Beranda, posisi grid sama.<br><b>Back 3×</b> → halaman sebelum website (jika ada).</div></div>
+      <div class="flow"><h3>B · Dari pencarian (A14)</h3><div class="why">Ketik → hasil → detail</div>
+        <div class="steps"><span class="st navy">Beranda<small>ketik “iphone 11”</small></span><span class="arr">→</span><span class="st">Gulir hasil</span><span class="arr">→</span><span class="st">Detail iPhone 11 Pro</span></div>
+        <div class="back"><b>Back 1×</b> → Beranda dengan kata “iphone 11”, daftar hasil, dan posisi gulir pulih. Keyboard tidak muncul sendiri.<br><b>Back 2×</b> → keluar ke halaman sebelumnya. Huruf yang diketik tidak menambah riwayat.</div></div>
+      <div class="flow"><h3>C · Masuk langsung dari WhatsApp (A15)</h3><div class="why">Link langsung ke detail</div>
+        <div class="steps"><span class="st">Chat WhatsApp</span><span class="arr">→</span><span class="st navy">Detail iPhone 11</span></div>
+        <div class="back"><b>Back</b> → kembali ke WhatsApp atau riwayat asli. Tidak ada layar merek atau tipe buatan.<br><b>“Semua merek”</b> tetap bisa dipakai sebagai navigasi biasa.</div></div>
+      <div class="flow"><h3>D · Ganti tipe HP (A17)</h3><div class="why">Detail 11 → Ganti tipe → XR</div>
+        <div class="steps"><span class="st">Detail iPhone 11</span><span class="arr">→</span><span class="st navy">Daftar iPhone<small>“Ganti dari iPhone 11”</small></span><span class="arr">→</span><span class="st">Detail iPhone XR</span></div>
+        <div class="back"><b>Back 1×</b> → Daftar iPhone. <b>Back 2×</b> → Detail iPhone 11. Mengikuti layar yang benar-benar dilalui.</div></div>
+      <div class="flow"><h3>E · Panel kebutuhan WhatsApp</h3><div class="why">Detail digulir → buka panel → tutup</div>
+        <div class="steps"><span class="st">Detail iPhone 11<small>digulir, pilihan ditandai</small></span><span class="arr">→</span><span class="st navy">Panel kebutuhan</span></div>
+        <div class="back"><b>X, Escape, atau Back 1×</b> → panel tertutup. Detail, pilihan harga, dan posisi gulir sama persis. Fokus kembali ke tombol pembuka.<br><b>Back berikutnya</b> → layar sebelum detail. Panel tidak menahan Back berulang.</div></div>
+    </div>
+    <h3 style="font-size:15.5px;margin-top:20px">Cara kerja yang direncanakan (untuk implementasi)</h3>
+    <table class="tbl">
+      <tr><th style="width:32%">Kejadian</th><th>Perilaku riwayat</th></tr>
+      <tr><td>Membuka merek, tipe, atau detail</td><td>Riwayat baru ditambahkan (<code>pushState</code>). Posisi gulir layar lama disimpan dulu ke entri lamanya.</td></tr>
+      <tr><td>Mengetik pencarian</td><td>Kata disimpan ke entri yang sama (<code>replaceState</code>, setelah jeda ketik). Tidak menambah riwayat.</td></tr>
+      <tr><td>Back / Forward</td><td>Layar dibangun ulang dari entri riwayat, lalu kata pencarian dan posisi gulir dipulihkan. Pemulihan otomatis browser dimatikan (<code>scrollRestoration = 'manual'</code>) supaya tidak bentrok.</td></tr>
+      <tr><td>Membuka panel kebutuhan <span class="tag t-prop">Usulan</span></td><td>Satu entri riwayat ditambahkan untuk panel. X, Escape, dan ketuk area gelap menutup lewat <code>history.back()</code>, sehingga riwayat tetap bersih. Kalau Forward kembali ke entri panel, panel tidak dibuka ulang dan entri itu dibersihkan dengan <code>replaceState</code>. Gulir halaman di belakang dikunci selama panel terbuka, lalu dipulihkan ke posisi yang sama.</td></tr>
+      <tr><td>Kembali dari cache browser</td><td>Ditangani lewat kejadian <code>pageshow</code>. Penting di Safari iPhone.</td></tr>
+      <tr><td>Alamat tipe yang tidak ada di data</td><td>Tampilkan pesan tipe belum tercantum dan “Semua merek”, bukan halaman kosong. Fitur bagikan link yang lengkap (F11) <b>tetap P1</b>.</td></tr>
+    </table>
+    <h3 style="font-size:15.5px;margin-top:20px">Bukti yang wajib dikumpulkan (bukan cukup dari URL)</h3>
+    <table class="tbl">
+      <tr><th>Uji</th><th>Perangkat dan cara</th><th>Bukti</th></tr>
+      <tr><td>A13, A14, A17</td><td>Android Chrome: tombol dan gestur Back. iPhone Safari: geser dari tepi. Desktop: Back dan Forward.</td><td>Rekaman layar per alur</td></tr>
+      <tr><td>A15</td><td>Buka link detail dari chat WhatsApp, lalu Back</td><td>Rekaman layar. Kalau belum bisa diuji, dicatat “belum diuji”, bukan lulus</td></tr>
+      <tr><td>Per huruf</td><td>Ketik 10 huruf, lalu Back sekali</td><td>Keluar dari layar dengan satu kali Back</td></tr>
+      <tr><td>Panel (E)</td><td>Tutup dengan X, Escape, area gelap, dan Back. Cek posisi gulir, pilihan harga, dan fokus kembali ke tombol pembuka. Uji juga dengan pembaca layar (TalkBack, VoiceOver)</td><td>Rekaman layar dan catatan pembaca layar</td></tr>
+    </table>
+  </section><!--/A-->
+
+  <!-- ================= 8. SISTEM VISUAL ================= -->
+  <!--A--><section class="sec" id="visual">
+    <h2>8 · Sistem visual dan catatan implementasi</h2>
+    <!--A--><p class="sub">Warna sudah dicek kontrasnya. Font final belum dipilih (D01). Mockup ini memakai font sistem HP.</p><!--/A-->
+    <div class="swatches">
+      <div class="sw"><i style="background:#0A1A33"></i><div><b>Navy 900</b><br>#0A1A33 · header</div></div>
+      <div class="sw"><i style="background:#F6F4EF"></i><div><b>Gading</b><br>#F6F4EF · latar</div></div>
+      <div class="sw"><i style="background:#FFFFFF"></i><div><b>Putih</b><br>kartu harga</div></div>
+      <div class="sw"><i style="background:#0F1B2D"></i><div><b>Tinta</b><br>15,7:1 di latar</div></div>
+      <div class="sw"><i style="background:#4F5B6E"></i><div><b>Tinta 2</b><br>6,3:1 · teks pendukung</div></div>
+      <div class="sw"><i style="background:#C9A54E"></i><div><b>Emas</b><br>hiasan saja</div></div>
+      <div class="sw"><i style="background:#8A6614"></i><div><b>Emas teks</b><br>5,3:1 di putih</div></div>
+      <div class="sw"><i style="background:#D8B566"></i><div><b>Emas di navy</b><br>8,9:1</div></div>
+    </div>
+    <table class="tbl" style="margin-top:16px">
+      <tr><th style="width:30%">Catatan implementasi</th><th>Isi</th></tr>
+      <tr><td><b>Teks dari Sheet dirender sebagai teks, bukan HTML</b> <span class="tag t-ok">Wajib</span></td><td>Semua nilai Sheet dimasukkan lewat <code>textContent</code> atau elemen yang dibuat satu per satu. Tidak ada lagi <code>innerHTML</code> berisi data, dan tidak ada lagi <code>onclick="…'${brand}'…"</code> seperti di kode sekarang. Tanda kutip di nama model tidak boleh merusak tombol atau menjalankan kode. Uji dengan data uji terpisah yang berisi tanda kutip, <code>&lt;</code>, dan <code>&amp;</code>.</td></tr>
+      <tr><td>Pencarian</td><td>Cocokkan ke gabungan “merek + model”, tanpa membedakan huruf besar-kecil dan spasi di awal atau akhir, supaya “iphone 11” ketemu (F02).</td></tr>
+      <tr><td>Gambar</td><td>Logo dan maskot dipisah sebagai WebP: ±65 KB, dibanding ±680 KB yang sekarang ditanam di kode.</td></tr>
+      <tr><td>Aksesibilitas</td><td>Area sentuh minimal 44 px, fokus keyboard berbentuk cincin emas, gerak dikurangi bila pengguna memintanya, angka harga rata (tabular).</td></tr>
+      <tr><td>Data internal</td><td>Tetap hanya membaca file publik tanpa Harga_Modal (sudah berjalan sejak 6 Okt).</td></tr>
+    </table>
+  </section><!--/A-->
+
+  <!--A--><section class="sec">
+    <h2>Keputusan yang masih terbuka (tidak diputuskan di mockup ini)</h2>
+    <table class="tbl">
+      <tr><th>ID</th><th>Keputusan</th><th>Dampak ke desain</th></tr>
+      <tr><td>D01</td><td>Mockup final, font, nilai warna akhir</td><td>Mockup ini adalah bahan review</td></tr>
+      <tr><td>D02, D03</td><td>Apakah harga sudah termasuk jasa, biaya cek, syarat garansi, arti “Tidak Ada” dan “Jasa”</td><td>Tidak ada teks ketentuan di layar pelanggan sampai diputuskan. Tempatnya disiapkan di kotak Bantuan pada detail. Nilai data ditampilkan apa adanya</td></tr>
+      <tr><td>D04</td><td>Nomor toko dan nomor owner</td><td>Tombol “Konfirmasi ke owner” menunggu nomor</td></tr>
+      <tr><td>D05</td><td>Pengelompokan Xiaomi, Redmi, Poco, “Xiomi”, dan penulisan model</td><td>Grid merek menampilkan data apa adanya</td></tr>
+      <tr><td>—</td><td>File logo resmi beresolusi tinggi</td><td>Logo saat ini 197×200 px, cukup untuk 32 px di HP. Untuk ukuran lebih besar perlu file resmi</td></tr>
+    </table>
+  </section><!--/A-->
+</div>
+</body>
+</html>
