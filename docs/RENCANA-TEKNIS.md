@@ -11,7 +11,22 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Detail: `/?merek=iphone&tipe=11`
   - Bantuan: `/?bantuan=1`
 - **Setiap kartu memakai tautan `<a href>` sungguhan,** jadi tetap bisa dibuka di tab baru. Klik biasa ditangani `pushState`.
-- **F11 (bagikan link dan pemulihan saat data berubah) tetap P1.** Tipe yang tidak ada di data hanya menampilkan pesan "belum tercantum" dan tautan "Semua merek".
+- **F11 (bagikan link) P0 sejak PRD v0.5.** Tipe yang tidak ada di data menampilkan pesan "belum tercantum" dan tautan "Semua merek".
+
+## Versi 3.1: berbagi, tampilan tautan, dan ikon (PRD v0.5)
+
+- **"Bagikan harga ini" (F11)** ada di kepala detail.
+  - Tautannya `location.origin + modelHref(m)`, yaitu alamat detail yang sama dengan kartu tipe.
+  - Urutan: `navigator.share` (menu berbagi HP). Jika tidak ada, `navigator.clipboard.writeText` dengan konfirmasi. Jika clipboard ditolak, tautan ditampilkan di kotak teks yang sudah terpilih.
+  - Batal berbagi (`AbortError`) tidak memunculkan pesan apa pun.
+- **Tampilan tautan (F18):** meta Open Graph statis di `index.html`.
+  - `og:image` harus alamat absolut. Sekarang memakai alamat produksi workers.dev, jadi gambar di kartu WhatsApp baru muncul setelah merge ke `main`. Ganti alamat ini saat pindah domain.
+  - Sengaja **tanpa `og:url`**, karena Facebook akan mengarahkan semua tautan detail ke beranda.
+  - Crawler WhatsApp tidak menjalankan JavaScript, jadi judul kartu sama untuk semua halaman. Nama tipe ikut di teks yang dibagikan lewat menu HP.
+- **Ikon:** `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png`, dan `site.webmanifest`.
+  - Manifest memakai `display: "browser"`, bukan `standalone`. Dengan begitu, website yang disimpan ke layar utama tetap punya tombol Back browser. Di iPhone, mode standalone tidak punya tombol Back.
+  - Tidak ada service worker atau cache offline, supaya harga lama tidak tampil.
+- **Aset dibuat ulang** dengan `node tools/buat_aset.js <folder-font-inter>` dari `design/sumber-aset/` (logo dan maskot resolusi asli dari website lama).
 
 ## Riwayat, Back, dan posisi gulir
 

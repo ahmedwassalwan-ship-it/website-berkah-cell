@@ -1,5 +1,5 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3 (preview)
- * Acuan: PRD v0.4, docs/RENCANA-TEKNIS.md.
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.1 (preview)
+ * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
  */
@@ -527,16 +527,45 @@
     return t + ' Mohon dibantu cek.';
   }
 
+  // F11: bagikan tautan detail lewat menu berbagi HP; cadangan salin tautan.
+  async function shareModel(m, note) {
+    const url = location.origin + modelHref(m);
+    note.hidden = true; note.textContent = '';
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Harga servis ' + m.fullName + ' — BERKAH CELL', text: 'Cek harga servis ' + m.fullName + ' di BERKAH CELL:', url });
+        return;
+      } catch (e) {
+        if (e && e.name === 'AbortError') return; // dibatalkan pelanggan
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      appendAll(note, icon('check', 16), 'Tautan disalin. Tempel di chat untuk membagikan.');
+    } catch (e) {
+      const input = h('input', { type: 'text', readonly: true, value: url, 'aria-label': 'Tautan harga ' + m.fullName });
+      appendAll(note, h('span', { text: 'Salin tautan ini:' }), input);
+      note.hidden = false;
+      input.focus(); input.select();
+      return;
+    }
+    note.hidden = false;
+  }
+
   function renderDetail(r) {
     const m = findModel(r);
     if (!m) return renderNotListed(r.brand + ' ' + r.model, r.brand);
     const b = m.brand;
     const gantiBtn = (cls) => h('button', { type: 'button', class: cls, onclick: () => navigate(brandHref(b), { ganti: m.key }) }, icon('swap', 16), cls.includes('sm') ? 'Ganti tipe' : 'Ganti tipe HP');
     const h1 = h('h1', { text: m.fullName });
+    const shareNote = h('div', { class: 'share-note', role: 'status', hidden: true });
     const devHead = h('section', { class: 'dev', 'aria-label': 'Perangkat' }, h('div', { class: 'wrap' },
       h('p', { class: 'eb', text: b.name }),
       h('div', { class: 'row1' }, h1, gantiBtn('btn-sec')),
-      h('p', { class: 'm', text: m.services.length + ' layanan · ' + m.optionCount + ' pilihan harga' })));
+      h('div', { class: 'row2' },
+        h('p', { class: 'm', text: m.services.length + ' layanan · ' + m.optionCount + ' pilihan harga' }),
+        h('button', { type: 'button', class: 'link-btn share', onclick: () => shareModel(m, shareNote) }, icon('share', 16), 'Bagikan harga ini')),
+      shareNote));
 
     const rowButtons = [];
     const services = h('div', { class: 'services' }, m.services.map((s, gi) => {

@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.4 · 6 Oktober 2026 · Bahasa Indonesia
+Versi 0.5 · 6 Oktober 2026 · Bahasa Indonesia
 
-**Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
+**Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Setelah meninjau preview, pemilik menyetujui paket peningkatan profesional: tautan berbagi, tampilan tautan saat dibagikan, ikon, dan informasi toko (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.4 menggantikan versi 0.3 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.5 menggantikan versi 0.4 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -119,13 +119,15 @@ P0 adalah kebutuhan wajib untuk rilis pertama. P1 adalah peningkatan yang dikerj
 | F08 | P0 | Website mengambil data harga dari sumber yang ditetapkan pemilik. Pembaruan harga tidak memerlukan perubahan manual pada setiap komponen UI. |
 | F09 | P0 | Bagian bantuan menjelaskan konfirmasi harga dan akses ke owner sesuai tujuan kontak yang telah diverifikasi. |
 | F10 | P0 | Nama merek memiliki penulisan yang konsisten. Alias pencarian mempertahankan keterjangkauan data lama tanpa menghilangkan varian layanan. |
-| F11 | P1 | Tautan langsung menuju perangkat atau layanan dapat dibagikan, dengan pemulihan yang jelas bila data sudah berubah atau dihapus. |
+| F11 | P0 | Tautan langsung menuju perangkat dapat dibagikan dari detail harga melalui “Bagikan harga ini” (menu berbagi HP atau salin tautan), dengan pemulihan yang jelas bila data sudah berubah atau dihapus. |
 | F12 | P1 | Filter jenis servis, seperti LCD atau baterai, dapat ditambahkan jika katalog dan uji pengguna menunjukkan kebutuhan. |
 | F13 | P0 | Nama lengkap merek dan model jelas pada detail harga. Header kecil menjaga identitas perangkat tetap terlihat saat menggulir tanpa menutup konten atau tindakan. |
 | F14 | P0 | “Ganti tipe HP” membuka pilihan model dalam merek yang sama. Pemilihan model lain memperbarui identitas, daftar layanan, harga, dan konteks WhatsApp. |
 | F15 | P0 | Bila tipe tidak ditemukan setelah data berhasil dimuat, tampilkan kata pencarian, penjelasan harga belum tercantum, serta “Tanyakan lewat WhatsApp” dan “Cari tipe lain”. |
 | F16 | P0 | Detail perangkat menyediakan “Layanan yang kamu cari belum ada? Tanyakan ke kami.” Pertanyaan membawa konteks perangkat walaupun layanan belum ada dalam katalog. |
 | F17 | P0 | Untuk pertanyaan umum, sebelum WhatsApp tawarkan kebutuhan LCD atau layar, baterai, layanan lainnya, atau belum tahu dan ingin menjelaskan keluhan. Pelanggan dapat melewati pilihan dan langsung membuka WhatsApp. Jika layanan sudah dipilih pada detail harga, WhatsApp langsung memakai konteks layanan tersebut. |
+| F18 | P0 | Tautan website yang dibagikan di WhatsApp atau media sosial menampilkan judul, deskripsi, dan gambar BERKAH CELL. Website memiliki ikon untuk layar utama HP. Tidak ada penyimpanan harga offline. |
+| F19 | P0 | Informasi toko berupa alamat, jam buka, dan tautan Google Maps tampil di website serta tersedia sebagai data lokal untuk mesin pencari. Isinya hanya dari data yang diberikan pemilik; bagian ini tidak tampil sebelum datanya tersedia. |
 
 ### Pesan bantuan dan konteks WhatsApp
 
@@ -293,10 +295,13 @@ Tabel ini menjadi daftar pemeriksaan untuk developer dan AI. Status setiap pemer
 | A19 | Layanan belum tercantum | Pada model yang tersedia, akses bantuan layanan tetap ada tanpa memerlukan filter P1. Pesan membawa model benar tanpa menyatakan perangkat tidak ditemukan atau menebak harga. |
 | A20 | Pilihan kebutuhan opsional | Uji keempat pilihan, pilihan lainnya atau keluhan tanpa teks tambahan, dan langsung ke WhatsApp tanpa memilih. Tidak ada isian wajib yang menghalangi; pesan membawa konteks yang tersedia dan tidak mengirim otomatis. Setelah memilih satu layanan dan kualitas pada detail, WhatsApp langsung membawa layanan tersebut tanpa menampilkan pilihan kebutuhan. |
 | A21 | Keadaan katalog dan pemulihan | Bedakan katalog sah yang kosong, hasil kosong, dan kegagalan jaringan atau data. “Coba lagi” memuat ulang data; pemulihan menampilkan katalog aktual tanpa harga contoh. |
+| A22 | Bagikan harga | Dari detail iPhone 11, “Bagikan harga ini” membuka menu berbagi HP atau menyalin tautan. Tautan membuka detail perangkat yang sama di tab baru, dan Kembali mengikuti A15. Tautan ke tipe yang sudah tidak ada menampilkan pesan belum tercantum. |
+| A23 | Tampilan tautan | Halaman memuat judul, deskripsi, dan gambar untuk pratinjau tautan; gambar dapat dimuat dari alamat publik. Ikon layar utama tersedia. Tidak ada permintaan jaringan baru selain sumber data. |
+| A24 | Informasi toko | Alamat, jam buka, dan tautan Maps sama persis dengan data dari pemilik dan tampil di beranda, bantuan, dan footer. Data lokal untuk mesin pencari memuat nilai yang sama. Tanpa data, bagian ini tidak tampil. |
 
 ### Pemetaan kebutuhan tambahan ke pengujian
 
-F06 diperiksa melalui A13 sampai A15. F13 diperiksa melalui A16 dan A08 sampai A09. F14 diperiksa melalui A17. F15 dan F16 diperiksa melalui A18 sampai A19. F17 serta perluasan F05 diperiksa melalui A20 dan A07. Perluasan F07 diperiksa melalui A06 dan A21.
+F06 diperiksa melalui A13 sampai A15. F13 diperiksa melalui A16 dan A08 sampai A09. F14 diperiksa melalui A17. F15 dan F16 diperiksa melalui A18 sampai A19. F17 serta perluasan F05 diperiksa melalui A20 dan A07. Perluasan F07 diperiksa melalui A06 dan A21. F11 diperiksa melalui A22 dan A15. F18 diperiksa melalui A23. F19 diperiksa melalui A24.
 
 Pada preview HP, sertakan nama model panjang, hasil pencarian kosong, pergantian perangkat, dan isi pesan WhatsApp. Catat versi preview, perangkat atau browser, hasil, dan bukti. Jika gestur Kembali atau perpindahan ke aplikasi WhatsApp belum dapat diuji, catat sebagai belum diuji, bukan lulus.
 
@@ -375,6 +380,14 @@ Pemilik menyetujui mockup revisi sebagai acuan implementasi preview dan menetapk
 4. **Kontak:** satu nomor WhatsApp, ditampilkan 089625050525 dan ditautkan sebagai 6289625050525, untuk pertanyaan servis maupun bantuan atau komplain kepada owner dengan isi pesan sesuai tujuan.
 5. **Merek:** “Xiomi” ditampilkan sebagai “Xiaomi”; Redmi dan Poco tetap merek tersendiri. Data sumber dipertahankan; model dan layanan yang berpotensi ganda diperiksa tanpa menimpa pilihan harga berbeda secara otomatis.
 
+### Keputusan pemilik pada 6 Oktober 2026 (paket profesional)
+
+Setelah meninjau preview v3 di HP dan melaporkan semua fitur berjalan baik, pemilik memilih paket peningkatan berikut:
+
+1. **Paket 1, dikerjakan:** tombol “Bagikan harga ini” pada detail harga (F11 naik dari P1 ke P0), tampilan tautan saat dibagikan, dan ikon layar utama HP (F18).
+2. **Paket 2, dikerjakan setelah data diterima:** informasi toko dan data lokal untuk mesin pencari (F19). Toko sudah terdaftar di Google Maps; alamat, jam buka, dan tautan Maps dikirim pemilik dan tidak boleh ditebak.
+3. **Ditunda:** domain sendiri dinilai sangat dibutuhkan, tetapi belum sekarang (D08). Pengukuran pengunjung dan Meta Pixel belum dipilih (D09).
+
 ### Keputusan yang masih terbuka
 
 Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang terkait diterapkan atau dipublikasikan. Hindari mengubah pertanyaan yang belum terjawab menjadi asumsi pasti.
@@ -388,6 +401,8 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 | D05 | Pemetaan merek dan model serta penanganan salah ketik | Merek diputuskan 6 Okt 2026 (Xiomi → Xiaomi; Redmi dan Poco terpisah). Model yang berpotensi ganda, termasuk lintas Xiaomi, Redmi, dan Poco, menunggu pemeriksaan pemilik |
 | D06 | Siapa pengelola Sheet, sumber publik yang aman, dan aturan pembaruan harga | Alur kerja perlu didokumentasikan |
 | D07 | Lokasi kode produksi, cara deploy, cadangan, dan prosedur pemulihan | Belum terdokumentasi di paket ini |
+| D08 | Domain sendiri untuk website | Ditunda 6 Okt 2026: dinilai perlu, terutama sebelum iklan Meta; dibeli dan dipasang setelah data siap. Sampai saat itu tautan publik memakai alamat workers.dev |
+| D09 | Pengukuran pengunjung dan Meta Pixel | Ditunda 6 Okt 2026. Bila dipilih, perlu ID, perubahan kebijakan keamanan halaman, dan keterangan privasi |
 
 ### Urutan pengerjaan berikutnya
 
@@ -405,6 +420,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.2, 5 Oktober 2026:** memasukkan tujuh ide dan semua aturan pendukung yang disetujui pemilik. Memperjelas F05 sampai F07; menambah F13 sampai F17; memperbarui A07 dan menambah A13 sampai A21. Menyesuaikan perjalanan pelanggan, panduan UI, konteks katalog, status persetujuan, serta petunjuk GitHub. Total 17 kebutuhan fungsional dan 21 kriteria penerimaan. F11 dan F12 tetap P1.
 - **Versi 0.3, 6 Oktober 2026:** mencatat arah desain Katalog Bertingkat yang disetujui pemilik beserta keputusan warna, tindakan kontak utama, maskot, dan aturan pemicu F17. Memperjelas F17 dan A20; memperbarui bagian 2, 5, dan 9 serta status D01 dan cakupan D03. Mockup final masih menunggu review. Prioritas P0/P1 tidak berubah.
 - **Versi 0.4, 6 Oktober 2026:** mencatat persetujuan mockup revisi sebagai acuan implementasi preview serta lima keputusan pemilik: harga termasuk jasa pemasangan dan pemeriksaan tanpa biaya, aturan garansi “Tidak Ada” dan kolom kosong, arti “Jasa”, satu nomor WhatsApp untuk servis dan komplain, serta normalisasi merek Xiomi → Xiaomi dengan Redmi dan Poco terpisah. Memperbarui bagian 2, 3, 4, 8, dan 9 serta status D01 sampai D05. Pajak, biaya tambahan lain, syarat garansi lengkap, dan model yang berpotensi ganda tetap terbuka. Prioritas P0/P1 tidak berubah.
+- **Versi 0.5, 6 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Informasi toko menunggu data dari pemilik.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -420,7 +436,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.4 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.5 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 

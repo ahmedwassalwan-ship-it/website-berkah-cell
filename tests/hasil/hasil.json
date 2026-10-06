@@ -21,7 +21,7 @@
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 21 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 31 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -162,7 +162,7 @@
       "✓ Back mengikuti riwayat asli (tidak ada layar merek/tipe buatan)",
       "✓ \"Semua merek\" berfungsi setelah masuk langsung",
       "✓ Mengetik 10 huruf lalu satu Back langsung keluar dari layar (tanpa riwayat per huruf)",
-      "✓ Link ke tipe yang tidak ada → pesan \"belum tercantum\" + \"Semua merek\" (F11 lengkap tetap P1)",
+      "✓ Link ke tipe yang tidak ada → pesan \"belum tercantum\" + \"Semua merek\"",
       "• Membuka link dari aplikasi WhatsApp sungguhan belum diuji (hanya emulasi lewat about:blank)."
     ]
   },
@@ -240,10 +240,43 @@
       "✓ Respons asli file publik diperiksa terpisah: ekspor 6 Okt 2026 hanya 7 kolom pelanggan; file utama berakses Dibatasi (dicek lewat Google Drive)."
     ]
   },
+  "A22": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Tombol \"Bagikan harga ini\" ada di detail",
+      "✓ Area sentuh tombol Bagikan ≥ 44 px",
+      "✓ Menu berbagi menerima tautan detail iPhone 11 beserta judul",
+      "✓ Setelah berbagi lewat menu HP tidak ada pesan tambahan",
+      "✓ Batal berbagi tidak memunculkan pesan dan tidak menyalin",
+      "✓ Tanpa menu berbagi: tautan disalin dan ada konfirmasi",
+      "✓ Tautan bersalin membuka detail iPhone XS Max",
+      "✓ Back dari tautan yang dibuka mengikuti riwayat asli (A15)",
+      "✓ Clipboard ditolak: tautan tampil di kotak terpilih untuk disalin manual",
+      "✓ Tautan ke tipe yang tidak ada lagi menampilkan pesan \"belum tercantum\"",
+      "✓ Tanpa error JS"
+    ]
+  },
+  "A23": {
+    "status": "BELUM DIUJI",
+    "notes": [
+      "✓ Judul, deskripsi, teks alternatif gambar, dan jenis kartu tersedia",
+      "✓ og:image memakai alamat absolut https dan ukuran 1200×630",
+      "✓ Tidak ada og:url tetap, sehingga tautan detail yang dibagikan tidak dialihkan ke beranda",
+      "✓ Gambar tautan termuat dari website dengan ukuran 1200×630",
+      "✓ Ukuran gambar tautan < 300 KB (batas aman WhatsApp)",
+      "✓ Ikon layar utama iPhone 180×180 termuat",
+      "✓ Manifest termuat; mode browser (tombol Back tetap ada di HP)",
+      "✓ Ikon manifest 192x192 termuat dengan ukuran benar",
+      "✓ Ikon manifest 512x512 termuat dengan ukuran benar",
+      "✓ Tanpa service worker atau cache offline (harga lama tidak tampil)",
+      "✓ Tidak ada permintaan jaringan baru selain sumber data",
+      "• Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main."
+    ]
+  },
   "A11": {
     "status": "BELUM DIUJI",
     "notes": [
-      "• Butuh review pemilik atas preview (beranda, katalog, detail, keadaan gagal)."
+      "• Pemilik melaporkan preview v3 (9e57432) berjalan baik di HP pada 6 Okt 2026. Perubahan Versi 3.1 (Bagikan, tampilan tautan, ikon) belum direview pemilik."
     ]
   },
   "A12": {

@@ -6,9 +6,10 @@ Website daftar harga servis HP BERKAH CELL.
 - `PRD.md` — dokumen kebutuhan produk.
 - `wrangler.jsonc` — konfigurasi deploy Cloudflare Workers.
 - `docs/RENCANA-TEKNIS.md` — rencana teknis preview v3 (navigasi, data, keamanan).
-- `docs/HASIL-UJI-PREVIEW.md` — hasil uji A01–A21 dan temuan data.
+- `docs/HASIL-UJI-PREVIEW.md` — hasil uji A01–A24 dan temuan data.
 - `design/mockup-v1/` — mockup yang disetujui sebagai acuan.
 - `tools/cek_data.py` — audit ekspor Price_List (hanya membaca).
+- `tools/buat_aset.js` — membuat gambar tautan (`og-cover.jpg`) dan ikon dari `design/sumber-aset/`.
 - `tests/` — uji penerimaan (`node tests/e2e.js`, butuh Playwright).
 
 ## Deploy

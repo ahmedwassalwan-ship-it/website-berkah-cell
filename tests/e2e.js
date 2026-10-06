@@ -88,10 +88,12 @@ async function run() {
     await testNotFound();
     await testPanel();
     await testNetwork();
+    await testShare();
+    await testMeta();
   } finally {
     await browser.close(); srv.srv.close();
   }
-  rec('A11', 'BELUM DIUJI', 'Butuh review pemilik atas preview (beranda, katalog, detail, keadaan gagal).');
+  rec('A11', 'BELUM DIUJI', 'Pemilik melaporkan preview v3 (9e57432) berjalan baik di HP pada 6 Okt 2026. Perubahan Versi 3.1 (Bagikan, tampilan tautan, ikon) belum direview pemilik.');
   rec('A12', 'BELUM BERLAKU', 'Belum ada rilis produksi pada tahap ini; PR tidak di-merge.');
   fs.writeFileSync(path.join(OUT, 'hasil.json'), JSON.stringify(results, null, 2));
   const ids = Object.keys(results).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
@@ -403,7 +405,7 @@ async function testDirectEntry() {
   expect('A15', p.url() === 'about:blank', 'Mengetik 10 huruf lalu satu Back langsung keluar dari layar (tanpa riwayat per huruf)', p.url());
   await p.goto(base + '?merek=nokia&tipe=3310'); await ready(p);
   const t = await p.textContent('main');
-  expect('A15', t.includes('belum tercantum') && (await p.$('.crumb a')) !== null, 'Link ke tipe yang tidak ada → pesan "belum tercantum" + "Semua merek" (F11 lengkap tetap P1)');
+  expect('A15', t.includes('belum tercantum') && (await p.$('.crumb a')) !== null, 'Link ke tipe yang tidak ada → pesan "belum tercantum" + "Semua merek"');
   rec('A15', 'BELUM DIUJI', 'Membuka link dari aplikasi WhatsApp sungguhan belum diuji (hanya emulasi lewat about:blank).');
   await p.context().close();
 }
@@ -563,6 +565,97 @@ async function testNetwork() {
   const leak = files.filter((f) => /harga_modal|1XliPDpr5B6P03NsWQmt/i.test(fs.readFileSync(path.join(__dirname, '..', 'site-live', f), 'utf8')));
   expect('A10', leak.length === 0, 'Aset publik tidak memuat Harga_Modal atau ID file utama', leak);
   rec('A10', 'LULUS', 'Respons asli file publik diperiksa terpisah: ekspor 6 Okt 2026 hanya 7 kolom pelanggan; file utama berakses Dibatasi (dicek lewat Google Drive).');
+  await p.context().close();
+}
+
+/* ---------- A22: Bagikan harga (F11) ---------- */
+async function testShare() {
+  const origin = new URL(base).origin;
+  const want = origin + '/?merek=iphone&tipe=11';
+  // 1. Menu berbagi HP tersedia: navigator.share dipanggil dengan tautan detail.
+  let p = await newPage();
+  await p.addInitScript(() => { navigator.share = (d) => { window.__shared = d; return Promise.resolve(); }; });
+  await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
+  const btn = p.locator('button.share');
+  expect('A22', (await btn.textContent()).includes('Bagikan harga ini'), 'Tombol "Bagikan harga ini" ada di detail');
+  const box = await btn.boundingBox();
+  expect('A22', box && box.height >= 44, 'Area sentuh tombol Bagikan ≥ 44 px', box);
+  await btn.click(); await sleep(100);
+  const shared = await p.evaluate(() => window.__shared);
+  expect('A22', shared && shared.url === want && /iPhone 11/.test(shared.title) && /iPhone 11/.test(shared.text), 'Menu berbagi menerima tautan detail iPhone 11 beserta judul', shared);
+  expect('A22', await p.locator('.share-note').isHidden(), 'Setelah berbagi lewat menu HP tidak ada pesan tambahan');
+  await p.context().close();
+  // 2. Pelanggan membatalkan menu berbagi: tidak ada pesan, tidak menyalin.
+  p = await newPage();
+  await p.addInitScript(() => { navigator.share = () => Promise.reject(new DOMException('batal', 'AbortError')); navigator.clipboard.writeText = () => { window.__copied = true; return Promise.resolve(); }; });
+  await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
+  await p.click('button.share'); await sleep(100);
+  expect('A22', (await p.locator('.share-note').isHidden()) && !(await p.evaluate(() => window.__copied)), 'Batal berbagi tidak memunculkan pesan dan tidak menyalin');
+  await p.context().close();
+  // 3. Tanpa menu berbagi (desktop): tautan disalin ke clipboard.
+  p = await newPage();
+  await p.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin });
+  await p.addInitScript(() => { try { delete Navigator.prototype.share; } catch (e) { /* abaikan */ } });
+  await p.goto(base + '?merek=iphone&tipe=xs%20max'); await ready(p);
+  await p.click('button.share'); await p.waitForSelector('.share-note:not([hidden])');
+  const clip = await p.evaluate(() => navigator.clipboard.readText());
+  const wantMax = origin + '/?merek=iphone&tipe=xs+max';
+  expect('A22', clip === wantMax && (await p.textContent('.share-note')).includes('Tautan disalin'), 'Tanpa menu berbagi: tautan disalin dan ada konfirmasi', { clip, wantMax });
+  // Tautan yang disalin membuka detail yang sama di tab baru.
+  const p2 = await newPage(); await p2.goto('about:blank'); await p2.goto(clip); await ready(p2);
+  expect('A22', (await p2.textContent('.dev h1')) === 'iPhone XS Max', 'Tautan bersalin membuka detail iPhone XS Max');
+  await p2.goBack(); await sleep(300);
+  expect('A22', p2.url() === 'about:blank', 'Back dari tautan yang dibuka mengikuti riwayat asli (A15)', p2.url());
+  await p2.context().close();
+  await p.context().close();
+  // 4. Clipboard ditolak: tampilkan tautan untuk disalin manual.
+  p = await newPage();
+  await p.addInitScript(() => { try { delete Navigator.prototype.share; } catch (e) { /* abaikan */ } navigator.clipboard.writeText = () => Promise.reject(new Error('ditolak')); });
+  await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
+  await p.click('button.share'); await p.waitForSelector('.share-note input');
+  const v = await p.evaluate(() => { const i = document.querySelector('.share-note input'); return { value: i.value, focused: document.activeElement === i }; });
+  expect('A22', v.value === want && v.focused, 'Clipboard ditolak: tautan tampil di kotak terpilih untuk disalin manual', v);
+  await shot(p, 'a22-bagikan-salin-manual');
+  await p.context().close();
+  // 5. Tautan ke tipe yang sudah tidak ada.
+  p = await newPage(); await p.goto(base + '?merek=iphone&tipe=99'); await ready(p);
+  expect('A22', (await p.textContent('main')).includes('belum tercantum'), 'Tautan ke tipe yang tidak ada lagi menampilkan pesan "belum tercantum"');
+  expect('A22', p.__errors.length === 0, 'Tanpa error JS', p.__errors);
+  await p.context().close();
+}
+
+/* ---------- A23: Tampilan tautan dan ikon (F18) ---------- */
+async function testMeta() {
+  const p = await newPage(); await p.goto(base); await ready(p);
+  const meta = await p.evaluate(() => {
+    const g = (s) => { const e = document.querySelector(s); return e ? (e.getAttribute('content') || e.getAttribute('href')) : null; };
+    return {
+      title: g('meta[property="og:title"]'), desc: g('meta[property="og:description"]'), img: g('meta[property="og:image"]'),
+      w: g('meta[property="og:image:width"]'), h: g('meta[property="og:image:height"]'), alt: g('meta[property="og:image:alt"]'),
+      card: g('meta[name="twitter:card"]'), url: g('meta[property="og:url"]'), touch: g('link[rel="apple-touch-icon"]'), manifest: g('link[rel="manifest"]'),
+    };
+  });
+  expect('A23', meta.title && meta.desc && meta.alt && meta.card === 'summary_large_image', 'Judul, deskripsi, teks alternatif gambar, dan jenis kartu tersedia', meta);
+  expect('A23', /^https:\/\/[^/]+\/assets\/og-cover\.jpg$/.test(meta.img || '') && meta.w === '1200' && meta.h === '630', 'og:image memakai alamat absolut https dan ukuran 1200×630', meta);
+  expect('A23', meta.url === null, 'Tidak ada og:url tetap, sehingga tautan detail yang dibagikan tidak dialihkan ke beranda');
+  const localImg = new URL(meta.img).pathname;
+  const dims = async (src) => p.evaluate((s) => new Promise((res) => { const i = new Image(); i.onload = () => res([i.naturalWidth, i.naturalHeight]); i.onerror = () => res(null); i.src = s; }), src);
+  expect('A23', JSON.stringify(await dims(base.replace(/\/$/, '') + localImg)) === '[1200,630]', 'Gambar tautan termuat dari website dengan ukuran 1200×630');
+  expect('A23', fs.statSync(path.join(__dirname, '..', 'site-live', localImg)).size < 300 * 1024, 'Ukuran gambar tautan < 300 KB (batas aman WhatsApp)');
+  expect('A23', JSON.stringify(await dims(meta.touch)) === '[180,180]', 'Ikon layar utama iPhone 180×180 termuat');
+  // Diambil lewat Playwright: CSP halaman (connect-src) memang tidak mengizinkan fetch ke situs sendiri.
+  const mr = await p.context().request.get(new URL(meta.manifest, p.url()).href);
+  const man = mr.ok() ? await mr.json() : null;
+  expect('A23', man && man.display === 'browser' && man.short_name === 'BERKAH CELL', 'Manifest termuat; mode browser (tombol Back tetap ada di HP)', man);
+  for (const ic of (man && man.icons) || []) {
+    const [w] = ic.sizes.split('x').map(Number);
+    expect('A23', JSON.stringify(await dims(ic.src)) === JSON.stringify([w, w]), 'Ikon manifest ' + ic.sizes + ' termuat dengan ukuran benar');
+  }
+  const sw = await p.evaluate(() => navigator.serviceWorker && navigator.serviceWorker.controller);
+  expect('A23', !sw, 'Tanpa service worker atau cache offline (harga lama tidak tampil)');
+  const ext = p.__requests.filter((u) => !u.startsWith(base) && !u.startsWith('data:'));
+  expect('A23', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru selain sumber data', ext);
+  rec('A23', 'BELUM DIUJI', 'Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main.');
   await p.context().close();
 }
 
