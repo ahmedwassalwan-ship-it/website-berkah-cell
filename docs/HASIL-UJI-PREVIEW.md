@@ -26,7 +26,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4 · Kode: `site-live/` di branch `clau
 | A08 | LULUS (emulasi) | Lebar 360/390/768/1440 tanpa gulir ke samping. Tombol bawah tidak menutupi konten terakhir. Layar pendek 360×640. Simulasi keyboard 360×360 untuk pencarian dan panel. Emulasi Pixel 7 dan iPhone 13. |
 | A09 | LULUS (sebagian otomatis) | Urutan Tab, fokus terlihat, Enter membuka merek, fokus pindah ke judul, label kotak cari, area sentuh ≥ 44 px di Beranda/Tipe/Detail, kontras ≥ 4,5:1 pada elemen yang diperiksa. Pembaca layar sungguhan belum diuji. |
 | A10 | LULUS | Permintaan luar hanya ke file publik `1mgN8N15…`. Aset tidak memuat Harga_Modal atau ID file utama. Ekspor publik 6 Okt hanya berisi 7 kolom pelanggan, dan file utama berakses Dibatasi (dicek lewat Drive). |
-| A11 | BELUM DIUJI | Menunggu review pemilik atas preview. |
+| A11 | LULUS (laporan pemilik) | 6 Okt 2026: pemilik mencoba link preview Cloudflare (commit 9e57432) di HP dan melaporkan semua fitur berjalan baik. Jenis HP/browser dan rincian per langkah belum dicatat. |
 | A12 | BELUM BERLAKU | Belum ada rilis produksi. PR tidak di-merge. |
 | A13 | LULUS (emulasi) | Detail → Back ke daftar Oppo dengan posisi gulir sama → Back ke Beranda dengan posisi gulir sama → Back keluar. Forward memulihkan posisi gulir. |
 | A14 | LULUS (emulasi) | Kata pencarian, hasil, dan posisi gulir pulih. Keyboard tidak muncul sendiri. Satu Back lagi langsung keluar. |
