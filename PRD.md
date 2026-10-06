@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.3 · 6 Oktober 2026 · Bahasa Indonesia
+Versi 0.4 · 6 Oktober 2026 · Bahasa Indonesia
 
-**Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat beserta empat keputusan pendukungnya (bagian 5 dan 9). Mockup final, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
+**Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.3 menggantikan versi 0.2 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.4 menggantikan versi 0.3 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -68,7 +68,7 @@ Pesan membawa tipe yang dicari atau perangkat yang dipilih, ditambah kebutuhan s
 
 ### Pelanggan yang ingin mengonfirmasi perbedaan harga
 
-Tindakan utama pada detail harga adalah “Tanya servis via WhatsApp”. “Komplen ke Owner” atau konfirmasi perbedaan harga ditempatkan sebagai bantuan terpisah, bukan tombol utama. Informasi bantuan menjelaskan cara menghubungi owner. Pesan yang disiapkan menyebut perangkat dan layanan jika konteks tersebut tersedia. Pemisahan nomor toko dan owner masih perlu dipastikan sebelum rilis.
+Tindakan utama pada detail harga adalah “Tanya servis via WhatsApp”. “Komplen ke Owner” atau konfirmasi perbedaan harga ditempatkan sebagai bantuan terpisah, bukan tombol utama. Toko memiliki satu nomor WhatsApp; pertanyaan servis dan bantuan atau komplain kepada owner menuju nomor yang sama dengan isi pesan sesuai tujuannya. Kontak owner tidak disebut sebagai saluran pribadi atau nomor terpisah. Pesan yang disiapkan menyebut perangkat dan layanan jika konteks tersebut tersedia.
 
 ### Pemilik atau pengelola data
 
@@ -147,7 +147,7 @@ Saat pelanggan mengganti perangkat atau pencarian, pesan harus memakai konteks t
 
 Pencarian angka pendek, seperti “11”, boleh menghasilkan beberapa merek. Hasil wajib menyebut merek dan model untuk menghindari salah pilih. Pencarian kosong mengembalikan tampilan katalog yang dapat dipahami.
 
-Baris berbeda kualitas atau harga tidak boleh dihapus hanya karena nama layanan sama. Duplikasi identik perlu ditandai untuk perbaikan data. Pemetaan “Xiomi” serta pengelompokan Redmi dan Xiaomi harus mengikuti keputusan pemilik; perubahan label tidak boleh diam-diam mengubah makna data sumber.
+Baris berbeda kualitas atau harga tidak boleh dihapus hanya karena nama layanan sama. Duplikasi identik perlu ditandai untuk perbaikan data. Sesuai keputusan pemilik 6 Oktober 2026, “Xiomi” ditampilkan sebagai “Xiaomi”, sedangkan Redmi dan Poco tetap menjadi pilihan merek tersendiri. Data sumber dipertahankan. Model atau layanan yang berpotensi ganda diperiksa dan dilaporkan; pilihan harga yang berbeda tidak boleh ditimpa secara otomatis. Perubahan label tidak boleh diam-diam mengubah makna data sumber.
 
 <!-- PAGE -->
 
@@ -168,10 +168,10 @@ Hasil pencarian kosong hanya dapat ditentukan setelah katalog berhasil dimuat. R
 | Brand | Merek HP | Wajib untuk baris yang ditampilkan. Label dan alias mengikuti pemetaan yang disepakati. |
 | Model | Tipe HP | Wajib. Pertahankan pembeda model seperti Pro, Plus, Max, dan generasi. |
 | Layanan | Jenis servis | Wajib. Label harus dapat dipahami pelanggan. |
-| Kualitas | Varian komponen atau jasa | Tampilkan sesuai sumber; kosong tidak boleh berubah menjadi klaim kualitas tertentu. |
+| Kualitas | Varian komponen atau jasa | Tampilkan sesuai sumber; kosong tidak boleh berubah menjadi klaim kualitas tertentu. “Jasa” berarti pekerjaan tenaga servis, misalnya pemasangan LCD, baterai, atau housing; nilai ini bukan harga, bukan tanda gratis, dan bukan tingkatan kualitas komponen. Pemetaan tampilannya ditentukan setelah posisi dan penggunaannya dalam ekspor data diperiksa; baris yang ambigu dilaporkan tanpa mengubah Sheet. |
 | Harga_Jual | Harga untuk pelanggan | Format rupiah konsisten. Nilai kosong, tidak valid, atau belum ditetapkan meminta konfirmasi. |
 | Estimasi_Waktu | Perkiraan durasi | Tampilkan sesuai sumber. Jangan menyatakan estimasi sebagai janji pasti. |
-| Garansi | Keterangan garansi | Tampilkan sesuai sumber. Data kosong tidak berarti “tidak ada garansi”. |
+| Garansi | Keterangan garansi | Tampilkan sesuai data setiap layanan. Nilai “Tidak Ada” berarti layanan tersebut tanpa garansi. Data kosong tidak sama dengan “Tidak Ada”. Jangan mengarang syarat atau durasi garansi, dan jangan menerapkan contoh layanan tanpa garansi sebagai aturan otomatis untuk satu kategori. |
 
 ### Ketepatan informasi
 
@@ -180,7 +180,9 @@ Hasil pencarian kosong hanya dapat ditentukan setelah katalog berhasil dimuat. R
 - Nol tidak otomatis berarti gratis. Nilai nol, negatif, format campuran, dan teks harga perlu aturan validasi yang tegas; kasus yang belum disepakati meminta konfirmasi.
 - Pemisah ribuan tidak boleh mengubah nilai harga. Perubahan format angka harus diuji dengan data nyata serta contoh rusak yang terisolasi.
 - Harga berbeda menurut kualitas ditampilkan sebagai pilihan berbeda. Harga “mulai dari” hanya digunakan bila dihitung dari varian valid dan dijelaskan konteksnya.
-- Kebijakan biaya jasa, pajak, pemeriksaan, dan kemungkinan biaya tambahan harus dikonfirmasi pemilik sebelum dimasukkan ke halaman publik.
+- Harga servis yang tercantum sudah termasuk jasa pemasangan untuk layanan tersebut (keputusan pemilik 6 Oktober 2026). Harga layanan yang berupa jasa pasang tidak boleh disimpulkan sudah termasuk komponen yang dipasang.
+- Pemeriksaan tidak dikenakan biaya. Upah yang diberikan pelanggan secara sukarela setelah pemeriksaan bukan biaya wajib.
+- Kebijakan pajak dan kemungkinan biaya tambahan lain belum ditetapkan dan tidak boleh dimasukkan ke halaman publik sebelum dikonfirmasi pemilik.
 
 ### Kerahasiaan data internal
 
@@ -310,9 +312,9 @@ Persetujuan tampilan tidak sama dengan persetujuan mengganti website publik. Cat
 
 ### Website dan data
 
-Website yang dibahas dalam proyek ini adalah https://berkahcellbatam.pages.dev/. Pemeriksaan pada sesi 4 Oktober 2026 menemukan katalog merek, pencarian model, rincian harga, dan tautan WhatsApp. Kondisi website publik belum diperiksa ulang pada tanggal penyusunan PRD ini.
+Website yang dibahas dalam proyek ini semula berada di https://berkahcellbatam.pages.dev/. Sejak 6 Oktober 2026 website dipublikasikan melalui Cloudflare Workers di https://website-berkah-cell.ahmedwassalwan.workers.dev/ dan dibangun otomatis dari branch main repository website-berkah-cell; alamat lama disiapkan sebagai pengalih. Pemeriksaan pada sesi 4 Oktober 2026 menemukan katalog merek, pencarian model, rincian harga, dan tautan WhatsApp.
 
-File preview lokal menggunakan sumber Google Sheets Price_List yang sama dengan salinan website yang diperiksa. Nomor tujuan WhatsApp dalam preview adalah 6289625050525. Nomor dan fungsi kontaknya perlu dikonfirmasi sebelum rilis baru.
+Sumber data publik website adalah file Google Sheets terpisah yang hanya berisi kolom pelanggan dan disalin dari file utama melalui IMPORTRANGE; file utama berakses terbatas. Nomor WhatsApp toko adalah 089625050525 (format tautan 6289625050525) dan dipakai untuk pertanyaan servis maupun bantuan atau komplain kepada owner.
 
 ### Aset dan preview
 
@@ -363,17 +365,27 @@ Aturan pendukung yang disetujui meliputi sifat katalog yang bertambah saat ada s
 
 Setelah membandingkan dua arah desain, pemilik menyetujui arah Katalog Bertingkat beserta keputusan warna, tindakan kontak, maskot, dan aturan pilihan kebutuhan F17 seperti tercatat pada bagian 5. Persetujuan ini tidak memilih mockup final dan tidak mengubah prioritas P0/P1; F11 tetap P1. Pengelompokan merek, arti nilai “Tidak Ada” dan “Jasa”, nomor tujuan kontak, serta ketentuan harga dan garansi tetap terbuka.
 
+### Keputusan pemilik pada 6 Oktober 2026 (lanjutan)
+
+Pemilik menyetujui mockup revisi sebagai acuan implementasi preview dan menetapkan:
+
+1. **Harga:** harga servis yang tercantum sudah termasuk jasa pemasangan untuk layanan tersebut. Jangan menyimpulkan bahwa harga layanan jasa pasang sudah termasuk komponen. Pemeriksaan tidak dikenakan biaya; upah sukarela setelah pemeriksaan bukan biaya wajib.
+2. **Garansi:** mengikuti data setiap layanan. “Tidak Ada” dipakai untuk layanan tanpa garansi, misalnya bypass, buka kunci, dan antigores; contoh ini bukan aturan untuk mengubah garansi satu kategori secara otomatis. Kolom kosong tidak sama dengan “Tidak Ada”. Syarat dan durasi garansi tidak boleh dikarang.
+3. **“Jasa”:** pekerjaan tenaga servis, misalnya pemasangan LCD, baterai, atau housing; pencatatan internal juga dapat mencakup upah sukarela setelah pemeriksaan. Bukan harga, bukan tanda gratis, dan bukan tingkatan kualitas komponen. Pemetaan di UI ditentukan setelah pemeriksaan ekspor data; baris ambigu dilaporkan tanpa mengubah Sheet.
+4. **Kontak:** satu nomor WhatsApp, ditampilkan 089625050525 dan ditautkan sebagai 6289625050525, untuk pertanyaan servis maupun bantuan atau komplain kepada owner dengan isi pesan sesuai tujuan.
+5. **Merek:** “Xiomi” ditampilkan sebagai “Xiaomi”; Redmi dan Poco tetap merek tersendiri. Data sumber dipertahankan; model dan layanan yang berpotensi ganda diperiksa tanpa menimpa pilihan harga berbeda secara otomatis.
+
 ### Keputusan yang masih terbuka
 
 Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang terkait diterapkan atau dipublikasikan. Hindari mengubah pertanyaan yang belum terjawab menjadi asumsi pasti.
 
 | ID | Keputusan | Status awal |
 | --- | --- | --- |
-| D01 | Mockup final, font, nilai warna, dan bentuk komponen | Arah desain disetujui 6 Okt 2026 (bagian 5); mockup HP menunggu review pemilik |
-| D02 | Apakah harga sudah termasuk jasa serta apakah ada biaya pemeriksaan atau tambahan | Belum ditetapkan dalam percakapan |
-| D03 | Syarat garansi, cara menampilkan layanan tanpa informasi garansi, serta arti nilai “Tidak Ada” dan “Jasa” | Mengikuti data yang ada; ketentuan lengkap perlu konfirmasi |
-| D04 | Nomor toko dan owner serta apakah keduanya memakai nomor yang sama | Tujuan lama tercatat; perlu verifikasi |
-| D05 | Pemetaan merek dan model serta penanganan salah ketik | Usulan normalisasi tersedia; aturan final perlu ditetapkan |
+| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview; tampilan final menunggu review preview |
+| D02 | Biaya jasa, pemeriksaan, pajak, dan biaya tambahan | Sebagian diputuskan 6 Okt 2026: harga termasuk jasa pemasangan, pemeriksaan tidak dikenakan biaya. Pajak dan biaya tambahan lain masih terbuka |
+| D03 | Garansi serta arti nilai “Tidak Ada” dan “Jasa” | Sebagian diputuskan 6 Okt 2026: garansi mengikuti data, “Tidak Ada” berarti tanpa garansi, arti “Jasa” ditetapkan. Syarat garansi lengkap dan pemakaian “Jasa” atau “Tidak Ada” yang tidak konsisten pada kolom Kualitas masih perlu konfirmasi |
+| D04 | Nomor toko dan owner | Diputuskan 6 Okt 2026: satu nomor 089625050525 untuk servis dan komplain |
+| D05 | Pemetaan merek dan model serta penanganan salah ketik | Merek diputuskan 6 Okt 2026 (Xiomi → Xiaomi; Redmi dan Poco terpisah). Model yang berpotensi ganda, termasuk lintas Xiaomi, Redmi, dan Poco, menunggu pemeriksaan pemilik |
 | D06 | Siapa pengelola Sheet, sumber publik yang aman, dan aturan pembaruan harga | Alur kerja perlu didokumentasikan |
 | D07 | Lokasi kode produksi, cara deploy, cadangan, dan prosedur pemulihan | Belum terdokumentasi di paket ini |
 
@@ -392,6 +404,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.1, 5 Oktober 2026:** susunan awal kebutuhan, panduan visual awal, 12 kriteria uji, dan keputusan terbuka.
 - **Versi 0.2, 5 Oktober 2026:** memasukkan tujuh ide dan semua aturan pendukung yang disetujui pemilik. Memperjelas F05 sampai F07; menambah F13 sampai F17; memperbarui A07 dan menambah A13 sampai A21. Menyesuaikan perjalanan pelanggan, panduan UI, konteks katalog, status persetujuan, serta petunjuk GitHub. Total 17 kebutuhan fungsional dan 21 kriteria penerimaan. F11 dan F12 tetap P1.
 - **Versi 0.3, 6 Oktober 2026:** mencatat arah desain Katalog Bertingkat yang disetujui pemilik beserta keputusan warna, tindakan kontak utama, maskot, dan aturan pemicu F17. Memperjelas F17 dan A20; memperbarui bagian 2, 5, dan 9 serta status D01 dan cakupan D03. Mockup final masih menunggu review. Prioritas P0/P1 tidak berubah.
+- **Versi 0.4, 6 Oktober 2026:** mencatat persetujuan mockup revisi sebagai acuan implementasi preview serta lima keputusan pemilik: harga termasuk jasa pemasangan dan pemeriksaan tanpa biaya, aturan garansi “Tidak Ada” dan kolom kosong, arti “Jasa”, satu nomor WhatsApp untuk servis dan komplain, serta normalisasi merek Xiomi → Xiaomi dengan Redmi dan Poco terpisah. Memperbarui bagian 2, 3, 4, 8, dan 9 serta status D01 sampai D05. Pajak, biaya tambahan lain, syarat garansi lengkap, dan model yang berpotensi ganda tetap terbuka. Prioritas P0/P1 tidak berubah.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -407,7 +420,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.3 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.4 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 
