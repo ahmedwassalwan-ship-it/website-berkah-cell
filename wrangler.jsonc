@@ -1,0 +1,10 @@
+// Konfigurasi deploy Cloudflare Workers (static assets).
+// Cloudflare otomatis deploy setiap ada push ke branch main.
+{
+  "name": "website-berkah-cell",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    // Hanya folder ini yang dipublikasikan; PRD.md dan file lain tidak ikut.
+    "directory": "./site-live"
+  }
+}
