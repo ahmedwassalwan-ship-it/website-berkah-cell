@@ -26,7 +26,7 @@
     STORE: {
       address: 'Avava Jodoh, Lantai Dasar, Batam',
       hours: 'Setiap hari, 11.00–20.00 WIB',
-      mapsUrl: 'https://share.google/xDIH18tkS00piTNIv',
+      mapsUrl: 'https://maps.app.goo.gl/9f942hFJcCKjUKnj9',
     },
   };
 

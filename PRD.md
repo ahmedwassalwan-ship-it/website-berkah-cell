@@ -385,7 +385,7 @@ Pemilik menyetujui mockup revisi sebagai acuan implementasi preview dan menetapk
 Setelah meninjau preview v3 di HP dan melaporkan semua fitur berjalan baik, pemilik memilih paket peningkatan berikut:
 
 1. **Paket 1, dikerjakan:** tombol “Bagikan harga ini” pada detail harga (F11 naik dari P1 ke P0), tampilan tautan saat dibagikan, dan ikon layar utama HP (F18).
-2. **Paket 2:** informasi toko dan data lokal untuk mesin pencari (F19). Data dari pemilik, 6 Oktober 2026: alamat “Avava Jodoh, Lantai Dasar, Batam”; buka setiap hari pukul 11.00–20.00 WIB; tautan Google Maps https://share.google/xDIH18tkS00piTNIv. Data ini tidak boleh diubah tanpa konfirmasi pemilik. Rating dan ulasan tidak ditampilkan sampai pemilik memberikan datanya.
+2. **Paket 2:** informasi toko dan data lokal untuk mesin pencari (F19). Data dari pemilik, 6 Oktober 2026: alamat “Avava Jodoh, Lantai Dasar, Batam”; buka setiap hari pukul 11.00–20.00 WIB; tautan Google Maps https://maps.app.goo.gl/9f942hFJcCKjUKnj9 (diganti pemilik pada 7 Oktober 2026; sebelumnya share.google). Data ini tidak boleh diubah tanpa konfirmasi pemilik. Rating dan ulasan tidak ditampilkan sampai pemilik memberikan datanya.
 3. **Ditunda:** domain sendiri dinilai sangat dibutuhkan, tetapi belum sekarang (D08). Pengukuran pengunjung dan Meta Pixel belum dipilih (D09).
 
 ### Keputusan yang masih terbuka

@@ -666,7 +666,7 @@ async function testMeta() {
 
 /* ---------- A24: Informasi toko (F19) ---------- */
 // Data persis dari pemilik, 6 Okt 2026.
-const STORE = { address: 'Avava Jodoh, Lantai Dasar, Batam', hours: 'Setiap hari, 11.00–20.00 WIB', maps: 'https://share.google/xDIH18tkS00piTNIv' };
+const STORE = { address: 'Avava Jodoh, Lantai Dasar, Batam', hours: 'Setiap hari, 11.00–20.00 WIB', maps: 'https://maps.app.goo.gl/9f942hFJcCKjUKnj9' };
 async function testStore() {
   const linkOk = (l) => l && l.href === STORE.maps && l.target === '_blank' && /noopener/.test(l.rel);
   const readLink = (p, sel) => p.$eval(sel, (a) => ({ href: a.href, target: a.target, rel: a.rel })).catch(() => null);
@@ -697,7 +697,7 @@ async function testStore() {
   expect('A24', help === STORE.address && linkOk(await readLink(p, 'main .store a')), 'Bantuan: blok toko dan tautan Maps tampil');
   await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
   const mini = await p.$eval('main .store-mini', (e) => e.textContent).catch(() => '');
-  expect('A24', mini.includes(STORE.address) && mini.includes(STORE.hours) && linkOk(await readLink(p, 'main a.link-btn[href^="https://share.google"]')), 'Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps');
+  expect('A24', mini.includes(STORE.address) && mini.includes(STORE.hours) && linkOk(await readLink(p, 'main a.link-btn[href^="https://maps.app.goo.gl"]')), 'Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps');
   expect('A24', csp.length === 0 && p.__errors.length === 0, 'Tanpa pelanggaran CSP dan tanpa error JS', { csp, errors: p.__errors });
   const ext = p.__requests.filter((u) => !u.startsWith(base) && !u.startsWith('data:'));
   expect('A24', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru (tautan Maps hanya dibuka saat diketuk)', ext);
@@ -723,9 +723,9 @@ async function testStore() {
   await q.goto(base + '?bantuan=1'); await ready(q);
   const h2 = (await q.$('main .store')) === null;
   await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
-  const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://share.google"]')) === null;
+  const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://maps.app.goo.gl"]')) === null;
   expect('A24', h1 && h2 && h3 && q.__errors.length === 0, 'Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail', { h1, h2, h3, errors: q.__errors });
-  rec('A24', 'LULUS', 'Tujuan tautan pendek Google Maps tidak bisa dibuka dari sesi ini; pemilik mengeceknya di HP pada 6 Okt 2026 (laporan pemilik).');
+  rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
 }
 
