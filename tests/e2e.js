@@ -92,6 +92,7 @@ async function run() {
     await testMeta();
     await testStore();
     await testDomain();
+    await testPolish();
   } finally {
     await browser.close(); srv.srv.close();
   }
@@ -351,8 +352,10 @@ async function testBackBrand() {
   await p.goto('about:blank'); await p.goto(base); await ready(p);
   await p.evaluate(() => window.scrollTo(0, 200)); await sleep(250);
   await p.click('.tile:has(b:text-is("Oppo"))'); await p.waitForSelector('.list');
-  await p.evaluate(() => window.scrollTo(0, 700)); await sleep(250);
+  // Gulir sampai tautan A77S terlihat, lalu catat posisi tepat sebelum klik (klik tidak menggulir lagi).
+  await p.evaluate(() => [...document.querySelectorAll('.list a')].find((a) => a.textContent.includes('A77S')).scrollIntoView({ block: 'center' })); await sleep(250);
   const y1 = await p.evaluate(() => window.scrollY);
+  expect('A13', y1 > 300, 'Daftar tipe digulir jauh sebelum membuka detail', y1);
   await p.click('.list a:has-text("A77S")'); await p.waitForSelector('.dev h1');
   await p.goBack(); await p.waitForSelector('.list'); await sleep(200);
   const back1 = await p.evaluate(() => ({ url: location.search, y: window.scrollY }));
@@ -747,6 +750,35 @@ async function testDomain() {
   expect('DOMAIN', p.__errors.length === 0, 'Tanpa error JS', p.__errors);
   await p.context().close();
   rec('DOMAIN', 'BELUM DIUJI', 'Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge.');
+}
+
+/* ---------- POLES: review sebelum rilis domain (tampilan & kelengkapan situs) ---------- */
+async function testPolish() {
+  const p = await newPage({ viewport: { width: 390, height: 844 } });
+  await p.goto(base + '?merek=oppo'); await ready(p);
+  const row = await p.$eval('.list .li', (a) => { const t = a.querySelector('.t').getBoundingClientRect(); const s = a.querySelector('.s').getBoundingClientRect(); return { tBottom: Math.round(t.bottom), sTop: Math.round(s.top) }; });
+  expect('POLES', row.sTop >= row.tBottom - 1, 'Daftar tipe: nama tipe dan jumlah layanan di baris terpisah (tidak menempel "A1K2 layanan")', row);
+  await p.goto(base); await ready(p);
+  const font = await p.evaluate(async () => { await document.fonts.ready; return { family: getComputedStyle(document.body).fontFamily, loaded: document.fonts.check('700 16px "Plus Jakarta Sans"') }; });
+  expect('POLES', /Plus Jakarta Sans/.test(font.family) && font.loaded, 'Font Plus Jakarta Sans termuat dari situs sendiri', font);
+  const trust = await p.$$eval('.hero .trust li', (e) => e.map((x) => x.textContent.trim()));
+  expect('POLES', JSON.stringify(trust) === JSON.stringify(['Pemeriksaan gratis', 'Harga termasuk jasa pemasangan', 'Garansi tertera per layanan']), 'Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik', trust);
+  await p.fill('#q', 'iphone'); await sleep(100);
+  expect('POLES', await p.locator('.hero .trust').isHidden(), 'Baris kepercayaan disembunyikan saat mencari');
+  // Halaman 404 bermerek
+  const nf = await newPage({ viewport: { width: 360, height: 740 } });
+  const r = await nf.goto(base + '404.html');
+  const info = await nf.evaluate(() => ({ h1: document.querySelector('h1').textContent, home: document.querySelector('.btn-pri').getAttribute('href'), wa: document.querySelector('.btn-ghost').getAttribute('href'), css: getComputedStyle(document.querySelector('.hdr')).backgroundColor, wide: document.documentElement.scrollWidth > innerWidth }));
+  expect('POLES', r.ok() && info.home === '/' && info.wa === 'https://wa.me/6289625050525' && info.css === 'rgb(10, 26, 51)' && !info.wide, 'Halaman 404: bergaya situs, tombol ke beranda dan WhatsApp toko, tanpa gulir ke samping', info);
+  await shot(nf, 'poles-404-360');
+  await nf.context().close();
+  const read = (f) => fs.readFileSync(path.join(__dirname, '..', 'site-live', f), 'utf8');
+  expect('POLES', /Sitemap: https:\/\/berkahcellbatam\.com\/sitemap\.xml/.test(read('robots.txt')) && read('sitemap.xml').includes('<loc>https://berkahcellbatam.com/</loc>'), 'robots.txt dan sitemap.xml mengarah ke domain resmi');
+  const hdrs = read('_headers');
+  expect('POLES', ['X-Content-Type-Options: nosniff', 'X-Frame-Options: DENY', 'Referrer-Policy:', 'Strict-Transport-Security:'].every((x) => hdrs.includes(x)), 'Header keamanan disiapkan di _headers');
+  await shot(p, 'poles-beranda-cari-390');
+  await p.context().close();
+  rec('POLES', 'LULUS', 'Tampilan premium dinilai lewat tangkapan layar emulasi Chromium; perlu dilihat pemilik di HP sungguhan.');
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });

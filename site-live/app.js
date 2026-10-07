@@ -392,9 +392,14 @@
     const hero = h('section', { class: 'hero' }, h('div', { class: 'wrap' },
       h('img', { class: 'mascot', src: 'assets/maskot-melambai.webp', alt: '', width: 66, height: 81 }),
       h('p', { class: 'eyebrow', text: 'Daftar harga servis HP' }),
-      h('h1', { text: 'Cari harga servis untuk HP kamu' }),
+      h('h1', null, 'Cari harga ', h('span', { class: 'gold', text: 'servis' }), ' untuk HP kamu'),
       h('p', { class: 'lead', text: 'Ketik tipe HP atau pilih merek di bawah.' }),
-      form));
+      form,
+      // Hanya fakta yang sudah diputuskan pemilik (PRD v0.4): tidak boleh ada klaim karangan.
+      h('ul', { class: 'trust', 'aria-label': 'Ketentuan servis' },
+        h('li', null, icon('check', 18), 'Pemeriksaan gratis'),
+        h('li', null, icon('check', 18), 'Harga termasuk jasa pemasangan'),
+        h('li', null, icon('check', 18), 'Garansi tertera per layanan'))));
     return { hero, input, clearBtn };
   }
 
@@ -474,7 +479,7 @@
     return h('section', { 'aria-labelledby': 'judul-merek' },
       h('h2', { class: 'sec-title', id: 'judul-merek' }, 'Pilih merek', h('small', { text: total + ' tipe tercatat' })),
       h('ul', { class: 'grid-brands', role: 'list' }, S.catalog.brandList.map((b) => h('li', { style: null },
-        h('a', { class: 'tile', href: brandHref(b), 'data-nav': true }, h('b', { text: b.name }), h('span', { text: b.list.length + ' tipe' }))))));
+        h('a', { class: 'tile', href: brandHref(b), 'data-nav': true }, h('b', { text: b.name }), h('span', { text: b.list.length + ' tipe' }), icon('chev', 18))))));
   }
   function notFoundState(q, input) {
     const top = [...S.catalog.brandList].sort((a, b) => b.list.length - a.list.length).slice(0, 4);

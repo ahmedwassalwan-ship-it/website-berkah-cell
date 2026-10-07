@@ -49,6 +49,17 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - Isian disimpan selama perangkat sama dan dibersihkan saat perangkat berubah.
   - Back pertama hanya menutup panel. Back berikutnya berpindah layar. Forward tidak membuka panel lagi. Tab tetap di dalam panel.
 
+## Polesan premium (7 Okt 2026, PR #2)
+
+- **POLES: LULUS (emulasi).**
+  - Nama tipe dan jumlah layanan di baris terpisah (bug "A1K2 layanan" diperbaiki).
+  - Font Plus Jakarta Sans termuat.
+  - Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik, dan tersembunyi saat mencari.
+  - Halaman 404 bergaya situs, dengan tombol ke beranda dan WhatsApp, tanpa gulir ke samping di 360 px.
+  - robots/sitemap mengarah ke domain resmi, dan header keamanan disiapkan.
+- **Uji lama tetap lulus.** A13 disesuaikan: baris daftar sekarang lebih tinggi, jadi tautan A77S digulir ke tengah dulu dan posisinya dicatat tepat sebelum diklik. Tujuan uji tidak berubah: Back memulihkan posisi saat diklik.
+- **Belum diuji:** tampilan di HP sungguhan, dan `_headers`/404 di Cloudflare. Keduanya baru bisa dicek setelah rilis.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

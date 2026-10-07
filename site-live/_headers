@@ -1,0 +1,8 @@
+# Header keamanan untuk semua halaman (Cloudflare Workers static assets).
+# File ini tidak ikut dipublikasikan sebagai halaman.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000

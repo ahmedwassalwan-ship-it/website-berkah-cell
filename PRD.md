@@ -394,7 +394,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 
 | ID | Keputusan | Status awal |
 | --- | --- | --- |
-| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview; tampilan final menunggu review preview |
+| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview. 7 Okt 2026: pemilik meminta polesan premium sebelum rilis domain; arah Katalog Bertingkat, warna navy-emas, dan alur tetap. Font Plus Jakarta Sans disimpan di situs sendiri. Tampilan menunggu review pemilik di preview |
 | D02 | Biaya jasa, pemeriksaan, pajak, dan biaya tambahan | Sebagian diputuskan 6 Okt 2026: harga termasuk jasa pemasangan, pemeriksaan tidak dikenakan biaya. Pajak dan biaya tambahan lain masih terbuka |
 | D03 | Garansi serta arti nilai “Tidak Ada” dan “Jasa” | Sebagian diputuskan 6 Okt 2026: garansi mengikuti data, “Tidak Ada” berarti tanpa garansi, arti “Jasa” ditetapkan. Syarat garansi lengkap dan pemakaian “Jasa” atau “Tidak Ada” yang tidak konsisten pada kolom Kualitas masih perlu konfirmasi |
 | D04 | Nomor toko dan owner | Diputuskan 6 Okt 2026: satu nomor 089625050525 untuk servis dan komplain |

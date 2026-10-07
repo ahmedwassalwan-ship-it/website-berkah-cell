@@ -15,7 +15,9 @@
   ],
   "assets": {
     // Hanya folder ini yang dipublikasikan; PRD.md dan file lain tidak ikut.
-    "directory": "./site-live"
+    "directory": "./site-live",
+    // Alamat yang tidak ada → site-live/404.html (status 404) dengan tombol kembali ke beranda.
+    "not_found_handling": "404-page"
   },
   // Wajib untuk `wrangler preview` (build branch non-main). Boleh kosong karena
   // Worker ini tidak punya binding; aset tetap diambil dari "assets" di atas.

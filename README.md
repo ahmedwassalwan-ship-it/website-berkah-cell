@@ -2,7 +2,11 @@
 
 Website daftar harga servis HP BERKAH CELL.
 
-- `site-live/` — kode website (`index.html`, `styles.css`, `app.js`, `assets/`).
+- `site-live/` — kode website:
+  - `index.html`, `styles.css`, `app.js`, `assets/` (termasuk font Plus Jakarta Sans dengan lisensi OFL)
+  - `404.html` untuk alamat yang tidak ada
+  - `robots.txt` dan `sitemap.xml`
+  - `_headers` untuk header keamanan
 - `PRD.md` — dokumen kebutuhan produk.
 - `wrangler.jsonc` — konfigurasi deploy Cloudflare Workers.
 - `docs/RENCANA-TEKNIS.md` — rencana teknis preview v3 (navigasi, data, keamanan).

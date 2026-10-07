@@ -57,6 +57,31 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - **URL absolut** (`og:image`, JSON-LD `url`, `image`, `logo`) memakai `https://berkahcellbatam.com`.
 - **workers.dev tetap aktif** sebagai cadangan (`workers_dev: true`).
 
+## Polesan premium sebelum rilis domain (7 Okt 2026)
+
+- **Arah tetap:** Katalog Bertingkat dengan navy dan emas. Tidak ada perubahan alur, teks harga, atau aturan bisnis.
+- **Font:** Plus Jakarta Sans (variable, latin, 27 KB).
+  - Disimpan di `assets/fonts/` beserta lisensi OFL, lalu di-preload.
+  - CSP tidak berubah, karena font berasal dari situs sendiri.
+  - Spasi kata dilonggarkan `.09em`, karena font ini rapat.
+- **Hero:**
+  - gradasi navy dengan cahaya emas tipis dan pola garis halus (CSS saja, tanpa gambar)
+  - kata "servis" bergradasi emas
+  - garis emas di bawah hero
+- **Baris kepercayaan** di bawah pencarian berisi tiga ketentuan yang sudah diputuskan pemilik: pemeriksaan gratis, harga termasuk jasa pemasangan, garansi tertera per layanan. Klaim lain tidak boleh ditambahkan tanpa keputusan pemilik.
+- **Kartu dan elemen lain:**
+  - Kartu merek, daftar, layanan, dan bantuan memakai bayangan berlapis dan aksen emas.
+  - Pilihan harga terpilih ditandai garis emas.
+  - Kartu "Kunjungi toko" dan footer berwarna navy.
+  - Header identitas dan bar tombol bawah memakai efek kaca buram.
+- **Bug yang diperbaiki:** di daftar tipe, nama tipe menempel dengan jumlah layanan ("A1K2 layanan"). `.li .t` dan `.li .s` sekarang `display:block`.
+- **Desktop:** kartu layanan memakai `columns:2` (masonry), supaya tidak ada celah karena tinggi kartu berbeda.
+- **Tanpa animasi pindah halaman.** Animasi seperti itu membuat halaman berkedip saat Back. Animasi tersisa: skeleton memuat dan panel. Semuanya mati jika pengguna memilih reduced motion.
+- **Kelengkapan situs:**
+  - `404.html` bergaya situs, dengan `not_found_handling: "404-page"` di `wrangler.jsonc`
+  - `robots.txt` dan `sitemap.xml` ke domain resmi
+  - `_headers` untuk header keamanan: nosniff, X-Frame-Options DENY, Referrer-Policy, Permissions-Policy, HSTS tanpa subdomain
+
 ## Riwayat, Back, dan posisi gulir
 
 - `history.scrollRestoration = 'manual'`.

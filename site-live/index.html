@@ -24,7 +24,8 @@
 <link rel="icon" href="assets/logo.webp" type="image/webp">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="styles.css?v=3.3">
+<link rel="preload" href="assets/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css?v=3.3.1">
 <!-- Data lokal untuk mesin pencari (F19). Nilainya harus sama dengan CONFIG.STORE di app.js
      dan footer. Blok data JSON tidak dijalankan sebagai skrip, jadi CSP tidak perlu diubah. -->
 <script type="application/ld+json">
@@ -87,8 +88,8 @@
   <header class="hdr">
     <div class="wrap hdr-in">
       <a class="brandmark" href="./" data-nav aria-label="BERKAH CELL, ke beranda">
-        <img src="assets/logo.webp" width="32" height="32" alt="">
-        <span>BERKAH CELL</span>
+        <img src="assets/logo.webp" width="34" height="34" alt="">
+        <span class="bm"><b>BERKAH CELL</b><small>Service HP · Batam</small></span>
       </a>
       <a class="btn-help" href="?bantuan=1" data-nav>
         <svg width="16" height="16" aria-hidden="true"><use href="#i-help"/></svg>Bantuan
@@ -100,16 +101,19 @@
   </main>
   <footer class="ftr">
     <div class="wrap">
-      <b>BERKAH CELL</b> — Service HP Terpercaya, Batam
+      <div class="ftr-brand">
+        <img src="assets/logo.webp" width="40" height="40" alt="" loading="lazy">
+        <div><b>BERKAH CELL</b><span class="tag">Service HP Terpercaya · Batam</span></div>
+      </div>
       <span class="store-ftr"><span class="addr">Avava Jodoh, Lantai Dasar, Batam</span> · <span class="hours">Setiap hari, 11.00–20.00 WIB</span><br>
         <a href="https://share.google/xDIH18tkS00piTNIv" target="_blank" rel="noopener">Lihat lokasi di Google Maps</a></span>
-      Harga dapat berubah sewaktu-waktu mengikuti harga sparepart.<br>
+      <span class="fine-print">Harga dapat berubah sewaktu-waktu mengikuti harga sparepart.</span>
       <span class="ver">Versi 3.3</span>
     </div>
   </footer>
 </div>
 <div id="fixed-layer"></div>
 <div id="panel-layer" hidden></div>
-<script src="app.js?v=3.3" defer></script>
+<script src="app.js?v=3.3.1" defer></script>
 </body>
 </html>

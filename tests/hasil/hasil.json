@@ -21,7 +21,7 @@
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 21 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 28 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -138,6 +138,7 @@
   "A13": {
     "status": "LULUS",
     "notes": [
+      "✓ Daftar tipe digulir jauh sebelum membuka detail",
       "✓ Back dari detail → daftar tipe Oppo dengan posisi gulir sama",
       "✓ Back berikutnya → Beranda dengan posisi gulir grid sama",
       "✓ Back ketiga keluar ke halaman sebelum website (tidak keluar terlalu awal)",
@@ -303,6 +304,19 @@
       "✓ og:image dan JSON-LD memakai https://berkahcellbatam.com",
       "✓ Tanpa error JS",
       "• Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge."
+    ]
+  },
+  "POLES": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Daftar tipe: nama tipe dan jumlah layanan di baris terpisah (tidak menempel \"A1K2 layanan\")",
+      "✓ Font Plus Jakarta Sans termuat dari situs sendiri",
+      "✓ Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik",
+      "✓ Baris kepercayaan disembunyikan saat mencari",
+      "✓ Halaman 404: bergaya situs, tombol ke beranda dan WhatsApp toko, tanpa gulir ke samping",
+      "✓ robots.txt dan sitemap.xml mengarah ke domain resmi",
+      "✓ Header keamanan disiapkan di _headers",
+      "✓ Tampilan premium dinilai lewat tangkapan layar emulasi Chromium; perlu dilihat pemilik di HP sungguhan."
     ]
   },
   "A11": {
