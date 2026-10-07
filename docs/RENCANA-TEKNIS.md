@@ -40,6 +40,10 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Detail: satu baris alamat dan jam di kotak Bantuan, plus tautan Maps.
   - Keadaan gagal memuat dan katalog kosong: blok yang sama, supaya pelanggan tetap tahu alamat toko.
 - **`STORE: null` menyembunyikan semua blok toko.** Footer dan JSON-LD statis harus dihapus manual.
+- **Tautan Maps di Android:** Chrome Android membuka tautan web Maps di tab browser, bukan di aplikasi (dilaporkan pemilik 7 Okt 2026).
+  - Di Android, kecuali WebView aplikasi lain (UA berisi `; wv)`), `mapsAttrs()` mengubah tautan menjadi `intent://…;package=com.google.android.apps.maps;S.browser_fallback_url=<tautan asli>;end`, tanpa `target=_blank`. Hasilnya, aplikasi Google Maps terbuka, atau tautan yang sama terbuka di browser bila aplikasi tidak ada.
+  - Tautan footer (`a[data-maps]`) ikut diubah saat halaman dimuat.
+  - iPhone dan desktop tetap memakai tautan https biasa.
 - **JSON-LD** memakai tipe `LocalBusiness`, tanpa rating atau ulasan.
   - Blok `application/ld+json` tidak dijalankan sebagai skrip, jadi CSP tidak diubah.
   - `addressRegion` "Kepulauan Riau" dan zona WIB adalah fakta lokasi Batam, bukan data bisnis.

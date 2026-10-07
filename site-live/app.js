@@ -357,7 +357,17 @@
   }
   // F19: informasi toko. Tidak merender apa pun tanpa data dari pemilik.
   const hasStore = () => !!(CONFIG.STORE && CONFIG.STORE.address && CONFIG.STORE.mapsUrl);
-  const mapsLink = (cls, label) => h('a', { class: cls, href: CONFIG.STORE.mapsUrl, target: '_blank', rel: 'noopener' }, icon('pin', 16), label);
+  // Chrome Android membuka tautan web Maps di tab browser, bukan di aplikasi. Di Android (bukan WebView
+  // aplikasi lain) tautan diubah menjadi intent ke aplikasi Google Maps, dengan cadangan tautan yang sama
+  // di browser bila aplikasi tidak terpasang. iPhone dan desktop memakai tautan biasa.
+  const USE_MAPS_INTENT = /Android/i.test(navigator.userAgent) && !/; wv\)/.test(navigator.userAgent);
+  function mapsAttrs(url) {
+    if (USE_MAPS_INTENT && /^https:\/\//.test(url)) {
+      return { href: 'intent://' + url.slice(8) + '#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=' + encodeURIComponent(url) + ';end' };
+    }
+    return { href: url, target: '_blank', rel: 'noopener' };
+  }
+  const mapsLink = (cls, label) => h('a', Object.assign({ class: cls }, mapsAttrs(CONFIG.STORE.mapsUrl)), icon('pin', 16), label);
   function storeBlock() {
     if (!hasStore()) return null;
     const s = CONFIG.STORE;
@@ -914,5 +924,12 @@
   if (!st().id) patchState({ id: newId() });
   if (st().panel) patchState({ panel: false });
   window.addEventListener('pagehide', () => { recordScroll(); persistScrolls(); });
+  // Tautan Maps statis di footer ikut memakai intent di Android.
+  if (USE_MAPS_INTENT) {
+    document.querySelectorAll('a[data-maps]').forEach((a) => {
+      const at = mapsAttrs(a.getAttribute('href'));
+      a.setAttribute('href', at.href); a.removeAttribute('target'); a.removeAttribute('rel');
+    });
+  }
   loadData();
 })();

@@ -725,6 +725,18 @@ async function testStore() {
   await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
   const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://maps.app.goo.gl"]')) === null;
   expect('A24', h1 && h2 && h3 && q.__errors.length === 0, 'Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail', { h1, h2, h3, errors: q.__errors });
+  // Android Chrome: tautan Maps membuka aplikasi Google Maps (intent) dengan cadangan tautan yang sama.
+  const want = 'intent://maps.app.goo.gl/9f942hFJcCKjUKnj9#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=' + encodeURIComponent(STORE.maps) + ';end';
+  const uaAndroid = 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36';
+  const uaWebView = 'Mozilla/5.0 (Linux; Android 14; Pixel 7; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.0.0 Mobile Safari/537.36';
+  const uaIphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
+  for (const [label, ua, intent] of [['Android Chrome', uaAndroid, true], ['WebView aplikasi Android', uaWebView, false], ['iPhone', uaIphone, false]]) {
+    const pa = await newPage({ ua, mobile: true, touch: true }); await pa.goto(base); await ready(pa);
+    const links = await pa.$$eval('main .store a, .ftr a[data-maps]', (as) => as.map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target') })));
+    const ok = links.length === 2 && links.every((l) => (intent ? l.href === want && l.target === null : l.href === STORE.maps && l.target === '_blank'));
+    expect('A24', ok, label + ': tombol Maps dan footer ' + (intent ? 'membuka aplikasi Google Maps (intent, cadangan tautan yang sama)' : 'memakai tautan Maps biasa'), links);
+    await pa.context().close();
+  }
   rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
 }

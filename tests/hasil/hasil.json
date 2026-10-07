@@ -21,7 +21,7 @@
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 18 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 19 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -293,6 +293,9 @@
       "✓ Katalog kosong: blok toko tetap tampil",
       "✓ Fixture tanpa data toko berhasil dibuat",
       "✓ Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail",
+      "✓ Android Chrome: tombol Maps dan footer membuka aplikasi Google Maps (intent, cadangan tautan yang sama)",
+      "✓ WebView aplikasi Android: tombol Maps dan footer memakai tautan Maps biasa",
+      "✓ iPhone: tombol Maps dan footer memakai tautan Maps biasa",
       "✓ Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis."
     ]
   },
