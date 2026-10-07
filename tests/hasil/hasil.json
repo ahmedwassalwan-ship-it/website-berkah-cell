@@ -21,7 +21,7 @@
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 24 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 21 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -295,16 +295,26 @@
       "✓ Tujuan tautan pendek Google Maps tidak bisa dibuka dari sesi ini; pemilik mengeceknya di HP pada 6 Okt 2026 (laporan pemilik)."
     ]
   },
-  "A11": {
+  "DOMAIN": {
     "status": "BELUM DIUJI",
     "notes": [
-      "• Pemilik melaporkan preview v3 (9e57432) berjalan baik di HP pada 6 Okt 2026. Perubahan Versi 3.1 (Bagikan, tampilan tautan, ikon) belum direview pemilik."
+      "✓ www.berkahcellbatam.com dialihkan ke berkahcellbatam.com dengan tautan yang sama",
+      "✓ Detail iPhone 11 tampil di domain resmi",
+      "✓ og:image dan JSON-LD memakai https://berkahcellbatam.com",
+      "✓ Tanpa error JS",
+      "• Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge."
+    ]
+  },
+  "A11": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Pemilik melaporkan preview v3 dan tombol Maps berjalan baik di HP (6 Okt 2026), lalu menyetujui rilis."
     ]
   },
   "A12": {
-    "status": "BELUM BERLAKU",
+    "status": "BELUM DIUJI",
     "notes": [
-      "• Belum ada rilis produksi pada tahap ini; PR tidak di-merge."
+      "• Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN). Dicek ulang di berkahcellbatam.com setelah domain aktif."
     ]
   }
 }

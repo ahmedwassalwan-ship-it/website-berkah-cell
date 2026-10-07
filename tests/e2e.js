@@ -91,11 +91,12 @@ async function run() {
     await testShare();
     await testMeta();
     await testStore();
+    await testDomain();
   } finally {
     await browser.close(); srv.srv.close();
   }
-  rec('A11', 'BELUM DIUJI', 'Pemilik melaporkan preview v3 (9e57432) berjalan baik di HP pada 6 Okt 2026. Perubahan Versi 3.1 (Bagikan, tampilan tautan, ikon) belum direview pemilik.');
-  rec('A12', 'BELUM BERLAKU', 'Belum ada rilis produksi pada tahap ini; PR tidak di-merge.');
+  rec('A11', 'LULUS', 'Pemilik melaporkan preview v3 dan tombol Maps berjalan baik di HP (6 Okt 2026), lalu menyetujui rilis.');
+  rec('A12', 'BELUM DIUJI', 'Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN). Dicek ulang di berkahcellbatam.com setelah domain aktif.');
   fs.writeFileSync(path.join(OUT, 'hasil.json'), JSON.stringify(results, null, 2));
   const ids = Object.keys(results).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   for (const id of ids) {
@@ -723,6 +724,29 @@ async function testStore() {
   expect('A24', h1 && h2 && h3 && q.__errors.length === 0, 'Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail', { h1, h2, h3, errors: q.__errors });
   rec('A24', 'LULUS', 'Tujuan tautan pendek Google Maps tidak bisa dibuka dari sesi ini; pemilik mengeceknya di HP pada 6 Okt 2026 (laporan pemilik).');
   await q.context().close();
+}
+
+/* ---------- DOMAIN: berkahcellbatam.com dan www (D08) ---------- */
+// Domain resmi disimulasikan: permintaan ke berkahcellbatam.com dilayani dari server uji lokal.
+async function testDomain() {
+  const p = await newPage();
+  await p.context().route(/^https:\/\/(www\.)?berkahcellbatam\.com\//, async (route) => {
+    const u = new URL(route.request().url());
+    const res = await route.fetch({ url: base.replace(/\/$/, '') + u.pathname + u.search });
+    await route.fulfill({ response: res });
+  });
+  await p.goto('https://www.berkahcellbatam.com/?merek=iphone&tipe=11'); await p.waitForURL('https://berkahcellbatam.com/**'); await ready(p);
+  expect('DOMAIN', p.url() === 'https://berkahcellbatam.com/?merek=iphone&tipe=11', 'www.berkahcellbatam.com dialihkan ke berkahcellbatam.com dengan tautan yang sama', p.url());
+  expect('DOMAIN', (await p.textContent('.dev h1')) === 'iPhone 11', 'Detail iPhone 11 tampil di domain resmi');
+  const meta = await p.evaluate(() => ({
+    og: document.querySelector('meta[property="og:image"]').content,
+    ld: JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent),
+  }));
+  expect('DOMAIN', meta.og === 'https://berkahcellbatam.com/assets/og-cover.jpg' && meta.ld.url === 'https://berkahcellbatam.com/' && /^https:\/\/berkahcellbatam\.com\//.test(meta.ld.logo) && /^https:\/\/berkahcellbatam\.com\//.test(meta.ld.image),
+    'og:image dan JSON-LD memakai https://berkahcellbatam.com', meta);
+  expect('DOMAIN', p.__errors.length === 0, 'Tanpa error JS', p.__errors);
+  await p.context().close();
+  rec('DOMAIN', 'BELUM DIUJI', 'Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge.');
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });

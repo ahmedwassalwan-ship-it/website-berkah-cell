@@ -18,6 +18,16 @@ Repo ini tersambung ke Cloudflare Workers (`website-berkah-cell`). Setiap push k
 branch `main` otomatis dibangun dan dipublikasikan. Hanya isi folder `site-live/`
 yang dipublikasikan.
 
+### Alamat website
+
+- **Resmi:** https://berkahcellbatam.com
+  - `www.` dialihkan ke alamat ini oleh `app.js`.
+  - Domain dibeli di Hostinger, aktif sampai 7 Okt 2029 dengan perpanjangan otomatis.
+  - Nameserver diarahkan ke Cloudflare. Custom domain diatur di `routes` pada `wrangler.jsonc`.
+- **Cadangan:** https://website-berkah-cell.ahmedwassalwan.workers.dev
+  - Diblokir sebagian ISP di Indonesia (`ERR_CERT_AUTHORITY_INVALID`), jadi **jangan disebar ke pelanggan**.
+- **Jika pindah domain:** ganti `routes` di `wrangler.jsonc`, URL absolut di `site-live/index.html` (`og:image` dan JSON-LD), dan pengalihan `www` di awal `site-live/app.js`.
+
 ### Pengaturan build Cloudflare
 
 Di dashboard: Workers & Pages → `website-berkah-cell` → Settings → Build.

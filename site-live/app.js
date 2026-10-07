@@ -1,10 +1,16 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.2 (preview)
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.3
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
  */
 (() => {
   'use strict';
+
+  // www.berkahcellbatam.com → berkahcellbatam.com (satu alamat resmi, tautan tetap sama).
+  if (location.hostname === 'www.berkahcellbatam.com') {
+    location.replace('https://berkahcellbatam.com' + location.pathname + location.search + location.hash);
+    return;
+  }
 
   /* ================= Konfigurasi ================= */
   const CONFIG = {

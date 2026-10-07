@@ -21,7 +21,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Batal berbagi (`AbortError`) tidak memunculkan pesan apa pun.
   - Kotak pesan (`role=status`) selalu ada di DOM, tetapi kosong dan tanpa ruang. Live region yang baru dimunculkan sering tidak dibacakan pembaca layar.
 - **Tampilan tautan (F18):** meta Open Graph statis di `index.html`.
-  - `og:image` harus alamat absolut. Sekarang memakai alamat produksi workers.dev, jadi gambar di kartu WhatsApp baru muncul setelah merge ke `main`. Ganti alamat ini saat pindah domain.
+  - `og:image` harus alamat absolut. Sejak Versi 3.3 memakai `https://berkahcellbatam.com/assets/og-cover.jpg`.
   - Sengaja **tanpa `og:url`**, karena Facebook akan mengarahkan semua tautan detail ke beranda.
   - Crawler WhatsApp tidak menjalankan JavaScript, jadi judul kartu sama untuk semua halaman. Nama tipe ikut di teks yang dibagikan lewat menu HP.
 - **Ikon:** `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png`, dan `site.webmanifest`.
@@ -43,6 +43,19 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - **JSON-LD** memakai tipe `LocalBusiness`, tanpa rating atau ulasan.
   - Blok `application/ld+json` tidak dijalankan sebagai skrip, jadi CSP tidak diubah.
   - `addressRegion` "Kepulauan Riau" dan zona WIB adalah fakta lokasi Batam, bukan data bisnis.
+
+## Versi 3.3: domain resmi berkahcellbatam.com (D08)
+
+- **Alasan:**
+  - Setelah rilis 6 Okt, `*.workers.dev` tidak bisa dibuka di jaringan WiFi seorang pelanggan (`NET::ERR_CERT_AUTHORITY_INVALID`), tetapi normal lewat VPN. Itu tanda intersepsi atau blokir ISP, bukan bug kode.
+  - Pada saat yang sama, kartu WhatsApp tetap tampil. Itu bukti server berjalan.
+- **Custom domain:** `routes` dengan `custom_domain: true` untuk `berkahcellbatam.com` dan `www.berkahcellbatam.com` di `wrangler.jsonc`.
+  - Cloudflare membuat DNS record dan sertifikat sendiri.
+  - Syarat: zona `berkahcellbatam.com` sudah **Active** di akun Cloudflare yang sama (nameserver dari Hostinger sudah diarahkan) **sebelum** merge ke `main`. Kalau belum, `wrangler deploy` produksi gagal.
+  - Record lama (A/CNAME parkir) untuk apex dan `www` harus dihapus, karena bentrok dengan custom domain.
+- **`www` dialihkan ke apex** di awal `app.js` (`location.replace`, path dan query tetap). Dengan begitu tidak perlu Redirect Rule di dashboard.
+- **URL absolut** (`og:image`, JSON-LD `url`, `image`, `logo`) memakai `https://berkahcellbatam.com`.
+- **workers.dev tetap aktif** sebagai cadangan (`workers_dev: true`).
 
 ## Riwayat, Back, dan posisi gulir
 
