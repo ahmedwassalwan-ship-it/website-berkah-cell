@@ -60,6 +60,16 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **Uji lama tetap lulus.** A13 disesuaikan: baris daftar sekarang lebih tinggi, jadi tautan A77S digulir ke tengah dulu dan posisinya dicatat tepat sebelum diklik. Tujuan uji tidak berubah: Back memulihkan posisi saat diklik.
 - **Belum diuji:** tampilan di HP sungguhan, dan `_headers`/404 di Cloudflare. Keduanya baru bisa dicek setelah rilis.
 
+## Tambahan pemilik (8 Okt 2026, PR #2)
+
+- **A02, LULUS:** ketikan tanpa spasi atau dengan spasi berbeda menemukan tipe yang benar di urutan pertama.
+  - Contoh: "vivoy91", "VivoY91", "y 91", "iphone11promax", "oppoa77s", "samsunga10".
+  - "redminote9" memunculkan Redmi Note 9 di merek Redmi dan Xiaomi.
+  - "e1" tidak memunculkan iPhone 13 atau Realme 10.
+  - Saringan di halaman Vivo menerima "vivoy91".
+- **POLES, LULUS (emulasi):** motif emboss termuat dari situs sendiri di latar halaman, hero, dan footer, tanpa request baru ke luar.
+- **Belum diuji:** tampilan motif di layar HP sungguhan. Motif ini sengaja tipis, jadi kecerahan layar memengaruhi seberapa terlihat.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

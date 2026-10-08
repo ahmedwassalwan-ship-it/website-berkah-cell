@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.5 · 6 Oktober 2026 · Bahasa Indonesia
+Versi 0.6 · 8 Oktober 2026 · Bahasa Indonesia
 
 **Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Setelah meninjau preview, pemilik menyetujui paket peningkatan profesional: tautan berbagi, tampilan tautan saat dibagikan, ikon, dan informasi toko (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.5 menggantikan versi 0.4 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.6 menggantikan versi 0.5 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -110,7 +110,7 @@ P0 adalah kebutuhan wajib untuk rilis pertama. P1 adalah peningkatan yang dikerj
 | ID | Prioritas | Kebutuhan dan hasil yang diharapkan |
 | --- | --- | --- |
 | F01 | P0 | Daftar merek dibentuk dari katalog yang valid. Setiap merek mengarah ke model yang sesuai. |
-| F02 | P0 | Pencarian mencakup seluruh merek dan model, mengabaikan kapitalisasi serta spasi di awal dan akhir. Hasil mencantumkan identitas perangkat. |
+| F02 | P0 | Pencarian mencakup seluruh merek dan model, mengabaikan kapitalisasi serta spasi di awal dan akhir. Ketikan tanpa spasi atau dengan spasi berbeda, seperti “vivoy91” atau “y 91”, tetap menemukan tipe yang sesuai. Hasil mencantumkan identitas perangkat. |
 | F03 | P0 | Pemilihan model menampilkan seluruh layanan dan varian kualitas yang tersedia untuk model tersebut. Harga dari model lain tidak boleh tercampur. |
 | F04 | P0 | Setiap layanan menampilkan nama, kualitas bila ada, harga jual, estimasi bila tersedia, dan garansi sesuai sumber. |
 | F05 | P0 | WhatsApp membawa tipe yang dicari atau merek dan model yang dipilih, serta layanan dan kualitas jika tersedia. Harga hanya disertakan bila tersedia untuk pilihan tersebut. Pelanggan meninjau dan mengirim sendiri pesan. |
@@ -275,7 +275,7 @@ Tabel ini menjadi daftar pemeriksaan untuk developer dan AI. Status setiap pemer
 | ID | Pemeriksaan | Bukti kelulusan |
 | --- | --- | --- |
 | A01 | Merek dan model | Sampel lintas merek menampilkan model yang benar; jumlah berasal dari data valid. |
-| A02 | Pencarian | Nama lengkap, kapitalisasi berbeda, spasi tambahan, dan angka pendek menghasilkan perangkat yang sesuai. |
+| A02 | Pencarian | Nama lengkap, kapitalisasi berbeda, spasi tambahan, ketikan tanpa spasi (“vivoy91”), dan angka pendek menghasilkan perangkat yang sesuai. |
 | A03 | Pilihan layanan | Semua varian kualitas yang sah tetap muncul; tidak ada harga dari perangkat lain. |
 | A04 | Ketepatan data | Bandingkan nilai asli dan tampilan untuk harga, kualitas, estimasi, dan garansi pada sampel yang dicatat. |
 | A05 | Data bermasalah | Harga kosong atau tidak valid tidak berubah menjadi harga resmi atau layanan gratis. |
@@ -394,7 +394,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 
 | ID | Keputusan | Status awal |
 | --- | --- | --- |
-| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview. 7 Okt 2026: pemilik meminta polesan premium sebelum rilis domain; arah Katalog Bertingkat, warna navy-emas, dan alur tetap. Font Plus Jakarta Sans disimpan di situs sendiri. Tampilan menunggu review pemilik di preview |
+| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview. 7 Okt 2026: pemilik meminta polesan premium sebelum rilis domain; arah Katalog Bertingkat, warna navy-emas, dan alur tetap. Font Plus Jakarta Sans disimpan di situs sendiri. Pemilik menilai tampilan sudah elegan dan mewah. 8 Okt 2026: atas permintaan pemilik, latar diberi motif emboss jalur PCB (cetak timbul, tanpa warna baru). Motif menunggu review pemilik di preview |
 | D02 | Biaya jasa, pemeriksaan, pajak, dan biaya tambahan | Sebagian diputuskan 6 Okt 2026: harga termasuk jasa pemasangan, pemeriksaan tidak dikenakan biaya. Pajak dan biaya tambahan lain masih terbuka |
 | D03 | Garansi serta arti nilai “Tidak Ada” dan “Jasa” | Sebagian diputuskan 6 Okt 2026: garansi mengikuti data, “Tidak Ada” berarti tanpa garansi, arti “Jasa” ditetapkan. Syarat garansi lengkap dan pemakaian “Jasa” atau “Tidak Ada” yang tidak konsisten pada kolom Kualitas masih perlu konfirmasi |
 | D04 | Nomor toko dan owner | Diputuskan 6 Okt 2026: satu nomor 089625050525 untuk servis dan komplain |
@@ -421,6 +421,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.3, 6 Oktober 2026:** mencatat arah desain Katalog Bertingkat yang disetujui pemilik beserta keputusan warna, tindakan kontak utama, maskot, dan aturan pemicu F17. Memperjelas F17 dan A20; memperbarui bagian 2, 5, dan 9 serta status D01 dan cakupan D03. Mockup final masih menunggu review. Prioritas P0/P1 tidak berubah.
 - **Versi 0.4, 6 Oktober 2026:** mencatat persetujuan mockup revisi sebagai acuan implementasi preview serta lima keputusan pemilik: harga termasuk jasa pemasangan dan pemeriksaan tanpa biaya, aturan garansi “Tidak Ada” dan kolom kosong, arti “Jasa”, satu nomor WhatsApp untuk servis dan komplain, serta normalisasi merek Xiomi → Xiaomi dengan Redmi dan Poco terpisah. Memperbarui bagian 2, 3, 4, 8, dan 9 serta status D01 sampai D05. Pajak, biaya tambahan lain, syarat garansi lengkap, dan model yang berpotensi ganda tetap terbuka. Prioritas P0/P1 tidak berubah.
 - **Versi 0.5, 6–7 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Data toko untuk F19 diterima pada hari yang sama. Pada 7 Oktober 2026 D08 diputuskan: domain berkahcellbatam.com, setelah workers.dev diketahui diblokir sebagian ISP.
+- **Versi 0.6, 8 Oktober 2026:** atas permintaan pemilik, F02 dan A02 mencakup ketikan tanpa spasi atau dengan spasi berbeda (“vivoy91”, “y 91”), karena banyak pelanggan mengetik tipe HP tanpa spasi. D01 mencatat motif emboss jalur PCB di latar. Prioritas P0/P1 tidak berubah.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -436,7 +437,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.5 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.6 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 

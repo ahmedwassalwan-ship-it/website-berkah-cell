@@ -105,6 +105,25 @@
   /* ================= Data ================= */
   const clean = (s) => String(s === null || s === undefined ? '' : s).replace(/\s+/g, ' ').trim();
   const lower = (s) => clean(s).toLowerCase();
+  const compact = (s) => s.replace(/[^a-z0-9]/g, '');
+  // Bentuk rapat untuk pencarian: hanya huruf dan angka, beserta posisi awal tiap kata.
+  // "vivo y91" -> { c: 'vivoy91', starts: {0, 4} }
+  function compactInfo(s) {
+    let c = ''; let prev = false; const starts = new Set();
+    for (const ch of s) {
+      const ok = /[a-z0-9]/.test(ch);
+      if (ok && !prev) starts.add(c.length);
+      if (ok) c += ch;
+      prev = ok;
+    }
+    return { c, starts };
+  }
+  // Posisi pertama q di bentuk rapat yang dimulai di awal kata, atau -1.
+  function compactAt(info, q) {
+    if (!q) return -1;
+    for (let i = info.c.indexOf(q); i >= 0; i = info.c.indexOf(q, i + 1)) if (info.starts.has(i)) return i;
+    return -1;
+  }
   const collator = new Intl.Collator('id', { numeric: true, sensitivity: 'base' });
 
   function parseCSV(text) {
@@ -205,6 +224,7 @@
         m.services = [...groups.values()];
         m.optionCount = m.services.reduce((n, s) => n + s.variants.length, 0);
         m.hay = [lower(m.fullName), lower(b.name + ' ' + m.name), ...[...b.raw].map((rb) => rb + ' ' + lower(m.name)), lower(m.name)];
+        m.hayC = m.hay.map(compactInfo);
         models.push(m);
       }
       b.list = [...b.models.values()].sort((x, y) => collator.compare(x.name, y.name));
@@ -413,18 +433,30 @@
     return { hero, input, clearBtn };
   }
 
+  // Pelanggan sering mengetik tanpa spasi ("vivoy91") atau dengan spasi lain ("y 91").
+  // Selain cocok biasa, kata kunci juga dibandingkan dalam bentuk rapat. Kecocokan rapat
+  // harus dimulai di awal kata, supaya "e1" tidak cocok dengan "iphone 13".
+  function matcher(q) {
+    const n = lower(q); const nc = compact(n);
+    const toks = n.split(' ').filter((t) => compact(t)).map((t) => [t, compact(t)]);
+    return (m) => {
+      let score = -1;
+      m.hay.forEach((hs, k) => {
+        const hc = m.hayC[k];
+        if (hs === n || (nc && hc.c === nc)) score = Math.max(score, 3);
+        else if (hs.startsWith(n) || compactAt(hc, nc) === 0) score = Math.max(score, 2);
+        else if (hs.includes(n) || compactAt(hc, nc) > 0) score = Math.max(score, 1);
+        else if (toks.length && toks.every(([t, tc]) => hs.includes(t) || compactAt(hc, tc) >= 0)) score = Math.max(score, 0);
+      });
+      return score;
+    };
+  }
   function search(q) {
-    const n = lower(q); if (!n) return [];
-    const toks = n.split(' ');
+    if (!lower(q)) return [];
+    const scoreOf = matcher(q);
     const out = [];
     for (const m of S.catalog.models) {
-      let score = -1;
-      for (const hs of m.hay) {
-        if (hs === n) score = Math.max(score, 3);
-        else if (hs.startsWith(n)) score = Math.max(score, 2);
-        else if (hs.includes(n)) score = Math.max(score, 1);
-        else if (toks.every((t) => hs.includes(t))) score = Math.max(score, 0);
-      }
+      const score = scoreOf(m);
       if (score >= 0) out.push({ m, score });
     }
     out.sort((a, b) => b.score - a.score || collator.compare(a.m.brand.name, b.m.brand.name) || collator.compare(a.m.name, b.m.name));
@@ -524,7 +556,8 @@
           () => openPanel({ kind: 'brand', brand: b }))));
     function update(f) {
       const n = lower(f);
-      const items = n ? b.list.filter((m) => lower(m.name).includes(n) || m.hay.some((x) => x.includes(n))) : b.list;
+      const scoreOf = matcher(n);
+      const items = n ? b.list.filter((m) => scoreOf(m) >= 0) : b.list;
       listWrap.textContent = '';
       if (!items.length) {
         appendAll(listWrap, h('p', { class: 'meta-line', role: 'status', text: 'Tidak ada tipe ' + b.name + ' yang cocok dengan “' + clean(f) + '”.' }));

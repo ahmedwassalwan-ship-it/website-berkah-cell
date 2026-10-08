@@ -14,6 +14,7 @@ Website daftar harga servis HP BERKAH CELL.
 - `design/mockup-v1/` — mockup yang disetujui sebagai acuan.
 - `tools/cek_data.py` — audit ekspor Price_List (hanya membaca).
 - `tools/buat_aset.js` — membuat gambar tautan (`og-cover.jpg`) dan ikon dari `design/sumber-aset/`.
+- `tools/buat_motif.js` — membuat motif emboss latar (`motif-emboss-terang.svg`, `motif-emboss-gelap.svg`).
 - `tests/` — uji penerimaan (`node tests/e2e.js`, butuh Playwright).
 
 ## Deploy

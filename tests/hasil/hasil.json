@@ -20,8 +20,17 @@
       "✓ Angka pendek \"11\" menghasilkan beberapa merek dengan nama merek + model",
       "✓ Alias lama \"xiomi\" tetap menemukan Xiaomi 9A (F10)",
       "✓ Y15s/Y15S tampil sebagai satu tipe",
+      "✓ \"vivoy91\" menemukan Vivo Y91 di urutan pertama",
+      "✓ \"VivoY91\" menemukan Vivo Y91 di urutan pertama",
+      "✓ \"y 91\" menemukan Vivo Y91 di urutan pertama",
+      "✓ \"iphone11promax\" menemukan iPhone 11 Pro Max di urutan pertama",
+      "✓ \"oppoa77s\" menemukan Oppo A77S di urutan pertama",
+      "✓ \"samsunga10\" menemukan Samsung A10 di urutan pertama",
+      "✓ \"redminote9\" menemukan Redmi Note 9 di kedua merek di urutan teratas",
+      "✓ Bentuk rapat hanya cocok dari awal kata: \"e1\" tidak memunculkan iPhone 13 atau Realme 10",
       "✓ Pencarian kosong kembali ke grid merek",
-      "✓ Hasil pencarian muncul dalam 19 ms (target < 300 ms, emulasi desktop)"
+      "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
+      "✓ Hasil pencarian muncul dalam 20 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -314,6 +323,7 @@
     "notes": [
       "✓ Daftar tipe: nama tipe dan jumlah layanan di baris terpisah (tidak menempel \"A1K2 layanan\")",
       "✓ Font Plus Jakarta Sans termuat dari situs sendiri",
+      "✓ Motif emboss (permintaan pemilik 8 Okt 2026) termuat dari situs sendiri di latar halaman, hero, dan footer",
       "✓ Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik",
       "✓ Baris kepercayaan disembunyikan saat mencari",
       "✓ Halaman 404: bergaya situs, tombol ke beranda dan WhatsApp toko, tanpa gulir ke samping",

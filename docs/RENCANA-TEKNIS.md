@@ -69,7 +69,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - CSP tidak berubah, karena font berasal dari situs sendiri.
   - Spasi kata dilonggarkan `.09em`, karena font ini rapat.
 - **Hero:**
-  - gradasi navy dengan cahaya emas tipis dan pola garis halus (CSS saja, tanpa gambar)
+  - gradasi navy dengan cahaya emas tipis dan motif emboss jalur PCB (lihat bagian 8 Okt 2026)
   - kata "servis" bergradasi emas
   - garis emas di bawah hero
 - **Baris kepercayaan** di bawah pencarian berisi tiga ketentuan yang sudah diputuskan pemilik: pemeriksaan gratis, harga termasuk jasa pemasangan, garansi tertera per layanan. Klaim lain tidak boleh ditambahkan tanpa keputusan pemilik.
@@ -85,6 +85,34 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - `404.html` bergaya situs, dengan `not_found_handling: "404-page"` di `wrangler.jsonc`
   - `robots.txt` dan `sitemap.xml` ke domain resmi
   - `_headers` untuk header keamanan: nosniff, X-Frame-Options DENY, Referrer-Policy, Permissions-Policy, HSTS tanpa subdomain
+
+## Tambahan dari pemilik (8 Okt 2026)
+
+### Pencarian tanpa spasi
+
+- **Masalah:** banyak pelanggan mengetik tipe HP tanpa spasi, misalnya "vivoy91". Sebelumnya ketikan itu tidak menemukan apa pun.
+- **Cara kerja:** setiap nama tipe juga disimpan dalam bentuk rapat (`compactInfo()` di `app.js`).
+  - Bentuk rapat hanya berisi huruf dan angka: "vivo y91" menjadi "vivoy91".
+  - Posisi awal tiap kata ikut dicatat.
+- **Aturan cocok:** kata kunci yang juga dirapatkan dianggap cocok **hanya jika dimulai di awal kata**.
+  - "vivoy91", "y 91", "iphone11promax", dan "redminote9" cocok.
+  - "e1" tidak memunculkan "iPhone 13", walaupun "iphone13" mengandung "e1".
+- **Urutan hasil:** sama persis lebih dulu, lalu awalan, lalu bagian dari nama.
+- **Saringan di halaman merek** memakai aturan yang sama (`matcher()`).
+
+### Motif emboss di latar
+
+- **Motif:** jalur PCB (chip, bus jalur, BGA, via) sebagai simbol keahlian hardware.
+- **Efek cetak timbul:** sorot putih di kiri atas dan bayangan di kanan bawah. Tidak ada warna baru.
+- **Pembuatan:**
+  - Ubin SVG 240×240 dibuat oleh `tools/buat_motif.js` dan menyambung tanpa garis sambungan.
+  - Hasilnya ada dua: `assets/motif-emboss-terang.svg` (latar krem) dan `assets/motif-emboss-gelap.svg` (hero dan footer navy).
+  - Ukuran sekitar 2 KB per file, dimuat dari situs sendiri, jadi CSP tidak berubah.
+- **Penempatan:**
+  - Latar krem halaman: motif tipis di sela kartu.
+  - Hero: motif dipusatkan di kanan sekitar maskot lewat mask radial, supaya area teks tetap bersih.
+  - Footer.
+- **Mengubah motif:** edit `tools/buat_motif.js`, lalu jalankan `node tools/buat_motif.js`.
 
 ## Riwayat, Back, dan posisi gulir
 

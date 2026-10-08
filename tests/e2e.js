@@ -144,8 +144,24 @@ async function testSearch() {
   expect('A02', (await names()).includes('Xiaomi 9A'), 'Alias lama "xiomi" tetap menemukan Xiaomi 9A (F10)');
   await p.fill('#q', 'y15s'); await sleep(50);
   expect('A02', JSON.stringify(await names()) === JSON.stringify(['Vivo Y15S']), 'Y15s/Y15S tampil sebagai satu tipe', await names());
+  // Ketikan tanpa spasi atau dengan spasi berbeda (permintaan pemilik 8 Okt 2026)
+  for (const [q, first] of [['vivoy91', 'Vivo Y91'], ['VivoY91', 'Vivo Y91'], ['y 91', 'Vivo Y91'], ['iphone11promax', 'iPhone 11 Pro Max'], ['oppoa77s', 'Oppo A77S'], ['samsunga10', 'Samsung A10']]) {
+    await p.fill('#q', q); await sleep(50);
+    const n = await names();
+    expect('A02', n[0] === first, `"${q}" menemukan ${first} di urutan pertama`, n);
+  }
+  await p.fill('#q', 'redminote9'); await sleep(50);
+  const rn9 = await names();
+  expect('A02', rn9.slice(0, 2).sort().join('|') === 'Redmi Note 9|Xiaomi Redmi Note 9', '"redminote9" menemukan Redmi Note 9 di kedua merek di urutan teratas', rn9);
+  await p.fill('#q', 'e1'); await sleep(50);
+  const e1 = await names();
+  expect('A02', !e1.includes('iPhone 13') && !e1.includes('Realme 10'), 'Bentuk rapat hanya cocok dari awal kata: "e1" tidak memunculkan iPhone 13 atau Realme 10', e1);
   await p.fill('#q', ''); await sleep(50);
   expect('A02', (await p.$$('.tile')).length === 10, 'Pencarian kosong kembali ke grid merek');
+  await p.click('.tile:has(b:text-is("Vivo"))'); await p.waitForSelector('#f');
+  await p.fill('#f', 'vivoy91'); await sleep(50);
+  expect('A02', JSON.stringify(await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent))) === JSON.stringify(['Y91']), 'Saringan di halaman merek juga menerima "vivoy91"');
+  await p.goBack(); await p.waitForSelector('.tile');
   const t0 = Date.now(); await p.fill('#q', 'samsung a'); await p.waitForSelector('.list .t'); const dt = Date.now() - t0;
   expect('A02', dt < 300, `Hasil pencarian muncul dalam ${dt} ms (target < 300 ms, emulasi desktop)`);
   await p.context().close();
@@ -773,6 +789,14 @@ async function testPolish() {
   await p.goto(base); await ready(p);
   const font = await p.evaluate(async () => { await document.fonts.ready; return { family: getComputedStyle(document.body).fontFamily, loaded: document.fonts.check('700 16px "Plus Jakarta Sans"') }; });
   expect('POLES', /Plus Jakarta Sans/.test(font.family) && font.loaded, 'Font Plus Jakarta Sans termuat dari situs sendiri', font);
+  const motif = await p.evaluate(async () => {
+    const bg = (el, pseudo) => getComputedStyle(el, pseudo).backgroundImage;
+    const urls = ['assets/motif-emboss-terang.svg', 'assets/motif-emboss-gelap.svg'];
+    const ok = await Promise.all(urls.map((u) => new Promise((res) => { const i = new Image(); i.onload = () => res(i.naturalWidth === 240); i.onerror = () => res(false); i.src = u; })));
+    return { body: bg(document.body), hero: bg(document.querySelector('.hero'), '::before'), ftr: bg(document.querySelector('.ftr')), ok };
+  });
+  expect('POLES', /motif-emboss-terang\.svg/.test(motif.body) && /motif-emboss-gelap\.svg/.test(motif.hero) && /motif-emboss-gelap\.svg/.test(motif.ftr) && motif.ok.every(Boolean),
+    'Motif emboss (permintaan pemilik 8 Okt 2026) termuat dari situs sendiri di latar halaman, hero, dan footer', motif);
   const trust = await p.$$eval('.hero .trust li', (e) => e.map((x) => x.textContent.trim()));
   expect('POLES', JSON.stringify(trust) === JSON.stringify(['Pemeriksaan gratis', 'Harga termasuk jasa pemasangan', 'Garansi tertera per layanan']), 'Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik', trust);
   await p.fill('#q', 'iphone'); await sleep(100);
