@@ -156,6 +156,12 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Disembunyikan saat mencari.
   - Website tidak menulis syarat kepemilikan, karena pemilik belum menetapkannya.
 
+### Urutan tipe iPhone
+
+- Atas permintaan pemilik, tipe iPhone diurutkan menurut generasi. Urutannya: 8 Plus → X → XR → XS → XS Max → 11.
+- Caranya: `m.sortKey` membaca awalan X sebagai 10 (angka romawi), lalu dipakai oleh `byModel()` di daftar merek, hasil pencarian, dan pencarian layanan.
+- Nama yang tampil tidak berubah.
+
 ## Riwayat, Back, dan posisi gulir
 
 - `history.scrollRestoration = 'manual'`.

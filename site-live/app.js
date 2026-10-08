@@ -134,6 +134,7 @@
     return -1;
   }
   const collator = new Intl.Collator('id', { numeric: true, sensitivity: 'base' });
+  const byModel = (x, y) => collator.compare(x.sortKey, y.sortKey);
 
   function parseCSV(text) {
     const rows = []; let row = []; let cur = ''; let inQ = false;
@@ -236,9 +237,11 @@
         m.hay = [lower(m.fullName), lower(b.name + ' ' + m.name), ...[...b.raw].map((rb) => rb + ' ' + lower(m.name)), lower(m.name),
           ...(SEARCH_ALIAS[b.key] || []).map((a) => a + ' ' + lower(m.name))];
         m.hayC = m.hay.map(compactInfo);
+        // iPhone X = 10: X, XR, XS, XS Max diurutkan di antara 8 Plus dan 11 (pemilik 8 Okt 2026).
+        m.sortKey = b.key === 'iphone' ? m.name.replace(/^x(r|s)?\b/i, (_, v) => '10 ' + (v || '')) : m.name;
         models.push(m);
       }
-      b.list = [...b.models.values()].sort((x, y) => collator.compare(x.name, y.name));
+      b.list = [...b.models.values()].sort(byModel);
     }
     const brandList = [...brands.values()].sort((x, y) => collator.compare(x.name, y.name));
     return { brands, brandList, models, issues };
@@ -522,7 +525,7 @@
       const score = scoreOf(m);
       if (score >= 0) out.push({ m, score });
     }
-    out.sort((a, b) => b.score - a.score || collator.compare(a.m.brand.name, b.m.brand.name) || collator.compare(a.m.name, b.m.name));
+    out.sort((a, b) => b.score - a.score || collator.compare(a.m.brand.name, b.m.brand.name) || byModel(a.m, b.m));
     return out.map((x) => x.m);
   }
   // Cadangan bila tidak ada nama tipe yang cocok: cari lewat nama layanan, mis. "bypass",
@@ -583,7 +586,7 @@
       let res = search(n).map((m) => ({ m }));
       if (!res.length) {
         res = serviceSearch(S.catalog.models, n)
-          .sort((a, b) => collator.compare(a.m.brand.name, b.m.brand.name) || collator.compare(a.m.name, b.m.name));
+          .sort((a, b) => collator.compare(a.m.brand.name, b.m.brand.name) || byModel(a.m, b.m));
       }
       status.hidden = false;
       if (!res.length) {

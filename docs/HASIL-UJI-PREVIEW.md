@@ -105,6 +105,10 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - Dengan data tanpa Bypass, badge tidak tampil.
 - **Catatan data:** baru 2 tipe yang punya layanan Bypass di ekspor 6 Okt 2026.
 
+## Urutan iPhone (8 Okt 2026, PR #2)
+
+- **A01, LULUS (emulasi):** daftar tipe iPhone dan hasil pencarian "iphone" sama-sama berurutan 6S Plus, 7, 7 plus, 8, 8 Plus, X, XR, XS, XS Max, 11, 11 Pro, 11 Pro Max, 12, 12 Pro, 12 Pro Max, 13, 13 Pro, 15 Plus.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

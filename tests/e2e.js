@@ -122,6 +122,16 @@ async function testCatalog() {
     expect('A01', n === count, `Daftar tipe ${brand} berisi ${count} tipe`, n);
     await p.goBack(); await p.waitForSelector('.tile');
   }
+  // Urutan iPhone sesuai generasi: X–XS Max di antara 8 Plus dan 11 (pemilik 8 Okt 2026)
+  const IPHONE_ORDER = ['6S Plus', '7', '7 plus', '8', '8 Plus', 'X', 'XR', 'XS', 'XS Max', '11', '11 Pro', '11 Pro Max', '12', '12 Pro', '12 Pro Max', '13', '13 Pro', '15 Plus'];
+  await p.click('.tile:has(b:text-is("iPhone"))'); await p.waitForSelector('.list');
+  const ip = await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent));
+  expect('A01', JSON.stringify(ip) === JSON.stringify(IPHONE_ORDER), 'Daftar tipe iPhone berurutan: … 8 Plus, X, XR, XS, XS Max, 11 …', ip);
+  await p.goBack(); await p.waitForSelector('.tile');
+  await p.fill('#q', 'iphone'); await sleep(80);
+  const ips = await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent));
+  expect('A01', JSON.stringify(ips) === JSON.stringify(IPHONE_ORDER.map((n) => 'iPhone ' + n)), 'Hasil pencarian "iphone" memakai urutan yang sama', ips);
+  await p.fill('#q', ''); await sleep(50);
   await p.click('.tile:has(b:text-is("Xiaomi"))'); await p.waitForSelector('.list');
   const xi = await p.$$eval('.list .t', (e) => e.map((x) => x.textContent));
   expect('A01', xi.includes('9A'), 'Model dari merek "xiomi" tampil di bawah Xiaomi', xi);

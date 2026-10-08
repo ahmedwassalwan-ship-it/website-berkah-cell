@@ -8,6 +8,8 @@
       "✓ Daftar tipe iPhone berisi 18 tipe",
       "✓ Daftar tipe Vivo berisi 15 tipe",
       "✓ Daftar tipe Xiaomi berisi 5 tipe",
+      "✓ Daftar tipe iPhone berurutan: … 8 Plus, X, XR, XS, XS Max, 11 …",
+      "✓ Hasil pencarian \"iphone\" memakai urutan yang sama",
       "✓ Model dari merek \"xiomi\" tampil di bawah Xiaomi"
     ]
   },
@@ -46,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 15 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 19 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
