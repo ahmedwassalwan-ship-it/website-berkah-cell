@@ -15,6 +15,7 @@ Website daftar harga servis HP BERKAH CELL.
 - `tools/cek_data.py` — audit ekspor Price_List (hanya membaca).
 - `tools/buat_aset.js` — membuat gambar tautan (`og-cover.jpg`) dan ikon dari `design/sumber-aset/`.
 - `tools/buat_motif.js` — membuat motif emboss latar (`motif-emboss-terang.svg`, `motif-emboss-gelap.svg`).
+- `tools/buat_video.js` — membuat video launching 9:16: versi organik (dengan Bypass), versi iklan (tanpa Bypass), dan cover. Hasilnya ditulis ke `video-hasil/` dan tidak ikut di-commit. Butuh Playwright dan ffmpeg.
 - `tests/` — uji penerimaan (`node tests/e2e.js`, butuh Playwright).
 
 ## Deploy
