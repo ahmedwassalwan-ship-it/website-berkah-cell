@@ -75,6 +75,20 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **POLES, LULUS (emulasi):** motif emboss termuat dari situs sendiri di latar halaman, hero, dan footer, tanpa request baru ke luar.
 - **Belum diuji:** tampilan motif di layar HP sungguhan. Motif ini sengaja tipis, jadi kecerahan layar memengaruhi seberapa terlihat.
 
+## Polesan terakhir (8 Okt 2026, PR #2)
+
+- **POLES, LULUS (emulasi):**
+  - Spasi kata di tombol sama dengan teks biasa, jadi tidak lagi tertulis "Garansi7hari".
+  - Beranda menampilkan "Cara servis" 3 langkah dengan teks yang hanya berisi fakta.
+- **A24, LULUS (emulasi, jam dikunci lewat Playwright):** status toko benar di semua kasus berikut:
+  - 09.00 WIB: Tutup, buka hari ini.
+  - 11.00 WIB: Buka.
+  - 12.30 WIB: Buka.
+  - 20.00 WIB: Tutup, buka besok.
+  - 12.30 WIB dengan HP di zona New York: tetap Buka.
+- **Footer dan Bantuan:** tautan WhatsApp di footer dan nomor di halaman Bantuan memakai format 0896-2505-0525.
+- **Tanpa data toko:** status tidak tampil, dan langkah 3 ditulis tanpa alamat.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

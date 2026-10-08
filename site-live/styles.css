@@ -25,7 +25,7 @@ html{scroll-padding-top:calc(var(--stick-h) + 12px);scroll-padding-bottom:calc(v
 body{font-family:"Plus Jakarta Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;background:var(--bg) url(assets/motif-emboss-terang.svg) 0 0/240px 240px;color:var(--ink);line-height:1.5;font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;word-spacing:.09em;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
 #shell{display:flex;flex-direction:column;flex:1}
 img{max-width:100%}
-button,input,textarea{font:inherit;color:inherit}
+button,input,textarea{font:inherit;color:inherit;word-spacing:inherit} /* bawaan browser mengatur ulang spasi kata di tombol */
 button{cursor:pointer;background:none;border:0}
 a{color:inherit}
 .sprite{position:absolute;width:0;height:0;overflow:hidden}
@@ -85,7 +85,7 @@ body.searching .hero .searchbox{margin-top:8px}
 
 /* ===== Sections ===== */
 .section{padding-top:22px}
-.sec-title{font-size:12px;font-weight:800;letter-spacing:1.6px;color:var(--ink-2);text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sec-title{font-size:12px;font-weight:800;letter-spacing:1.6px;color:var(--ink-2);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .sec-title::before{content:"";width:16px;height:2px;border-radius:2px;background:var(--gold-grad);margin-right:-2px;order:-1}
 .sec-title small{margin-left:auto;font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--ink-3)}
 .grid-brands{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;list-style:none}
@@ -175,13 +175,25 @@ body.searching .hero .searchbox{margin-top:8px}
 .store-mini{margin-top:10px}
 /* Kartu "Kunjungi toko": navy dengan aksen emas */
 .box.store{position:relative;overflow:hidden;color:#fff;border-color:transparent;background-color:var(--navy-900);
-  background-image:radial-gradient(380px 200px at 100% 0%,rgba(201,165,78,.22),rgba(201,165,78,0) 70%),linear-gradient(160deg,#0D2244 0%,#0A1A33 60%);box-shadow:0 18px 40px -22px rgba(10,26,51,.65)}
+  background-image:radial-gradient(380px 200px at 100% 0%,rgba(201,165,78,.22),rgba(201,165,78,0) 70%),url(assets/motif-emboss-gelap.svg),linear-gradient(160deg,#0D2244 0%,#0A1A33 60%);background-size:auto,240px 240px,auto;box-shadow:0 18px 40px -22px rgba(10,26,51,.65)}
 .box.store::after{content:"";position:absolute;left:16px;right:16px;top:0;height:1px;background:linear-gradient(90deg,rgba(216,181,102,0),rgba(216,181,102,.8),rgba(216,181,102,0))}
 .box.store h2{color:#fff;font-size:17px;display:flex;align-items:center;gap:8px}
 .box.store h2::before{content:"";width:16px;height:2px;border-radius:2px;background:var(--gold-grad)}
 .store .store-line{display:flex;align-items:flex-start;gap:9px;color:#E3E9F3;margin-top:10px;font-size:14.5px}
 .store .store-line svg{flex:none;margin-top:2px;color:var(--gold-on-navy)}
 .store .acts{margin-top:14px}
+.open-status{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:5px 12px 5px 10px;border-radius:20px;font-size:13px;font-weight:700;background:rgba(255,255,255,.07);color:#C3CEDF;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.open-status .dot{width:8px;height:8px;border-radius:50%;background:#8A97AD}
+.open-status.is-open{color:#BFF2D2;background:rgba(46,204,113,.12);box-shadow:inset 0 0 0 1px rgba(46,204,113,.28)}
+.open-status.is-open .dot{background:#34D27B;box-shadow:0 0 0 3px rgba(52,210,123,.22)}
+/* Langkah servis di beranda */
+.steps{margin-top:22px}
+.steps-list{list-style:none;background:var(--card);border:1px solid rgba(10,26,51,.06);border-radius:var(--r-md);box-shadow:var(--sh-1);padding:6px 16px}
+.steps-list li{position:relative;display:flex;gap:14px;padding:12px 0}
+.steps-list li:not(:last-child)::after{content:"";position:absolute;left:14px;top:46px;bottom:-8px;width:2px;border-radius:2px;background:linear-gradient(180deg,rgba(201,165,78,.55),rgba(201,165,78,.12))}
+.steps .n{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:var(--navy-900);color:var(--gold-on-navy);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(216,181,102,.55)}
+.steps b{display:block;font-size:15px;line-height:1.35;padding-top:4px}
+.steps p{font-size:13.5px;color:var(--ink-2);margin-top:2px}
 .store .btn-sec{background:transparent;color:var(--gold-on-navy);border-color:rgba(216,181,102,.7)}
 .store .btn-sec:hover{background:var(--gold-on-navy);border-color:var(--gold-on-navy);color:var(--navy-900)}
 .sticky-dev{position:fixed;left:0;right:0;top:0;z-index:30;background:rgba(255,255,255,.9);-webkit-backdrop-filter:saturate(160%) blur(14px);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid rgba(10,26,51,.08);box-shadow:0 6px 20px -10px rgba(10,26,51,.25)}
@@ -235,6 +247,7 @@ body.searching .hero .searchbox{margin-top:8px}
 .ftr .store-ftr .addr,.ftr .store-ftr .hours{white-space:nowrap}
 .ftr a{display:inline-flex;align-items:center;min-height:44px;color:var(--gold-on-navy);font-weight:700;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(216,181,102,.5)}
 .ftr a:hover{text-decoration-color:var(--gold-on-navy)}
+.ftr .ftr-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 18px}
 .ftr .fine-print{display:block;margin-top:6px;color:#AEBBD0}
 .ftr .ver{display:block;margin-top:6px;color:#9FB0CC;font-size:12px}
 body.has-cta .ftr{padding-bottom:calc(var(--cta-h) + 24px)}
@@ -272,6 +285,10 @@ body.locked{overflow:hidden}
 @media (min-width:640px){
   .grid-brands{grid-template-columns:repeat(4,1fr);gap:12px}
   .trust{font-size:13.5px}
+  .steps-list{display:grid;grid-template-columns:repeat(3,1fr);padding:4px 0}
+  .steps-list li{flex-direction:column;gap:10px;padding:14px 18px}
+  .steps-list li+li{border-left:1px solid var(--line-2)}
+  .steps-list li:not(:last-child)::after{display:none}
 }
 @media (min-width:1024px){
   :root{--wrap:1000px}

@@ -18,7 +18,7 @@
     // disalin dari file utama lewat IMPORTRANGE. JANGAN arahkan ke file utama.
     SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/1mgN8N15Tu-KvNLs2IblKTKVbbtoIiaPOBd-MiFoL5gA/gviz/tq?tqx=out:csv&gid=0',
     WA_NUMBER: '6289625050525', // satu nomor toko untuk servis dan komplain (PRD v0.4)
-    WA_DISPLAY: '089625050525',
+    WA_DISPLAY: '0896-2505-0525',
     LOAD_TIMEOUT_MS: 15000,
     URL_DEBOUNCE_MS: 300,
     // Data toko dari pemilik (6 Okt 2026). Harus sama dengan footer dan JSON-LD di index.html.
@@ -27,6 +27,8 @@
       address: 'Avava Jodoh, Lantai Dasar, Batam',
       hours: 'Setiap hari, 11.00–20.00 WIB',
       mapsUrl: 'https://maps.app.goo.gl/9f942hFJcCKjUKnj9',
+      // Jam yang sama dalam bentuk data, untuk status "Buka sekarang" (setiap hari, WIB).
+      open: '11:00', close: '20:00', tz: 'Asia/Jakarta',
     },
   };
 
@@ -401,7 +403,48 @@
       h('h2', { id: 'judul-toko', text: 'Kunjungi toko' }),
       h('p', { class: 'store-line addr' }, icon('pin', 16), s.address),
       s.hours ? h('p', { class: 'store-line hours' }, icon('clock', 16), s.hours) : null,
+      openStatusEl(),
       h('div', { class: 'acts' }, mapsLink('btn-sec', 'Buka di Google Maps')));
+  }
+
+  // Status buka/tutup dari jam buka pemilik (setiap hari), dihitung dalam WIB, bukan jam HP.
+  function openStatus() {
+    const s = CONFIG.STORE;
+    if (!s || !s.open || !s.close) return null;
+    let now;
+    try {
+      const parts = new Intl.DateTimeFormat('en-GB', { timeZone: s.tz || 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+      now = Number(parts.find((x) => x.type === 'hour').value) * 60 + Number(parts.find((x) => x.type === 'minute').value);
+    } catch (e) { return null; }
+    const min = (t) => { const [a, b] = t.split(':').map(Number); return a * 60 + b; };
+    const label = (t) => t.replace(':', '.') + ' WIB';
+    if (now >= min(s.open) && now < min(s.close)) return { open: true, text: 'Buka sekarang · sampai ' + label(s.close) };
+    return { open: false, text: 'Tutup sekarang · buka ' + (now < min(s.open) ? 'hari ini' : 'besok') + ' pukul ' + label(s.open) };
+  }
+  function openStatusEl() {
+    const st = openStatus(); if (!st) return null;
+    return h('p', { class: 'open-status' + (st.open ? ' is-open' : '') }, h('span', { class: 'dot', 'aria-hidden': 'true' }), h('span', { class: 'txt', text: st.text }));
+  }
+  function refreshOpenStatus() {
+    const st = openStatus(); if (!st) return;
+    document.querySelectorAll('.open-status').forEach((el) => {
+      el.classList.toggle('is-open', st.open);
+      const t = el.querySelector('.txt'); if (t.textContent !== st.text) t.textContent = st.text;
+    });
+  }
+
+  // Alur servis di beranda: hanya fakta yang sudah ada (cara kerja situs, alamat, pemeriksaan gratis).
+  function stepsBlock() {
+    const s = hasStore() ? CONFIG.STORE : null;
+    const steps = [
+      ['Cek harga di sini', 'Cari tipe HP kamu, lalu pilih layanan yang dibutuhkan.'],
+      ['Tanya lewat WhatsApp', 'Pesan sudah berisi tipe HP dan layanan pilihanmu.'],
+      ['Bawa HP ke toko', (s ? s.address + '. ' : '') + 'Pemeriksaan gratis.'],
+    ];
+    return h('section', { class: 'steps', 'aria-labelledby': 'judul-langkah' },
+      h('h2', { class: 'sec-title', id: 'judul-langkah', text: 'Cara servis di BERKAH CELL' }),
+      h('ol', { class: 'steps-list' }, steps.map(([t, d], i) =>
+        h('li', null, h('span', { class: 'n', 'aria-hidden': 'true', text: String(i + 1) }), h('div', null, h('b', { text: t }), h('p', { text: d }))))));
   }
   function storeLine() {
     if (!hasStore()) return null;
@@ -493,7 +536,7 @@
       body.textContent = '';
       if (!n) {
         status.hidden = true; status.textContent = '';
-        appendAll(body, brandGrid(), helpCard('Tipe HP kamu belum ada?', 'Daftar harga terus dilengkapi. Tanyakan langsung ke kami.',
+        appendAll(body, brandGrid(), stepsBlock(), helpCard('Tipe HP kamu belum ada?', 'Daftar harga terus dilengkapi. Tanyakan langsung ke kami.',
           'Tanya servis via WhatsApp', () => openPanel({ kind: 'general' })), storeBlock());
         return;
       }
@@ -970,5 +1013,7 @@
       a.setAttribute('href', at.href); a.removeAttribute('target'); a.removeAttribute('rel');
     });
   }
+  // Status "Buka sekarang" diperbarui tiap menit selama halaman terbuka.
+  setInterval(refreshOpenStatus, 60000);
   loadData();
 })();

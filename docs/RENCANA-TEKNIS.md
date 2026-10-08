@@ -121,6 +121,24 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Footer.
 - **Mengubah motif:** edit `tools/buat_motif.js`, lalu jalankan `node tools/buat_motif.js`.
 
+### Polesan terakhir sebelum rilis domain
+
+- **Bug spasi di tombol:**
+  - Gejala: di kartu harga tertulis "Garansi7hari", "Gantitipe HP", dan "Bagikanhargaini".
+  - Penyebab: stylesheet bawaan Chrome mengatur ulang `word-spacing` pada `button` dan `input`, jadi pelonggaran `.09em` dari `body` tidak ikut.
+  - Perbaikan: `button,input,textarea{word-spacing:inherit}`.
+- **Status buka/tutup** di kartu "Kunjungi toko":
+  - Fungsi `openStatus()` membaca `CONFIG.STORE.open`, `close`, dan `tz`.
+  - Waktu dihitung dengan `Intl.DateTimeFormat` dalam zona Asia/Jakarta (WIB), jadi jam atau zona waktu HP tidak berpengaruh.
+  - Status diperbarui tiap menit.
+  - Hari libur belum dikenal. Jika toko tutup di hari tertentu, data itu harus ditambahkan dari pemilik.
+- **"Cara servis di BERKAH CELL"** di beranda (`stepsBlock()`), berisi tiga langkah: cek harga, tanya lewat WhatsApp, bawa HP ke toko.
+  - Isinya hanya fakta yang sudah ada: cara kerja situs, alamat, dan pemeriksaan gratis.
+  - Tanpa data toko, langkah 3 ditulis tanpa alamat.
+- **Nomor WhatsApp** ditulis `0896-2505-0525`. Footer juga mendapat tautan WhatsApp.
+- **Kartu toko** memakai motif emboss gelap yang sama dengan hero dan footer.
+- **Judul seksi** (`.sec-title`) dirata kiri. Sebelumnya, judul tanpa `small` terdorong ke kanan.
+
 ## Riwayat, Back, dan posisi gulir
 
 - `history.scrollRestoration = 'manual'`.
