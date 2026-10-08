@@ -30,6 +30,9 @@
       // Jam yang sama dalam bentuk data, untuk status "Buka sekarang" (setiap hari, WIB).
       open: '11:00', close: '20:00', tz: 'Asia/Jakarta',
     },
+    // Keahlian andalan menurut pemilik (8 Okt 2026). Badge di beranda hanya tampil jika
+    // ada tipe yang punya layanan ini di daftar harga.
+    SPECIALTY: { label: 'Bypass iCloud iPhone', q: 'bypass' },
   };
 
   // Nama tampilan merek, sama dengan daftar bot Telegram (Price List Manager).
@@ -44,6 +47,8 @@
   const BRAND_ALIAS = { xiomi: 'xiaomi' };
   // Nama lain yang sering diketik pelanggan (8 Okt 2026); hanya untuk pencarian, tidak ditampilkan.
   const SEARCH_ALIAS = { samsung: ['galaxy', 'samsung galaxy'] };
+  // Kata yang sering diketik untuk nama layanan (Sheet menulis "Ganti Batrai"); hanya untuk pencarian.
+  const SERVICE_ALIAS = { baterai: 'batrai', batre: 'batrai', battery: 'batrai', icloud: 'bypass', layar: 'lcd' };
 
   const NEEDS = [
     { id: 'lcd', label: 'Ganti LCD atau layar' },
@@ -226,6 +231,7 @@
           if (!row.price.ok) issues.push({ type: 'harga-tidak-valid', line: row.line, value: row.price.raw });
         }
         m.services = [...groups.values()];
+        m.services.forEach((g) => { g.hayC = compactInfo(lower(g.name)); });
         m.optionCount = m.services.reduce((n, s) => n + s.variants.length, 0);
         m.hay = [lower(m.fullName), lower(b.name + ' ' + m.name), ...[...b.raw].map((rb) => rb + ' ' + lower(m.name)), lower(m.name),
           ...(SEARCH_ALIAS[b.key] || []).map((a) => a + ' ' + lower(m.name))];
@@ -458,6 +464,13 @@
   }
 
   /* ================= Beranda & pencarian ================= */
+  // Badge keahlian andalan (D10). Tidak tampil bila daftar harga belum punya layanannya.
+  function specialtyLink(disabled) {
+    const sp = CONFIG.SPECIALTY;
+    if (disabled || !sp || !S.catalog || !serviceSearch(S.catalog.models, sp.q).length) return null;
+    return h('a', { class: 'andalan', href: urlFor({ name: 'home', q: sp.q }), 'data-nav': true },
+      icon('lock', 16), h('span', null, 'Andalan kami: ', h('b', { text: sp.label })), icon('chev', 16));
+  }
   function heroBlock(opts) {
     const disabled = !!opts.disabled;
     const input = h('input', {
@@ -474,6 +487,7 @@
       h('h1', null, 'Cari harga ', h('span', { class: 'gold', text: 'servis' }), ' untuk HP kamu'),
       h('p', { class: 'lead', text: 'Ketik tipe HP atau pilih merek di bawah.' }),
       form,
+      specialtyLink(disabled),
       // Hanya fakta yang sudah diputuskan pemilik (PRD v0.4): tidak boleh ada klaim karangan.
       h('ul', { class: 'trust', 'aria-label': 'Ketentuan servis' },
         h('li', null, icon('check', 18), 'Pemeriksaan gratis'),
@@ -511,10 +525,36 @@
     out.sort((a, b) => b.score - a.score || collator.compare(a.m.brand.name, b.m.brand.name) || collator.compare(a.m.name, b.m.name));
     return out.map((x) => x.m);
   }
+  // Cadangan bila tidak ada nama tipe yang cocok: cari lewat nama layanan, mis. "bypass",
+  // "icloud", "lcd y91", "baterai". Setiap kata harus cocok dengan satu layanan atau nama tipe.
+  function svcAlias(t) {
+    if (SERVICE_ALIAS[t]) return SERVICE_ALIAS[t];
+    const k = t.length >= 3 ? Object.keys(SERVICE_ALIAS).find((a) => a.startsWith(t)) : null;
+    return k ? SERVICE_ALIAS[k] : '';
+  }
+  function serviceSearch(list, q) {
+    const toks = lower(q).split(' ').map(compact).filter(Boolean);
+    if (!toks.length) return [];
+    const inSvc = (g, t) => compactAt(g.hayC, t) >= 0 || compactAt(g.hayC, svcAlias(t)) >= 0;
+    const inModel = (m, t) => m.hayC.some((hc) => compactAt(hc, t) >= 0);
+    const out = [];
+    for (const m of list) {
+      const g = m.services.find((sv) => toks.some((t) => inSvc(sv, t)) && toks.every((t) => inSvc(sv, t) || inModel(m, t)));
+      if (g) out.push({ m, svc: g });
+    }
+    return out;
+  }
+  // Ringkasan satu layanan untuk baris hasil: "Bypass · Rp 100.000" atau rentang harga dari data.
+  function svcSummary(g) {
+    const prices = g.variants.filter((v) => v.price.ok).map((v) => v.price.value);
+    if (!prices.length) return g.name + ' · tanyakan harga';
+    const lo = Math.min(...prices); const hi = Math.max(...prices);
+    return g.name + ' · ' + (lo === hi ? formatRp(lo) : formatRp(lo) + ' – ' + formatRp(hi));
+  }
   const modelHref = (m) => urlFor({ name: 'detail', brand: m.brand.key, model: m.key });
   const brandHref = (b) => urlFor({ name: 'brand', brand: b.key });
   function modelItem(m, opts) {
-    const svc = m.services.length + ' layanan';
+    const svc = opts && opts.svc ? svcSummary(opts.svc) : m.services.length + ' layanan';
     return h('li', null, h('a', { class: 'li' + (opts && opts.current ? ' cur' : ''), href: modelHref(m), 'data-nav': true },
       h('span', null,
         h('span', { class: 't' }, opts && opts.short ? m.name : m.fullName, opts && opts.current ? h('span', { class: 'badge-cur', text: 'Sedang dilihat' }) : null),
@@ -540,7 +580,11 @@
           'Tanya servis via WhatsApp', () => openPanel({ kind: 'general' })), storeBlock());
         return;
       }
-      const res = search(n);
+      let res = search(n).map((m) => ({ m }));
+      if (!res.length) {
+        res = serviceSearch(S.catalog.models, n)
+          .sort((a, b) => collator.compare(a.m.brand.name, b.m.brand.name) || collator.compare(a.m.name, b.m.name));
+      }
       status.hidden = false;
       if (!res.length) {
         status.textContent = 'Tidak ada tipe yang cocok dengan “' + n + '”.';
@@ -549,8 +593,9 @@
         return;
       }
       status.classList.remove('vh');
-      status.textContent = res.length + ' tipe cocok dengan “' + n + '”';
-      appendAll(body, h('ul', { class: 'list' }, res.map((m) => modelItem(m))),
+      const svcNames = [...new Set(res.map((x) => (x.svc ? x.svc.name : '')))];
+      status.textContent = res.length + ' tipe ' + (svcNames.length === 1 && svcNames[0] ? 'dengan layanan ' + svcNames[0] : 'cocok dengan “' + n + '”');
+      appendAll(body, h('ul', { class: 'list' }, res.map((x) => modelItem(x.m, { svc: x.svc }))),
         helpCard('Bukan tipe yang kamu cari?', 'Tanyakan tipe lain lewat WhatsApp.', 'Tanya servis via WhatsApp',
           () => openPanel({ kind: 'notfound', query: n })));
     }
@@ -606,13 +651,14 @@
     function update(f) {
       const n = lower(f);
       const scoreOf = matcher(n);
-      const items = n ? b.list.filter((m) => scoreOf(m) >= 0) : b.list;
+      let items = (n ? b.list.filter((m) => scoreOf(m) >= 0) : b.list).map((m) => ({ m }));
+      if (n && !items.length) items = serviceSearch(b.list, n);
       listWrap.textContent = '';
       if (!items.length) {
         appendAll(listWrap, h('p', { class: 'meta-line', role: 'status', text: 'Tidak ada tipe ' + b.name + ' yang cocok dengan “' + clean(f) + '”.' }));
         return;
       }
-      appendAll(listWrap, h('ul', { class: 'list' }, items.map((m) => modelItem(m, { short: true, current: ganti && m === ganti }))));
+      appendAll(listWrap, h('ul', { class: 'list' }, items.map((x) => modelItem(x.m, { short: true, current: ganti && x.m === ganti, svc: x.svc }))));
     }
     filterInput.value = st().f || '';
     update(filterInput.value);

@@ -139,6 +139,23 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - **Kartu toko** memakai motif emboss gelap yang sama dengan hero dan footer.
 - **Judul seksi** (`.sec-title`) dirata kiri. Sebelumnya, judul tanpa `small` terdorong ke kanan.
 
+### Pencarian layanan dan badge andalan (D10)
+
+- **Pencarian layanan sebagai cadangan:** `serviceSearch()` baru dipakai jika pencarian nama tipe kosong, jadi hasil pencarian tipe tidak berubah.
+  - Sebuah tipe cocok jika setiap kata cocok dengan satu layanan tipe itu atau dengan nama tipenya, dan minimal satu kata cocok dengan layanan.
+  - Pencocokan memakai `compactInfo()` dan `compactAt()`, jadi aturan awal kata dan "tanpa spasi" ikut berlaku.
+  - `SERVICE_ALIAS`:
+    - "baterai", "batre", dan "battery" diarahkan ke "batrai" (ejaan di Sheet).
+    - "icloud" diarahkan ke "bypass", dan "layar" ke "lcd".
+    - Awalan alias minimal 3 huruf juga diterima, supaya hasil tidak hilang saat mengetik.
+  - Baris hasil menampilkan nama layanan dan harga dari data. Contoh: "Bypass · Rp 100.000". Jika harganya beberapa, tampil rentang; jika tidak valid, tampil "tanyakan harga".
+  - Saringan di halaman merek memakai cadangan yang sama.
+- **Badge andalan** di hero: "Andalan kami: Bypass iCloud iPhone".
+  - Diatur lewat `CONFIG.SPECIALTY`, dan menautkan ke `?q=bypass`.
+  - Hanya tampil jika daftar harga punya layanan Bypass, jadi tidak pernah membawa pelanggan ke hasil kosong.
+  - Disembunyikan saat mencari.
+  - Website tidak menulis syarat kepemilikan, karena pemilik belum menetapkannya.
+
 ## Riwayat, Back, dan posisi gulir
 
 - `history.scrollRestoration = 'manual'`.

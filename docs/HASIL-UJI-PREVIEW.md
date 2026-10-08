@@ -89,6 +89,22 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **Footer dan Bantuan:** tautan WhatsApp di footer dan nomor di halaman Bantuan memakai format 0896-2505-0525.
 - **Tanpa data toko:** status tidak tampil, dan langkah 3 ditulis tanpa alamat.
 
+## Pencarian layanan dan badge andalan (8 Okt 2026, PR #2)
+
+- **A02, LULUS (emulasi):**
+  - "bypass", "icloud", "iphone bypass", dan "bypass iphone" menampilkan iPhone 7 plus (Rp 60.000) dan iPhone 8 (Rp 100.000).
+  - "lcd y91" menampilkan Ganti LCD Vivo Y91 Rp 230.000.
+  - "baterai" dan "bate" menemukan 25 tipe dengan Ganti Batrai.
+  - "zzz" tetap "belum tercantum".
+  - Saringan halaman iPhone menerima "bypass".
+  - Pencarian tipe lama tidak berubah.
+- **POLES, LULUS (emulasi):**
+  - Badge tampil dengan tinggi ≥ 44 px.
+  - Mengetuk badge menampilkan 2 harga bypass, dan Back kembali ke beranda.
+  - Badge tersembunyi saat mencari.
+  - Dengan data tanpa Bypass, badge tidak tampil.
+- **Catatan data:** baru 2 tipe yang punya layanan Bypass di ekspor 6 Okt 2026.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

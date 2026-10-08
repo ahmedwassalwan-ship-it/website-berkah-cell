@@ -162,6 +162,23 @@ async function testSearch() {
   await p.fill('#q', 'galaxy'); await sleep(50);
   const gx = await names();
   expect('A02', gx.length === 20 && gx.every((x) => x.startsWith('Samsung ')), '"galaxy" saja memunculkan 20 tipe Samsung, tanpa merek lain', gx);
+  // Cari lewat nama layanan bila tidak ada nama tipe yang cocok (8 Okt 2026)
+  const rows = async () => p.$$eval('.list .li', (e) => e.map((x) => x.querySelector('.t').firstChild.textContent + ' | ' + x.querySelector('.s').textContent));
+  for (const q of ['bypass', 'icloud', 'iCloud', 'iphone bypass', 'bypass iphone']) {
+    await p.fill('#q', q); await sleep(50);
+    const r = await rows();
+    expect('A02', JSON.stringify(r) === JSON.stringify(['iPhone 7 plus | Bypass · Rp 60.000', 'iPhone 8 | Bypass · Rp 100.000']) && (await p.textContent('#q-status')) === '2 tipe dengan layanan Bypass',
+      `"${q}" menampilkan tipe yang punya layanan Bypass beserta harganya`, r);
+  }
+  await p.fill('#q', 'lcd y91'); await sleep(50);
+  expect('A02', JSON.stringify(await rows()) === JSON.stringify(['Vivo Y91 | Ganti LCD · Rp 230.000']), '"lcd y91" menampilkan harga Ganti LCD Vivo Y91', await rows());
+  for (const q of ['baterai', 'bate']) {
+    await p.fill('#q', q); await sleep(50);
+    const r = await rows();
+    expect('A02', r.length === 25 && r.every((x) => / \| Ganti Batrai · /.test(x)), `"${q}" menemukan layanan "Ganti Batrai" (alias ejaan)`, r.slice(0, 3));
+  }
+  await p.fill('#q', 'zzz'); await sleep(50);
+  expect('A02', (await p.$('.list')) === null, 'Kata yang tidak cocok dengan tipe maupun layanan tetap "belum tercantum"');
   await p.fill('#q', 'e1'); await sleep(50);
   const e1 = await names();
   expect('A02', !e1.includes('iPhone 13') && !e1.includes('Realme 10'), 'Bentuk rapat hanya cocok dari awal kata: "e1" tidak memunculkan iPhone 13 atau Realme 10', e1);
@@ -170,6 +187,11 @@ async function testSearch() {
   await p.click('.tile:has(b:text-is("Vivo"))'); await p.waitForSelector('#f');
   await p.fill('#f', 'vivoy91'); await sleep(50);
   expect('A02', JSON.stringify(await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent))) === JSON.stringify(['Y91']), 'Saringan di halaman merek juga menerima "vivoy91"');
+  await p.goBack(); await p.waitForSelector('.tile');
+  await p.click('.tile:has(b:text-is("iPhone"))'); await p.waitForSelector('#f');
+  await p.fill('#f', 'bypass'); await sleep(50);
+  const bf = await p.$$eval('.list .li', (e) => e.map((x) => x.innerText.replace(/\n/g, ' | ')));
+  expect('A02', bf.length === 2 && bf[0].startsWith('7 plus | Bypass') && bf[1].startsWith('8 | Bypass'), 'Saringan di halaman iPhone menerima nama layanan "bypass"', bf);
   await p.goBack(); await p.waitForSelector('.tile');
   await p.click('.tile:has(b:text-is("Samsung"))'); await p.waitForSelector('#f');
   await p.fill('#f', 'galaxy a10'); await sleep(50);
@@ -848,8 +870,19 @@ async function testPolish() {
     'Beranda: "Cara servis" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)', steps);
   const trust = await p.$$eval('.hero .trust li', (e) => e.map((x) => x.textContent.trim()));
   expect('POLES', JSON.stringify(trust) === JSON.stringify(['Pemeriksaan gratis', 'Harga termasuk jasa pemasangan', 'Garansi tertera per layanan']), 'Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik', trust);
+  const badge = await p.$eval('a.andalan', (a) => ({ text: a.textContent.trim(), href: a.getAttribute('href'), h: a.getBoundingClientRect().height })).catch(() => null);
+  expect('POLES', badge && badge.text === 'Andalan kami: Bypass iCloud iPhone' && /\?q=bypass$/.test(badge.href) && badge.h >= 44, 'Badge andalan "Bypass iCloud iPhone" tampil di hero (area sentuh ≥ 44 px)', badge);
+  await p.click('a.andalan'); await p.waitForSelector('.list');
+  const bp = await p.evaluate(() => ({ q: document.querySelector('#q').value, n: document.querySelectorAll('.list li').length, url: location.search }));
+  expect('POLES', bp.q === 'bypass' && bp.n === 2 && bp.url === '?q=bypass', 'Mengetuk badge menampilkan semua harga bypass', bp);
+  await p.goBack(); await p.waitForSelector('.tile');
+  expect('POLES', (await p.inputValue('#q')) === '' && (await p.$('a.andalan')) !== null, 'Back dari hasil badge kembali ke beranda');
   await p.fill('#q', 'iphone'); await sleep(100);
   expect('POLES', await p.locator('.hero .trust').isHidden(), 'Baris kepercayaan disembunyikan saat mencari');
+  expect('POLES', await p.locator('.hero .andalan').isHidden(), 'Badge andalan disembunyikan saat mencari');
+  const nb = await newPage({ data: 'bad' }); await nb.goto(base); await ready(nb);
+  expect('POLES', (await nb.$('a.andalan')) === null && (await nb.$$('.tile')).length > 0, 'Tanpa layanan Bypass di daftar harga, badge tidak tampil');
+  await nb.context().close();
   // Halaman 404 bermerek
   const nf = await newPage({ viewport: { width: 360, height: 740 } });
   const r = await nf.goto(base + '404.html');
