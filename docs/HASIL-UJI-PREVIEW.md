@@ -67,6 +67,11 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - "redminote9" memunculkan Redmi Note 9 di merek Redmi dan Xiaomi.
   - "e1" tidak memunculkan iPhone 13 atau Realme 10.
   - Saringan di halaman Vivo menerima "vivoy91".
+  - Alias Samsung: "galaxy a10", "samsung galaxy a10", "Galaxy A10", dan "galaxya10" menemukan Samsung A10, dengan nama tetap tampil "Samsung A10".
+  - "galaxy" saja memunculkan 20 tipe Samsung, dan saringan di halaman Samsung menerima "galaxy a10".
+- **A15, bug lama diperbaiki:** mengetik di saringan lalu langsung Back (dalam 300 ms) dulu mengubah alamat beranda menjadi `?merek=vivo`.
+  - Uji baru gagal tanpa perbaikan dan lulus dengan perbaikan.
+  - Forward tetap kembali ke daftar tipe Vivo.
 - **POLES, LULUS (emulasi):** motif emboss termuat dari situs sendiri di latar halaman, hero, dan footer, tanpa request baru ke luar.
 - **Belum diuji:** tampilan motif di layar HP sungguhan. Motif ini sengaja tipis, jadi kecerahan layar memengaruhi seberapa terlihat.
 

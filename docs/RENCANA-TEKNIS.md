@@ -99,6 +99,13 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - "e1" tidak memunculkan "iPhone 13", walaupun "iphone13" mengandung "e1".
 - **Urutan hasil:** sama persis lebih dulu, lalu awalan, lalu bagian dari nama.
 - **Saringan di halaman merek** memakai aturan yang sama (`matcher()`).
+- **Alias "galaxy":**
+  - `SEARCH_ALIAS = { samsung: ['galaxy', 'samsung galaxy'] }` menambah "galaxy a10" dan "samsung galaxy a10" ke kata kunci setiap tipe Samsung.
+  - Alias hanya dipakai untuk pencarian. Nama yang tampil tetap "Samsung A10".
+  - Alias untuk merek lain cukup ditambahkan di konstanta yang sama.
+- **Bug lama yang ikut diperbaiki:**
+  - Masalah: mengetik di pencarian atau saringan lalu menekan Back dalam 300 ms membuat `replaceState` yang tertunda menimpa alamat halaman tujuan. Akibatnya beranda tampil, tetapi alamatnya `?merek=vivo`.
+  - Perbaikan: `popstate` sekarang membatalkan URL yang belum tersimpan.
 
 ### Motif emboss di latar
 

@@ -153,6 +153,15 @@ async function testSearch() {
   await p.fill('#q', 'redminote9'); await sleep(50);
   const rn9 = await names();
   expect('A02', rn9.slice(0, 2).sort().join('|') === 'Redmi Note 9|Xiaomi Redmi Note 9', '"redminote9" menemukan Redmi Note 9 di kedua merek di urutan teratas', rn9);
+  // Alias "galaxy" untuk Samsung (permintaan pemilik 8 Okt 2026); nama tampilan tetap "Samsung A10"
+  for (const q of ['galaxy a10', 'samsung galaxy a10', 'Galaxy A10', 'galaxya10']) {
+    await p.fill('#q', q); await sleep(50);
+    const n = await names();
+    expect('A02', n[0] === 'Samsung A10' && !n.some((x) => /galaxy/i.test(x)), `"${q}" menemukan Samsung A10 di urutan pertama, tampil sebagai "Samsung A10"`, n);
+  }
+  await p.fill('#q', 'galaxy'); await sleep(50);
+  const gx = await names();
+  expect('A02', gx.length === 20 && gx.every((x) => x.startsWith('Samsung ')), '"galaxy" saja memunculkan 20 tipe Samsung, tanpa merek lain', gx);
   await p.fill('#q', 'e1'); await sleep(50);
   const e1 = await names();
   expect('A02', !e1.includes('iPhone 13') && !e1.includes('Realme 10'), 'Bentuk rapat hanya cocok dari awal kata: "e1" tidak memunculkan iPhone 13 atau Realme 10', e1);
@@ -161,6 +170,11 @@ async function testSearch() {
   await p.click('.tile:has(b:text-is("Vivo"))'); await p.waitForSelector('#f');
   await p.fill('#f', 'vivoy91'); await sleep(50);
   expect('A02', JSON.stringify(await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent))) === JSON.stringify(['Y91']), 'Saringan di halaman merek juga menerima "vivoy91"');
+  await p.goBack(); await p.waitForSelector('.tile');
+  await p.click('.tile:has(b:text-is("Samsung"))'); await p.waitForSelector('#f');
+  await p.fill('#f', 'galaxy a10'); await sleep(50);
+  const sf = await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent));
+  expect('A02', sf[0] === 'A10', 'Saringan di halaman Samsung menerima "galaxy a10"', sf);
   await p.goBack(); await p.waitForSelector('.tile');
   const t0 = Date.now(); await p.fill('#q', 'samsung a'); await p.waitForSelector('.list .t'); const dt = Date.now() - t0;
   expect('A02', dt < 300, `Hasil pencarian muncul dalam ${dt} ms (target < 300 ms, emulasi desktop)`);
@@ -424,6 +438,15 @@ async function testDirectEntry() {
   await p.click('#q'); await p.keyboard.type('samsunga5x', { delay: 40 }); await sleep(450);
   await p.goBack(); await sleep(300);
   expect('A15', p.url() === 'about:blank', 'Mengetik 10 huruf lalu satu Back langsung keluar dari layar (tanpa riwayat per huruf)', p.url());
+  // Mengetik di saringan lalu Back dalam < 300 ms tidak boleh menimpa alamat beranda
+  await p.goto(base); await ready(p);
+  await p.click('.tile:has(b:text-is("Vivo"))'); await p.waitForSelector('#f');
+  await p.click('#f'); await p.keyboard.type('y9', { delay: 20 });
+  await p.goBack(); await sleep(450);
+  const back = await p.evaluate(() => ({ search: location.search, tiles: document.querySelectorAll('.tile').length }));
+  expect('A15', back.search === '' && back.tiles === 10, 'Mengetik lalu langsung Back: beranda tetap beranda (alamat tidak tertimpa saringan yang belum tersimpan)', back);
+  await p.goForward(); await ready(p); await sleep(100);
+  expect('A15', /merek=vivo/.test(p.url()) && (await p.$('#f')) !== null, 'Forward kembali ke daftar tipe Vivo', p.url());
   await p.goto(base + '?merek=nokia&tipe=3310'); await ready(p);
   const t = await p.textContent('main');
   expect('A15', t.includes('belum tercantum') && (await p.$('.crumb a')) !== null, 'Link ke tipe yang tidak ada → pesan "belum tercantum" + "Semua merek"');

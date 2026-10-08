@@ -27,10 +27,16 @@
       "✓ \"oppoa77s\" menemukan Oppo A77S di urutan pertama",
       "✓ \"samsunga10\" menemukan Samsung A10 di urutan pertama",
       "✓ \"redminote9\" menemukan Redmi Note 9 di kedua merek di urutan teratas",
+      "✓ \"galaxy a10\" menemukan Samsung A10 di urutan pertama, tampil sebagai \"Samsung A10\"",
+      "✓ \"samsung galaxy a10\" menemukan Samsung A10 di urutan pertama, tampil sebagai \"Samsung A10\"",
+      "✓ \"Galaxy A10\" menemukan Samsung A10 di urutan pertama, tampil sebagai \"Samsung A10\"",
+      "✓ \"galaxya10\" menemukan Samsung A10 di urutan pertama, tampil sebagai \"Samsung A10\"",
+      "✓ \"galaxy\" saja memunculkan 20 tipe Samsung, tanpa merek lain",
       "✓ Bentuk rapat hanya cocok dari awal kata: \"e1\" tidak memunculkan iPhone 13 atau Realme 10",
       "✓ Pencarian kosong kembali ke grid merek",
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
-      "✓ Hasil pencarian muncul dalam 20 ms (target < 300 ms, emulasi desktop)"
+      "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
+      "✓ Hasil pencarian muncul dalam 19 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -172,6 +178,8 @@
       "✓ Back mengikuti riwayat asli (tidak ada layar merek/tipe buatan)",
       "✓ \"Semua merek\" berfungsi setelah masuk langsung",
       "✓ Mengetik 10 huruf lalu satu Back langsung keluar dari layar (tanpa riwayat per huruf)",
+      "✓ Mengetik lalu langsung Back: beranda tetap beranda (alamat tidak tertimpa saringan yang belum tersimpan)",
+      "✓ Forward kembali ke daftar tipe Vivo",
       "✓ Link ke tipe yang tidak ada → pesan \"belum tercantum\" + \"Semua merek\"",
       "• Membuka link dari aplikasi WhatsApp sungguhan belum diuji (hanya emulasi lewat about:blank)."
     ]

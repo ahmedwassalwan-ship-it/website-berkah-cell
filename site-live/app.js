@@ -40,6 +40,8 @@
   };
   // Keputusan pemilik 6 Okt 2026: "Xiomi" ditampilkan sebagai Xiaomi; Redmi & Poco tetap terpisah.
   const BRAND_ALIAS = { xiomi: 'xiaomi' };
+  // Nama lain yang sering diketik pelanggan (8 Okt 2026); hanya untuk pencarian, tidak ditampilkan.
+  const SEARCH_ALIAS = { samsung: ['galaxy', 'samsung galaxy'] };
 
   const NEEDS = [
     { id: 'lcd', label: 'Ganti LCD atau layar' },
@@ -223,7 +225,8 @@
         }
         m.services = [...groups.values()];
         m.optionCount = m.services.reduce((n, s) => n + s.variants.length, 0);
-        m.hay = [lower(m.fullName), lower(b.name + ' ' + m.name), ...[...b.raw].map((rb) => rb + ' ' + lower(m.name)), lower(m.name)];
+        m.hay = [lower(m.fullName), lower(b.name + ' ' + m.name), ...[...b.raw].map((rb) => rb + ' ' + lower(m.name)), lower(m.name),
+          ...(SEARCH_ALIAS[b.key] || []).map((a) => a + ' ' + lower(m.name))];
         m.hayC = m.hay.map(compactInfo);
         models.push(m);
       }
@@ -328,6 +331,9 @@
   });
 
   window.addEventListener('popstate', (e) => {
+    // URL pencarian yang belum tersimpan milik entri yang baru ditinggalkan. Jangan sampai
+    // menimpa entri tujuan (mengetik lalu Back dalam 300 ms).
+    clearTimeout(urlTimer); pendingUrl = null;
     const s = e.state || {};
     if (panel.open) {
       if (location.href === renderedHref) { closePanelNow(true); return; }
