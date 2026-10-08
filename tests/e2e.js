@@ -97,7 +97,8 @@ async function run() {
     await browser.close(); srv.srv.close();
   }
   rec('A11', 'LULUS', 'Pemilik melaporkan preview v3 dan tombol Maps berjalan baik di HP (6 Okt 2026), lalu menyetujui rilis.');
-  rec('A12', 'BELUM DIUJI', 'Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN). Dicek ulang di berkahcellbatam.com setelah domain aktif.');
+  rec('A12', 'BELUM DIUJI', 'Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN).');
+  rec('A12', 'BELUM DIUJI', 'Rilis 8 Okt 2026 (fa2ae79): berkahcellbatam.com terbuka di HP pemilik, PC lain di WiFi yang sama, dan laptop pemilik setelah cache DNS dibersihkan (laporan pemilik). Sisa cek: www, 404, kartu WhatsApp, Maps, WiFi yang dulu memblokir.');
   fs.writeFileSync(path.join(OUT, 'hasil.json'), JSON.stringify(results, null, 2));
   const ids = Object.keys(results).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   for (const id of ids) {
@@ -286,7 +287,8 @@ async function testStates() {
   await pn.context().close();
   const pr = await newPage({ data: (n) => (n === 1 ? 'abort' : 'ok') }); await pr.goto(base); await pr.waitForSelector('#retry');
   await pr.click('#retry'); await pr.waitForSelector('.tile');
-  expect('A21', (await pr.$$('.tile')).length === 10 && !(await pr.textContent('main')).includes('belum berhasil'), '"Coba lagi" memuat ulang dan menampilkan katalog asli');
+  const rt = { tiles: (await pr.$$('.tile')).length, gagal: (await pr.textContent('main')).includes('belum berhasil'), url: pr.url() };
+  expect('A21', rt.tiles === 10 && !rt.gagal, '"Coba lagi" memuat ulang dan menampilkan katalog asli', rt);
   expect('A06', (await pr.$$('.tile')).length === 10, 'Pemulihan setelah gagal tanpa harga contoh');
   await pr.context().close();
 }

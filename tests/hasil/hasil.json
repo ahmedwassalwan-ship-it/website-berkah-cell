@@ -48,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 19 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 17 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -376,7 +376,8 @@
   "A12": {
     "status": "BELUM DIUJI",
     "notes": [
-      "• Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN). Dicek ulang di berkahcellbatam.com setelah domain aktif."
+      "• Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN).",
+      "• Rilis 8 Okt 2026 (fa2ae79): berkahcellbatam.com terbuka di HP pemilik, PC lain di WiFi yang sama, dan laptop pemilik setelah cache DNS dibersihkan (laporan pemilik). Sisa cek: www, 404, kartu WhatsApp, Maps, WiFi yang dulu memblokir."
     ]
   }
 }

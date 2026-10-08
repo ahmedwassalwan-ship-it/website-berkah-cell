@@ -109,6 +109,28 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 
 - **A01, LULUS (emulasi):** daftar tipe iPhone dan hasil pencarian "iphone" sama-sama berurutan 6S Plus, 7, 7 plus, 8, 8 Plus, X, XR, XS, XS Max, 11, 11 Pro, 11 Pro Max, 12, 12 Pro, 12 Pro Max, 13, 13 Pro, 15 Plus.
 
+## Rilis domain berkahcellbatam.com (8 Okt 2026)
+
+- **Rilis:**
+  - PR #2 di-merge ke `main` sebagai `fa2ae79` (05:34 UTC), atas izin pemilik ("Langsung rilis").
+  - Build produksi Cloudflare (`wrangler deploy`) sukses.
+- **Domain terbuka (laporan pemilik):**
+  - di HP pemilik
+  - di PC teman pada WiFi yang sama
+  - di laptop pemilik, setelah restart / `ipconfig /flushdns`
+- **Kendala laptop pemilik:**
+  - Sebelumnya laptop menampilkan `DNS_PROBE_STARTED` ("DNS address could not be found").
+  - Penyebabnya cache negatif: laptop sempat mencoba membuka domain sebelum domain aktif, lalu menyimpan jawaban "tidak ada".
+  - Ini bukan blokir dan bukan masalah server.
+  - Browser lain yang mengalami hal sama cukup di-restart, atau ditunggu sampai sekitar 30 menit.
+- **Belum dicek pemilik:**
+  - `www` dialihkan ke apex
+  - `/abc` menampilkan halaman 404
+  - kartu link WhatsApp (A23)
+  - tombol Maps membuka aplikasi di Android
+  - WiFi yang dulu memblokir workers.dev
+- Sesi ini tidak bisa membuka domain (proxy 403), jadi semua hasil di atas berasal dari laporan pemilik.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).
