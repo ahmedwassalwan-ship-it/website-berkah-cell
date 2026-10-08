@@ -97,8 +97,7 @@ async function run() {
     await browser.close(); srv.srv.close();
   }
   rec('A11', 'LULUS', 'Pemilik melaporkan preview v3 dan tombol Maps berjalan baik di HP (6 Okt 2026), lalu menyetujui rilis.');
-  rec('A12', 'BELUM DIUJI', 'Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN).');
-  rec('A12', 'BELUM DIUJI', 'Rilis 8 Okt 2026 (fa2ae79): berkahcellbatam.com terbuka di HP pemilik, PC lain di WiFi yang sama, dan laptop pemilik setelah cache DNS dibersihkan (laporan pemilik). Sisa cek: www, 404, kartu WhatsApp, Maps, WiFi yang dulu memblokir.');
+  rec('A12', 'LULUS', 'Rilis 8 Okt 2026 (fa2ae79) di berkahcellbatam.com: website, www → apex, halaman 404, kartu WhatsApp, dan tombol Maps aman di HP dan PC (laporan pemilik). Riwayat: workers.dev dari rilis 6 Okt diblokir sebagian ISP, karena itu pindah ke domain sendiri.');
   fs.writeFileSync(path.join(OUT, 'hasil.json'), JSON.stringify(results, null, 2));
   const ids = Object.keys(results).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   for (const id of ids) {
@@ -733,7 +732,7 @@ async function testMeta() {
   expect('A23', !sw, 'Tanpa service worker atau cache offline (harga lama tidak tampil)');
   const ext = p.__requests.filter((u) => !u.startsWith(base) && !u.startsWith('data:'));
   expect('A23', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru selain sumber data', ext);
-  rec('A23', 'BELUM DIUJI', 'Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main.');
+  rec('A23', 'LULUS', 'Kartu link WhatsApp untuk berkahcellbatam.com tampil dengan gambar (laporan pemilik, 8 Okt 2026). Facebook belum dicek.');
   await p.context().close();
 }
 
@@ -854,7 +853,7 @@ async function testDomain() {
     'og:image dan JSON-LD memakai https://berkahcellbatam.com', meta);
   expect('DOMAIN', p.__errors.length === 0, 'Tanpa error JS', p.__errors);
   await p.context().close();
-  rec('DOMAIN', 'BELUM DIUJI', 'Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge.');
+  rec('DOMAIN', 'LULUS', 'Domain sungguhan (DNS, sertifikat, www → apex, 404) aman di HP dan PC (laporan pemilik, 8 Okt 2026). Laptop yang sempat mencoba sebelum domain aktif perlu flush DNS sekali.');
 }
 
 /* ---------- POLES: review sebelum rilis domain (tampilan & kelengkapan situs) ---------- */

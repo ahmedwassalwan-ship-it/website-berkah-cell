@@ -48,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 17 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 21 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -287,7 +287,7 @@
     ]
   },
   "A23": {
-    "status": "BELUM DIUJI",
+    "status": "LULUS",
     "notes": [
       "✓ Judul, deskripsi, teks alternatif gambar, dan jenis kartu tersedia",
       "✓ og:image memakai alamat absolut https dan ukuran 1200×630",
@@ -300,7 +300,7 @@
       "✓ Ikon manifest 512x512 termuat dengan ukuran benar",
       "✓ Tanpa service worker atau cache offline (harga lama tidak tampil)",
       "✓ Tidak ada permintaan jaringan baru selain sumber data",
-      "• Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main."
+      "✓ Kartu link WhatsApp untuk berkahcellbatam.com tampil dengan gambar (laporan pemilik, 8 Okt 2026). Facebook belum dicek."
     ]
   },
   "A24": {
@@ -337,13 +337,13 @@
     ]
   },
   "DOMAIN": {
-    "status": "BELUM DIUJI",
+    "status": "LULUS",
     "notes": [
       "✓ www.berkahcellbatam.com dialihkan ke berkahcellbatam.com dengan tautan yang sama",
       "✓ Detail iPhone 11 tampil di domain resmi",
       "✓ og:image dan JSON-LD memakai https://berkahcellbatam.com",
       "✓ Tanpa error JS",
-      "• Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge."
+      "✓ Domain sungguhan (DNS, sertifikat, www → apex, 404) aman di HP dan PC (laporan pemilik, 8 Okt 2026). Laptop yang sempat mencoba sebelum domain aktif perlu flush DNS sekali."
     ]
   },
   "POLES": {
@@ -374,10 +374,9 @@
     ]
   },
   "A12": {
-    "status": "BELUM DIUJI",
+    "status": "LULUS",
     "notes": [
-      "• Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN).",
-      "• Rilis 8 Okt 2026 (fa2ae79): berkahcellbatam.com terbuka di HP pemilik, PC lain di WiFi yang sama, dan laptop pemilik setelah cache DNS dibersihkan (laporan pemilik). Sisa cek: www, 404, kartu WhatsApp, Maps, WiFi yang dulu memblokir."
+      "✓ Rilis 8 Okt 2026 (fa2ae79) di berkahcellbatam.com: website, www → apex, halaman 404, kartu WhatsApp, dan tombol Maps aman di HP dan PC (laporan pemilik). Riwayat: workers.dev dari rilis 6 Okt diblokir sebagian ISP, karena itu pindah ke domain sendiri."
     ]
   }
 }

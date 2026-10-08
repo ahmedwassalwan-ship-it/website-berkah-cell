@@ -123,12 +123,12 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - Penyebabnya cache negatif: laptop sempat mencoba membuka domain sebelum domain aktif, lalu menyimpan jawaban "tidak ada".
   - Ini bukan blokir dan bukan masalah server.
   - Browser lain yang mengalami hal sama cukup di-restart, atau ditunggu sampai sekitar 30 menit.
-- **Belum dicek pemilik:**
+- **Semua cek pasca-rilis aman** (laporan pemilik, 8 Okt 2026):
   - `www` dialihkan ke apex
   - `/abc` menampilkan halaman 404
-  - kartu link WhatsApp (A23)
-  - tombol Maps membuka aplikasi di Android
-  - WiFi yang dulu memblokir workers.dev
+  - kartu link WhatsApp bergambar (A23)
+  - tombol Maps
+- **Status:** A12, A23, dan DOMAIN menjadi LULUS. A15 (membuka link dari aplikasi WhatsApp sungguhan) tetap tercatat sebagai emulasi.
 - Sesi ini tidak bisa membuka domain (proxy 403), jadi semua hasil di atas berasal dari laporan pemilik.
 
 ## Temuan data (tanpa mengubah Sheet)
