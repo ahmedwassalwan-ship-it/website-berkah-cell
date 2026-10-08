@@ -21,7 +21,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Batal berbagi (`AbortError`) tidak memunculkan pesan apa pun.
   - Kotak pesan (`role=status`) selalu ada di DOM, tetapi kosong dan tanpa ruang. Live region yang baru dimunculkan sering tidak dibacakan pembaca layar.
 - **Tampilan tautan (F18):** meta Open Graph statis di `index.html`.
-  - `og:image` harus alamat absolut. Sekarang memakai alamat produksi workers.dev, jadi gambar di kartu WhatsApp baru muncul setelah merge ke `main`. Ganti alamat ini saat pindah domain.
+  - `og:image` harus alamat absolut. Sejak Versi 3.3 memakai `https://berkahcellbatam.com/assets/og-cover.jpg`.
   - Sengaja **tanpa `og:url`**, karena Facebook akan mengarahkan semua tautan detail ke beranda.
   - Crawler WhatsApp tidak menjalankan JavaScript, jadi judul kartu sama untuk semua halaman. Nama tipe ikut di teks yang dibagikan lewat menu HP.
 - **Ikon:** `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png`, dan `site.webmanifest`.
@@ -40,9 +40,127 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Detail: satu baris alamat dan jam di kotak Bantuan, plus tautan Maps.
   - Keadaan gagal memuat dan katalog kosong: blok yang sama, supaya pelanggan tetap tahu alamat toko.
 - **`STORE: null` menyembunyikan semua blok toko.** Footer dan JSON-LD statis harus dihapus manual.
+- **Tautan Maps di Android:** Chrome Android membuka tautan web Maps di tab browser, bukan di aplikasi (dilaporkan pemilik 7 Okt 2026).
+  - Di Android, kecuali WebView aplikasi lain (UA berisi `; wv)`), `mapsAttrs()` mengubah tautan menjadi `intent://…;package=com.google.android.apps.maps;S.browser_fallback_url=<tautan asli>;end`, tanpa `target=_blank`. Hasilnya, aplikasi Google Maps terbuka, atau tautan yang sama terbuka di browser bila aplikasi tidak ada.
+  - Tautan footer (`a[data-maps]`) ikut diubah saat halaman dimuat.
+  - iPhone dan desktop tetap memakai tautan https biasa.
 - **JSON-LD** memakai tipe `LocalBusiness`, tanpa rating atau ulasan.
   - Blok `application/ld+json` tidak dijalankan sebagai skrip, jadi CSP tidak diubah.
   - `addressRegion` "Kepulauan Riau" dan zona WIB adalah fakta lokasi Batam, bukan data bisnis.
+
+## Versi 3.3: domain resmi berkahcellbatam.com (D08)
+
+- **Alasan:**
+  - Setelah rilis 6 Okt, `*.workers.dev` tidak bisa dibuka di jaringan WiFi seorang pelanggan (`NET::ERR_CERT_AUTHORITY_INVALID`), tetapi normal lewat VPN. Itu tanda intersepsi atau blokir ISP, bukan bug kode.
+  - Pada saat yang sama, kartu WhatsApp tetap tampil. Itu bukti server berjalan.
+- **Custom domain:** `routes` dengan `custom_domain: true` untuk `berkahcellbatam.com` dan `www.berkahcellbatam.com` di `wrangler.jsonc`.
+  - Cloudflare membuat DNS record dan sertifikat sendiri.
+  - Syarat: zona `berkahcellbatam.com` sudah **Active** di akun Cloudflare yang sama (nameserver dari Hostinger sudah diarahkan) **sebelum** merge ke `main`. Kalau belum, `wrangler deploy` produksi gagal.
+  - Record lama (A/CNAME parkir) untuk apex dan `www` harus dihapus, karena bentrok dengan custom domain.
+- **`www` dialihkan ke apex** di awal `app.js` (`location.replace`, path dan query tetap). Dengan begitu tidak perlu Redirect Rule di dashboard.
+- **URL absolut** (`og:image`, JSON-LD `url`, `image`, `logo`) memakai `https://berkahcellbatam.com`.
+- **workers.dev tetap aktif** sebagai cadangan (`workers_dev: true`).
+
+## Polesan premium sebelum rilis domain (7 Okt 2026)
+
+- **Arah tetap:** Katalog Bertingkat dengan navy dan emas. Tidak ada perubahan alur, teks harga, atau aturan bisnis.
+- **Font:** Plus Jakarta Sans (variable, latin, 27 KB).
+  - Disimpan di `assets/fonts/` beserta lisensi OFL, lalu di-preload.
+  - CSP tidak berubah, karena font berasal dari situs sendiri.
+  - Spasi kata dilonggarkan `.09em`, karena font ini rapat.
+- **Hero:**
+  - gradasi navy dengan cahaya emas tipis dan motif emboss jalur PCB (lihat bagian 8 Okt 2026)
+  - kata "servis" bergradasi emas
+  - garis emas di bawah hero
+- **Baris kepercayaan** di bawah pencarian berisi tiga ketentuan yang sudah diputuskan pemilik: pemeriksaan gratis, harga termasuk jasa pemasangan, garansi tertera per layanan. Klaim lain tidak boleh ditambahkan tanpa keputusan pemilik.
+- **Kartu dan elemen lain:**
+  - Kartu merek, daftar, layanan, dan bantuan memakai bayangan berlapis dan aksen emas.
+  - Pilihan harga terpilih ditandai garis emas.
+  - Kartu "Kunjungi toko" dan footer berwarna navy.
+  - Header identitas dan bar tombol bawah memakai efek kaca buram.
+- **Bug yang diperbaiki:** di daftar tipe, nama tipe menempel dengan jumlah layanan ("A1K2 layanan"). `.li .t` dan `.li .s` sekarang `display:block`.
+- **Desktop:** kartu layanan memakai `columns:2` (masonry), supaya tidak ada celah karena tinggi kartu berbeda.
+- **Tanpa animasi pindah halaman.** Animasi seperti itu membuat halaman berkedip saat Back. Animasi tersisa: skeleton memuat dan panel. Semuanya mati jika pengguna memilih reduced motion.
+- **Kelengkapan situs:**
+  - `404.html` bergaya situs, dengan `not_found_handling: "404-page"` di `wrangler.jsonc`
+  - `robots.txt` dan `sitemap.xml` ke domain resmi
+  - `_headers` untuk header keamanan: nosniff, X-Frame-Options DENY, Referrer-Policy, Permissions-Policy, HSTS tanpa subdomain
+
+## Tambahan dari pemilik (8 Okt 2026)
+
+### Pencarian tanpa spasi
+
+- **Masalah:** banyak pelanggan mengetik tipe HP tanpa spasi, misalnya "vivoy91". Sebelumnya ketikan itu tidak menemukan apa pun.
+- **Cara kerja:** setiap nama tipe juga disimpan dalam bentuk rapat (`compactInfo()` di `app.js`).
+  - Bentuk rapat hanya berisi huruf dan angka: "vivo y91" menjadi "vivoy91".
+  - Posisi awal tiap kata ikut dicatat.
+- **Aturan cocok:** kata kunci yang juga dirapatkan dianggap cocok **hanya jika dimulai di awal kata**.
+  - "vivoy91", "y 91", "iphone11promax", dan "redminote9" cocok.
+  - "e1" tidak memunculkan "iPhone 13", walaupun "iphone13" mengandung "e1".
+- **Urutan hasil:** sama persis lebih dulu, lalu awalan, lalu bagian dari nama.
+- **Saringan di halaman merek** memakai aturan yang sama (`matcher()`).
+- **Alias "galaxy":**
+  - `SEARCH_ALIAS = { samsung: ['galaxy', 'samsung galaxy'] }` menambah "galaxy a10" dan "samsung galaxy a10" ke kata kunci setiap tipe Samsung.
+  - Alias hanya dipakai untuk pencarian. Nama yang tampil tetap "Samsung A10".
+  - Alias untuk merek lain cukup ditambahkan di konstanta yang sama.
+- **Bug lama yang ikut diperbaiki:**
+  - Masalah: mengetik di pencarian atau saringan lalu menekan Back dalam 300 ms membuat `replaceState` yang tertunda menimpa alamat halaman tujuan. Akibatnya beranda tampil, tetapi alamatnya `?merek=vivo`.
+  - Perbaikan: `popstate` sekarang membatalkan URL yang belum tersimpan.
+
+### Motif emboss di latar
+
+- **Motif:** jalur PCB (chip, bus jalur, BGA, via) sebagai simbol keahlian hardware.
+- **Efek cetak timbul:** sorot putih di kiri atas dan bayangan di kanan bawah. Tidak ada warna baru.
+- **Pembuatan:**
+  - Ubin SVG 240×240 dibuat oleh `tools/buat_motif.js` dan menyambung tanpa garis sambungan.
+  - Hasilnya ada dua: `assets/motif-emboss-terang.svg` (latar krem) dan `assets/motif-emboss-gelap.svg` (hero dan footer navy).
+  - Ukuran sekitar 2 KB per file, dimuat dari situs sendiri, jadi CSP tidak berubah.
+- **Penempatan:**
+  - Latar krem halaman: motif tipis di sela kartu.
+  - Hero: motif dipusatkan di kanan sekitar maskot lewat mask radial, supaya area teks tetap bersih.
+  - Footer.
+- **Mengubah motif:** edit `tools/buat_motif.js`, lalu jalankan `node tools/buat_motif.js`.
+
+### Polesan terakhir sebelum rilis domain
+
+- **Bug spasi di tombol:**
+  - Gejala: di kartu harga tertulis "Garansi7hari", "Gantitipe HP", dan "Bagikanhargaini".
+  - Penyebab: stylesheet bawaan Chrome mengatur ulang `word-spacing` pada `button` dan `input`, jadi pelonggaran `.09em` dari `body` tidak ikut.
+  - Perbaikan: `button,input,textarea{word-spacing:inherit}`.
+- **Status buka/tutup** di kartu "Kunjungi toko":
+  - Fungsi `openStatus()` membaca `CONFIG.STORE.open`, `close`, dan `tz`.
+  - Waktu dihitung dengan `Intl.DateTimeFormat` dalam zona Asia/Jakarta (WIB), jadi jam atau zona waktu HP tidak berpengaruh.
+  - Status diperbarui tiap menit.
+  - Hari libur belum dikenal. Jika toko tutup di hari tertentu, data itu harus ditambahkan dari pemilik.
+- **"Cara servis di BERKAH CELL"** di beranda (`stepsBlock()`), berisi tiga langkah: cek harga, tanya lewat WhatsApp, bawa HP ke toko.
+  - Isinya hanya fakta yang sudah ada: cara kerja situs, alamat, dan pemeriksaan gratis.
+  - Tanpa data toko, langkah 3 ditulis tanpa alamat.
+- **Nomor WhatsApp** ditulis `0896-2505-0525`. Footer juga mendapat tautan WhatsApp.
+- **Kartu toko** memakai motif emboss gelap yang sama dengan hero dan footer.
+- **Judul seksi** (`.sec-title`) dirata kiri. Sebelumnya, judul tanpa `small` terdorong ke kanan.
+
+### Pencarian layanan dan badge andalan (D10)
+
+- **Pencarian layanan sebagai cadangan:** `serviceSearch()` baru dipakai jika pencarian nama tipe kosong, jadi hasil pencarian tipe tidak berubah.
+  - Sebuah tipe cocok jika setiap kata cocok dengan satu layanan tipe itu atau dengan nama tipenya, dan minimal satu kata cocok dengan layanan.
+  - Pencocokan memakai `compactInfo()` dan `compactAt()`, jadi aturan awal kata dan "tanpa spasi" ikut berlaku.
+  - `SERVICE_ALIAS`:
+    - "baterai", "batre", dan "battery" diarahkan ke "batrai" (ejaan di Sheet).
+    - "icloud" diarahkan ke "bypass", dan "layar" ke "lcd".
+    - Awalan alias minimal 3 huruf juga diterima, supaya hasil tidak hilang saat mengetik.
+  - Baris hasil menampilkan nama layanan dan harga dari data. Contoh: "Bypass · Rp 100.000". Jika harganya beberapa, tampil rentang; jika tidak valid, tampil "tanyakan harga".
+  - Saringan di halaman merek memakai cadangan yang sama.
+- **Badge andalan** di hero: "Andalan kami: Bypass iCloud iPhone".
+  - Diatur lewat `CONFIG.SPECIALTY`, dan menautkan ke `?q=bypass`.
+  - Hanya tampil jika daftar harga punya layanan Bypass, jadi tidak pernah membawa pelanggan ke hasil kosong.
+  - Disembunyikan saat mencari.
+  - Website tidak menulis syarat kepemilikan, karena pemilik belum menetapkannya.
+
+### Urutan tipe iPhone
+
+- Atas permintaan pemilik, tipe iPhone diurutkan menurut generasi. Urutannya: 8 Plus → X → XR → XS → XS Max → 11.
+- Caranya: `m.sortKey` membaca awalan X sebagai 10 (angka romawi), lalu dipakai oleh `byModel()` di daftar merek, hasil pencarian, dan pencarian layanan.
+- Nama yang tampil tidak berubah.
 
 ## Riwayat, Back, dan posisi gulir
 

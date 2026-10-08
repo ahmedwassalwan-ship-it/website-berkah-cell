@@ -45,7 +45,7 @@ function expect(id, cond, note, detail) { rec(id, cond ? 'LULUS' : 'GAGAL', note
 
 let base; let browser;
 async function newPage(opts = {}) {
-  const ctx = await browser.newContext({ viewport: opts.viewport || { width: 390, height: 844 }, deviceScaleFactor: opts.dpr || 1, hasTouch: !!opts.touch, isMobile: !!opts.mobile, userAgent: opts.ua });
+  const ctx = await browser.newContext({ viewport: opts.viewport || { width: 390, height: 844 }, deviceScaleFactor: opts.dpr || 1, hasTouch: !!opts.touch, isMobile: !!opts.mobile, userAgent: opts.ua, timezoneId: opts.tz });
   const page = await ctx.newPage();
   page.__errors = []; page.__requests = [];
   page.on('pageerror', (e) => page.__errors.push(e.message));
@@ -91,11 +91,13 @@ async function run() {
     await testShare();
     await testMeta();
     await testStore();
+    await testDomain();
+    await testPolish();
   } finally {
     await browser.close(); srv.srv.close();
   }
-  rec('A11', 'BELUM DIUJI', 'Pemilik melaporkan preview v3 (9e57432) berjalan baik di HP pada 6 Okt 2026. Perubahan Versi 3.1 (Bagikan, tampilan tautan, ikon) belum direview pemilik.');
-  rec('A12', 'BELUM BERLAKU', 'Belum ada rilis produksi pada tahap ini; PR tidak di-merge.');
+  rec('A11', 'LULUS', 'Pemilik melaporkan preview v3 dan tombol Maps berjalan baik di HP (6 Okt 2026), lalu menyetujui rilis.');
+  rec('A12', 'BELUM DIUJI', 'Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN). Dicek ulang di berkahcellbatam.com setelah domain aktif.');
   fs.writeFileSync(path.join(OUT, 'hasil.json'), JSON.stringify(results, null, 2));
   const ids = Object.keys(results).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   for (const id of ids) {
@@ -120,6 +122,16 @@ async function testCatalog() {
     expect('A01', n === count, `Daftar tipe ${brand} berisi ${count} tipe`, n);
     await p.goBack(); await p.waitForSelector('.tile');
   }
+  // Urutan iPhone sesuai generasi: X–XS Max di antara 8 Plus dan 11 (pemilik 8 Okt 2026)
+  const IPHONE_ORDER = ['6S Plus', '7', '7 plus', '8', '8 Plus', 'X', 'XR', 'XS', 'XS Max', '11', '11 Pro', '11 Pro Max', '12', '12 Pro', '12 Pro Max', '13', '13 Pro', '15 Plus'];
+  await p.click('.tile:has(b:text-is("iPhone"))'); await p.waitForSelector('.list');
+  const ip = await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent));
+  expect('A01', JSON.stringify(ip) === JSON.stringify(IPHONE_ORDER), 'Daftar tipe iPhone berurutan: … 8 Plus, X, XR, XS, XS Max, 11 …', ip);
+  await p.goBack(); await p.waitForSelector('.tile');
+  await p.fill('#q', 'iphone'); await sleep(80);
+  const ips = await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent));
+  expect('A01', JSON.stringify(ips) === JSON.stringify(IPHONE_ORDER.map((n) => 'iPhone ' + n)), 'Hasil pencarian "iphone" memakai urutan yang sama', ips);
+  await p.fill('#q', ''); await sleep(50);
   await p.click('.tile:has(b:text-is("Xiaomi"))'); await p.waitForSelector('.list');
   const xi = await p.$$eval('.list .t', (e) => e.map((x) => x.textContent));
   expect('A01', xi.includes('9A'), 'Model dari merek "xiomi" tampil di bawah Xiaomi', xi);
@@ -142,8 +154,60 @@ async function testSearch() {
   expect('A02', (await names()).includes('Xiaomi 9A'), 'Alias lama "xiomi" tetap menemukan Xiaomi 9A (F10)');
   await p.fill('#q', 'y15s'); await sleep(50);
   expect('A02', JSON.stringify(await names()) === JSON.stringify(['Vivo Y15S']), 'Y15s/Y15S tampil sebagai satu tipe', await names());
+  // Ketikan tanpa spasi atau dengan spasi berbeda (permintaan pemilik 8 Okt 2026)
+  for (const [q, first] of [['vivoy91', 'Vivo Y91'], ['VivoY91', 'Vivo Y91'], ['y 91', 'Vivo Y91'], ['iphone11promax', 'iPhone 11 Pro Max'], ['oppoa77s', 'Oppo A77S'], ['samsunga10', 'Samsung A10']]) {
+    await p.fill('#q', q); await sleep(50);
+    const n = await names();
+    expect('A02', n[0] === first, `"${q}" menemukan ${first} di urutan pertama`, n);
+  }
+  await p.fill('#q', 'redminote9'); await sleep(50);
+  const rn9 = await names();
+  expect('A02', rn9.slice(0, 2).sort().join('|') === 'Redmi Note 9|Xiaomi Redmi Note 9', '"redminote9" menemukan Redmi Note 9 di kedua merek di urutan teratas', rn9);
+  // Alias "galaxy" untuk Samsung (permintaan pemilik 8 Okt 2026); nama tampilan tetap "Samsung A10"
+  for (const q of ['galaxy a10', 'samsung galaxy a10', 'Galaxy A10', 'galaxya10']) {
+    await p.fill('#q', q); await sleep(50);
+    const n = await names();
+    expect('A02', n[0] === 'Samsung A10' && !n.some((x) => /galaxy/i.test(x)), `"${q}" menemukan Samsung A10 di urutan pertama, tampil sebagai "Samsung A10"`, n);
+  }
+  await p.fill('#q', 'galaxy'); await sleep(50);
+  const gx = await names();
+  expect('A02', gx.length === 20 && gx.every((x) => x.startsWith('Samsung ')), '"galaxy" saja memunculkan 20 tipe Samsung, tanpa merek lain', gx);
+  // Cari lewat nama layanan bila tidak ada nama tipe yang cocok (8 Okt 2026)
+  const rows = async () => p.$$eval('.list .li', (e) => e.map((x) => x.querySelector('.t').firstChild.textContent + ' | ' + x.querySelector('.s').textContent));
+  for (const q of ['bypass', 'icloud', 'iCloud', 'iphone bypass', 'bypass iphone']) {
+    await p.fill('#q', q); await sleep(50);
+    const r = await rows();
+    expect('A02', JSON.stringify(r) === JSON.stringify(['iPhone 7 plus | Bypass · Rp 60.000', 'iPhone 8 | Bypass · Rp 100.000']) && (await p.textContent('#q-status')) === '2 tipe dengan layanan Bypass',
+      `"${q}" menampilkan tipe yang punya layanan Bypass beserta harganya`, r);
+  }
+  await p.fill('#q', 'lcd y91'); await sleep(50);
+  expect('A02', JSON.stringify(await rows()) === JSON.stringify(['Vivo Y91 | Ganti LCD · Rp 230.000']), '"lcd y91" menampilkan harga Ganti LCD Vivo Y91', await rows());
+  for (const q of ['baterai', 'bate']) {
+    await p.fill('#q', q); await sleep(50);
+    const r = await rows();
+    expect('A02', r.length === 25 && r.every((x) => / \| Ganti Batrai · /.test(x)), `"${q}" menemukan layanan "Ganti Batrai" (alias ejaan)`, r.slice(0, 3));
+  }
+  await p.fill('#q', 'zzz'); await sleep(50);
+  expect('A02', (await p.$('.list')) === null, 'Kata yang tidak cocok dengan tipe maupun layanan tetap "belum tercantum"');
+  await p.fill('#q', 'e1'); await sleep(50);
+  const e1 = await names();
+  expect('A02', !e1.includes('iPhone 13') && !e1.includes('Realme 10'), 'Bentuk rapat hanya cocok dari awal kata: "e1" tidak memunculkan iPhone 13 atau Realme 10', e1);
   await p.fill('#q', ''); await sleep(50);
   expect('A02', (await p.$$('.tile')).length === 10, 'Pencarian kosong kembali ke grid merek');
+  await p.click('.tile:has(b:text-is("Vivo"))'); await p.waitForSelector('#f');
+  await p.fill('#f', 'vivoy91'); await sleep(50);
+  expect('A02', JSON.stringify(await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent))) === JSON.stringify(['Y91']), 'Saringan di halaman merek juga menerima "vivoy91"');
+  await p.goBack(); await p.waitForSelector('.tile');
+  await p.click('.tile:has(b:text-is("iPhone"))'); await p.waitForSelector('#f');
+  await p.fill('#f', 'bypass'); await sleep(50);
+  const bf = await p.$$eval('.list .li', (e) => e.map((x) => x.innerText.replace(/\n/g, ' | ')));
+  expect('A02', bf.length === 2 && bf[0].startsWith('7 plus | Bypass') && bf[1].startsWith('8 | Bypass'), 'Saringan di halaman iPhone menerima nama layanan "bypass"', bf);
+  await p.goBack(); await p.waitForSelector('.tile');
+  await p.click('.tile:has(b:text-is("Samsung"))'); await p.waitForSelector('#f');
+  await p.fill('#f', 'galaxy a10'); await sleep(50);
+  const sf = await p.$$eval('.list .t', (e) => e.map((x) => x.firstChild.textContent));
+  expect('A02', sf[0] === 'A10', 'Saringan di halaman Samsung menerima "galaxy a10"', sf);
+  await p.goBack(); await p.waitForSelector('.tile');
   const t0 = Date.now(); await p.fill('#q', 'samsung a'); await p.waitForSelector('.list .t'); const dt = Date.now() - t0;
   expect('A02', dt < 300, `Hasil pencarian muncul dalam ${dt} ms (target < 300 ms, emulasi desktop)`);
   await p.context().close();
@@ -350,8 +414,10 @@ async function testBackBrand() {
   await p.goto('about:blank'); await p.goto(base); await ready(p);
   await p.evaluate(() => window.scrollTo(0, 200)); await sleep(250);
   await p.click('.tile:has(b:text-is("Oppo"))'); await p.waitForSelector('.list');
-  await p.evaluate(() => window.scrollTo(0, 700)); await sleep(250);
+  // Gulir sampai tautan A77S terlihat, lalu catat posisi tepat sebelum klik (klik tidak menggulir lagi).
+  await p.evaluate(() => [...document.querySelectorAll('.list a')].find((a) => a.textContent.includes('A77S')).scrollIntoView({ block: 'center' })); await sleep(250);
   const y1 = await p.evaluate(() => window.scrollY);
+  expect('A13', y1 > 300, 'Daftar tipe digulir jauh sebelum membuka detail', y1);
   await p.click('.list a:has-text("A77S")'); await p.waitForSelector('.dev h1');
   await p.goBack(); await p.waitForSelector('.list'); await sleep(200);
   const back1 = await p.evaluate(() => ({ url: location.search, y: window.scrollY }));
@@ -404,6 +470,15 @@ async function testDirectEntry() {
   await p.click('#q'); await p.keyboard.type('samsunga5x', { delay: 40 }); await sleep(450);
   await p.goBack(); await sleep(300);
   expect('A15', p.url() === 'about:blank', 'Mengetik 10 huruf lalu satu Back langsung keluar dari layar (tanpa riwayat per huruf)', p.url());
+  // Mengetik di saringan lalu Back dalam < 300 ms tidak boleh menimpa alamat beranda
+  await p.goto(base); await ready(p);
+  await p.click('.tile:has(b:text-is("Vivo"))'); await p.waitForSelector('#f');
+  await p.click('#f'); await p.keyboard.type('y9', { delay: 20 });
+  await p.goBack(); await sleep(450);
+  const back = await p.evaluate(() => ({ search: location.search, tiles: document.querySelectorAll('.tile').length }));
+  expect('A15', back.search === '' && back.tiles === 10, 'Mengetik lalu langsung Back: beranda tetap beranda (alamat tidak tertimpa saringan yang belum tersimpan)', back);
+  await p.goForward(); await ready(p); await sleep(100);
+  expect('A15', /merek=vivo/.test(p.url()) && (await p.$('#f')) !== null, 'Forward kembali ke daftar tipe Vivo', p.url());
   await p.goto(base + '?merek=nokia&tipe=3310'); await ready(p);
   const t = await p.textContent('main');
   expect('A15', t.includes('belum tercantum') && (await p.$('.crumb a')) !== null, 'Link ke tipe yang tidak ada → pesan "belum tercantum" + "Semua merek"');
@@ -662,7 +737,7 @@ async function testMeta() {
 
 /* ---------- A24: Informasi toko (F19) ---------- */
 // Data persis dari pemilik, 6 Okt 2026.
-const STORE = { address: 'Avava Jodoh, Lantai Dasar, Batam', hours: 'Setiap hari, 11.00–20.00 WIB', maps: 'https://share.google/xDIH18tkS00piTNIv' };
+const STORE = { address: 'Avava Jodoh, Lantai Dasar, Batam', hours: 'Setiap hari, 11.00–20.00 WIB', maps: 'https://maps.app.goo.gl/9f942hFJcCKjUKnj9' };
 async function testStore() {
   const linkOk = (l) => l && l.href === STORE.maps && l.target === '_blank' && /noopener/.test(l.rel);
   const readLink = (p, sel) => p.$eval(sel, (a) => ({ href: a.href, target: a.target, rel: a.rel })).catch(() => null);
@@ -680,6 +755,8 @@ async function testStore() {
   // Footer (statis, terbaca tanpa JavaScript)
   const ftr = await p.$eval('.ftr', (f) => ({ addr: f.querySelector('.addr').textContent.trim(), hours: f.querySelector('.hours').textContent.trim() }));
   expect('A24', ftr.addr === STORE.address && ftr.hours === STORE.hours && linkOk(await readLink(p, '.ftr a')), 'Footer: alamat, jam, dan tautan Maps sama', ftr);
+  const fwa = await p.$eval('.ftr a[href^="https://wa.me/"]', (a) => ({ href: a.href, text: a.textContent.trim(), target: a.target, rel: a.rel })).catch(() => null);
+  expect('A24', fwa && fwa.href === 'https://wa.me/6289625050525' && fwa.text === 'WhatsApp 0896-2505-0525' && fwa.target === '_blank' && /noopener/.test(fwa.rel), 'Footer: tautan WhatsApp toko dengan nomor yang mudah dibaca', fwa);
   // JSON-LD
   const ld = await p.$eval('script[type="application/ld+json"]', (s) => s.textContent).then((x) => { try { return JSON.parse(x); } catch (e) { return null; } });
   const oh = ld && ld.openingHoursSpecification && ld.openingHoursSpecification[0];
@@ -690,16 +767,32 @@ async function testStore() {
   // Bantuan dan detail
   await p.goto(base + '?bantuan=1'); await ready(p);
   const help = await p.$eval('main .store .addr', (e) => e.textContent.trim()).catch(() => null);
+  expect('A24', (await p.textContent('main .phone-no')) === '0896-2505-0525', 'Bantuan: nomor WhatsApp ditulis 0896-2505-0525');
   expect('A24', help === STORE.address && linkOk(await readLink(p, 'main .store a')), 'Bantuan: blok toko dan tautan Maps tampil');
   await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
   const mini = await p.$eval('main .store-mini', (e) => e.textContent).catch(() => '');
-  expect('A24', mini.includes(STORE.address) && mini.includes(STORE.hours) && linkOk(await readLink(p, 'main a.link-btn[href^="https://share.google"]')), 'Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps');
+  expect('A24', mini.includes(STORE.address) && mini.includes(STORE.hours) && linkOk(await readLink(p, 'main a.link-btn[href^="https://maps.app.goo.gl"]')), 'Detail: kotak Bantuan memuat alamat, jam, dan tautan Maps');
   expect('A24', csp.length === 0 && p.__errors.length === 0, 'Tanpa pelanggaran CSP dan tanpa error JS', { csp, errors: p.__errors });
   const ext = p.__requests.filter((u) => !u.startsWith(base) && !u.startsWith('data:'));
   expect('A24', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru (tautan Maps hanya dibuka saat diketuk)', ext);
   await shot(p, 'a24-detail-bantuan-toko');
   await p.goto(base + '?bantuan=1'); await ready(p); await shot(p, 'a24-bantuan-toko', true);
   await p.context().close();
+  // Status buka/tutup dihitung dari jam pemilik dalam WIB, bukan dari zona waktu HP.
+  for (const [iso, tz, want] of [
+    ['2026-10-08T05:30:00Z', undefined, 'Buka sekarang · sampai 20.00 WIB'],
+    ['2026-10-08T04:00:00Z', undefined, 'Buka sekarang · sampai 20.00 WIB'],
+    ['2026-10-08T02:00:00Z', undefined, 'Tutup sekarang · buka hari ini pukul 11.00 WIB'],
+    ['2026-10-08T13:00:00Z', undefined, 'Tutup sekarang · buka besok pukul 11.00 WIB'],
+    ['2026-10-08T05:30:00Z', 'America/New_York', 'Buka sekarang · sampai 20.00 WIB'],
+  ]) {
+    const pc = await newPage({ tz }); await pc.clock.setFixedTime(new Date(iso));
+    await pc.goto(base); await ready(pc);
+    const os = await pc.$eval('main .store .open-status', (e) => ({ text: e.textContent.trim(), open: e.classList.contains('is-open') })).catch(() => null);
+    const wib = new Date(new Date(iso).getTime() + 7 * 3600e3).toISOString().slice(11, 16);
+    expect('A24', os && os.text === want && os.open === want.startsWith('Buka'), `Status toko pukul ${wib} WIB${tz ? ' (HP di zona ' + tz + ')' : ''}: "${want}"`, os);
+    await pc.context().close();
+  }
   // Saat data gagal dimuat atau katalog kosong, alamat toko tetap tersedia sebagai alternatif.
   for (const mode of ['abort', 'empty']) {
     const pe = await newPage({ data: mode }); await pe.goto(base);
@@ -715,14 +808,105 @@ async function testStore() {
   expect('A24', noStore !== src, 'Fixture tanpa data toko berhasil dibuat');
   await q.route('**/app.js*', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: noStore }));
   await q.goto(base); await ready(q);
-  const h1 = (await q.$('main .store')) === null;
+  const h1 = (await q.$('main .store')) === null && (await q.$('.open-status')) === null;
+  const step3 = await q.$eval('.steps li:nth-child(3) p', (e) => e.textContent).catch(() => null);
+  expect('A24', step3 === 'Pemeriksaan gratis.', 'Tanpa data toko: langkah 3 tanpa alamat', step3);
   await q.goto(base + '?bantuan=1'); await ready(q);
   const h2 = (await q.$('main .store')) === null;
   await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
-  const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://share.google"]')) === null;
+  const h3 = (await q.$('main .store-mini')) === null && (await q.$('main a[href^="https://maps.app.goo.gl"]')) === null;
   expect('A24', h1 && h2 && h3 && q.__errors.length === 0, 'Tanpa data toko (STORE: null), blok toko tidak tampil di beranda, bantuan, dan detail', { h1, h2, h3, errors: q.__errors });
-  rec('A24', 'LULUS', 'Tujuan tautan pendek Google Maps tidak bisa dibuka dari sesi ini; pemilik mengeceknya di HP pada 6 Okt 2026 (laporan pemilik).');
+  // Android Chrome: tautan Maps membuka aplikasi Google Maps (intent) dengan cadangan tautan yang sama.
+  const want = 'intent://maps.app.goo.gl/9f942hFJcCKjUKnj9#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=' + encodeURIComponent(STORE.maps) + ';end';
+  const uaAndroid = 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36';
+  const uaWebView = 'Mozilla/5.0 (Linux; Android 14; Pixel 7; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/120.0.0.0 Mobile Safari/537.36';
+  const uaIphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
+  for (const [label, ua, intent] of [['Android Chrome', uaAndroid, true], ['WebView aplikasi Android', uaWebView, false], ['iPhone', uaIphone, false]]) {
+    const pa = await newPage({ ua, mobile: true, touch: true }); await pa.goto(base); await ready(pa);
+    const links = await pa.$$eval('main .store a, .ftr a[data-maps]', (as) => as.map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target') })));
+    const ok = links.length === 2 && links.every((l) => (intent ? l.href === want && l.target === null : l.href === STORE.maps && l.target === '_blank'));
+    expect('A24', ok, label + ': tombol Maps dan footer ' + (intent ? 'membuka aplikasi Google Maps (intent, cadangan tautan yang sama)' : 'memakai tautan Maps biasa'), links);
+    await pa.context().close();
+  }
+  rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
+}
+
+/* ---------- DOMAIN: berkahcellbatam.com dan www (D08) ---------- */
+// Domain resmi disimulasikan: permintaan ke berkahcellbatam.com dilayani dari server uji lokal.
+async function testDomain() {
+  const p = await newPage();
+  await p.context().route(/^https:\/\/(www\.)?berkahcellbatam\.com\//, async (route) => {
+    const u = new URL(route.request().url());
+    const res = await route.fetch({ url: base.replace(/\/$/, '') + u.pathname + u.search });
+    await route.fulfill({ response: res });
+  });
+  await p.goto('https://www.berkahcellbatam.com/?merek=iphone&tipe=11'); await p.waitForURL('https://berkahcellbatam.com/**'); await ready(p);
+  expect('DOMAIN', p.url() === 'https://berkahcellbatam.com/?merek=iphone&tipe=11', 'www.berkahcellbatam.com dialihkan ke berkahcellbatam.com dengan tautan yang sama', p.url());
+  expect('DOMAIN', (await p.textContent('.dev h1')) === 'iPhone 11', 'Detail iPhone 11 tampil di domain resmi');
+  const meta = await p.evaluate(() => ({
+    og: document.querySelector('meta[property="og:image"]').content,
+    ld: JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent),
+  }));
+  expect('DOMAIN', meta.og === 'https://berkahcellbatam.com/assets/og-cover.jpg' && meta.ld.url === 'https://berkahcellbatam.com/' && /^https:\/\/berkahcellbatam\.com\//.test(meta.ld.logo) && /^https:\/\/berkahcellbatam\.com\//.test(meta.ld.image),
+    'og:image dan JSON-LD memakai https://berkahcellbatam.com', meta);
+  expect('DOMAIN', p.__errors.length === 0, 'Tanpa error JS', p.__errors);
+  await p.context().close();
+  rec('DOMAIN', 'BELUM DIUJI', 'Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge.');
+}
+
+/* ---------- POLES: review sebelum rilis domain (tampilan & kelengkapan situs) ---------- */
+async function testPolish() {
+  const p = await newPage({ viewport: { width: 390, height: 844 } });
+  await p.goto(base + '?merek=oppo'); await ready(p);
+  const row = await p.$eval('.list .li', (a) => { const t = a.querySelector('.t').getBoundingClientRect(); const s = a.querySelector('.s').getBoundingClientRect(); return { tBottom: Math.round(t.bottom), sTop: Math.round(s.top) }; });
+  expect('POLES', row.sTop >= row.tBottom - 1, 'Daftar tipe: nama tipe dan jumlah layanan di baris terpisah (tidak menempel "A1K2 layanan")', row);
+  await p.goto(base + '?merek=iphone&tipe=11'); await ready(p);
+  const ws = await p.evaluate(() => ({ body: getComputedStyle(document.body).wordSpacing, btn: getComputedStyle(document.querySelector('.var')).wordSpacing, link: getComputedStyle(document.querySelector('.dev button')).wordSpacing }));
+  expect('POLES', ws.btn === ws.body && ws.link === ws.body && ws.body !== '0px', 'Spasi kata di tombol sama dengan teks biasa (tidak "Garansi7hari")', ws);
+  await p.goto(base); await ready(p);
+  const font = await p.evaluate(async () => { await document.fonts.ready; return { family: getComputedStyle(document.body).fontFamily, loaded: document.fonts.check('700 16px "Plus Jakarta Sans"') }; });
+  expect('POLES', /Plus Jakarta Sans/.test(font.family) && font.loaded, 'Font Plus Jakarta Sans termuat dari situs sendiri', font);
+  const motif = await p.evaluate(async () => {
+    const bg = (el, pseudo) => getComputedStyle(el, pseudo).backgroundImage;
+    const urls = ['assets/motif-emboss-terang.svg', 'assets/motif-emboss-gelap.svg'];
+    const ok = await Promise.all(urls.map((u) => new Promise((res) => { const i = new Image(); i.onload = () => res(i.naturalWidth === 240); i.onerror = () => res(false); i.src = u; })));
+    return { body: bg(document.body), hero: bg(document.querySelector('.hero'), '::before'), ftr: bg(document.querySelector('.ftr')), ok };
+  });
+  expect('POLES', /motif-emboss-terang\.svg/.test(motif.body) && /motif-emboss-gelap\.svg/.test(motif.hero) && /motif-emboss-gelap\.svg/.test(motif.ftr) && motif.ok.every(Boolean),
+    'Motif emboss (permintaan pemilik 8 Okt 2026) termuat dari situs sendiri di latar halaman, hero, dan footer', motif);
+  const steps = await p.$$eval('.steps li', (e) => e.map((x) => x.querySelector('b').textContent + ' | ' + x.querySelector('p').textContent));
+  expect('POLES', JSON.stringify(steps) === JSON.stringify(['Cek harga di sini | Cari tipe HP kamu, lalu pilih layanan yang dibutuhkan.', 'Tanya lewat WhatsApp | Pesan sudah berisi tipe HP dan layanan pilihanmu.', 'Bawa HP ke toko | ' + STORE.address + '. Pemeriksaan gratis.']),
+    'Beranda: "Cara servis" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)', steps);
+  const trust = await p.$$eval('.hero .trust li', (e) => e.map((x) => x.textContent.trim()));
+  expect('POLES', JSON.stringify(trust) === JSON.stringify(['Pemeriksaan gratis', 'Harga termasuk jasa pemasangan', 'Garansi tertera per layanan']), 'Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik', trust);
+  const badge = await p.$eval('a.andalan', (a) => ({ text: a.textContent.trim(), href: a.getAttribute('href'), h: a.getBoundingClientRect().height })).catch(() => null);
+  expect('POLES', badge && badge.text === 'Andalan kami: Bypass iCloud iPhone' && /\?q=bypass$/.test(badge.href) && badge.h >= 44, 'Badge andalan "Bypass iCloud iPhone" tampil di hero (area sentuh ≥ 44 px)', badge);
+  await p.click('a.andalan'); await p.waitForSelector('.list');
+  const bp = await p.evaluate(() => ({ q: document.querySelector('#q').value, n: document.querySelectorAll('.list li').length, url: location.search }));
+  expect('POLES', bp.q === 'bypass' && bp.n === 2 && bp.url === '?q=bypass', 'Mengetuk badge menampilkan semua harga bypass', bp);
+  await p.goBack(); await p.waitForSelector('.tile');
+  expect('POLES', (await p.inputValue('#q')) === '' && (await p.$('a.andalan')) !== null, 'Back dari hasil badge kembali ke beranda');
+  await p.fill('#q', 'iphone'); await sleep(100);
+  expect('POLES', await p.locator('.hero .trust').isHidden(), 'Baris kepercayaan disembunyikan saat mencari');
+  expect('POLES', await p.locator('.hero .andalan').isHidden(), 'Badge andalan disembunyikan saat mencari');
+  const nb = await newPage({ data: 'bad' }); await nb.goto(base); await ready(nb);
+  expect('POLES', (await nb.$('a.andalan')) === null && (await nb.$$('.tile')).length > 0, 'Tanpa layanan Bypass di daftar harga, badge tidak tampil');
+  await nb.context().close();
+  // Halaman 404 bermerek
+  const nf = await newPage({ viewport: { width: 360, height: 740 } });
+  const r = await nf.goto(base + '404.html');
+  const info = await nf.evaluate(() => ({ h1: document.querySelector('h1').textContent, home: document.querySelector('.btn-pri').getAttribute('href'), wa: document.querySelector('.btn-ghost').getAttribute('href'), css: getComputedStyle(document.querySelector('.hdr')).backgroundColor, wide: document.documentElement.scrollWidth > innerWidth }));
+  expect('POLES', r.ok() && info.home === '/' && info.wa === 'https://wa.me/6289625050525' && info.css === 'rgb(10, 26, 51)' && !info.wide, 'Halaman 404: bergaya situs, tombol ke beranda dan WhatsApp toko, tanpa gulir ke samping', info);
+  await shot(nf, 'poles-404-360');
+  await nf.context().close();
+  const read = (f) => fs.readFileSync(path.join(__dirname, '..', 'site-live', f), 'utf8');
+  expect('POLES', /Sitemap: https:\/\/berkahcellbatam\.com\/sitemap\.xml/.test(read('robots.txt')) && read('sitemap.xml').includes('<loc>https://berkahcellbatam.com/</loc>'), 'robots.txt dan sitemap.xml mengarah ke domain resmi');
+  const hdrs = read('_headers');
+  expect('POLES', ['X-Content-Type-Options: nosniff', 'X-Frame-Options: DENY', 'Referrer-Policy:', 'Strict-Transport-Security:'].every((x) => hdrs.includes(x)), 'Header keamanan disiapkan di _headers');
+  await shot(p, 'poles-beranda-cari-390');
+  await p.context().close();
+  rec('POLES', 'LULUS', 'Tampilan premium dinilai lewat tangkapan layar emulasi Chromium; perlu dilihat pemilik di HP sungguhan.');
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });

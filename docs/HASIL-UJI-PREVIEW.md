@@ -27,7 +27,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 | A09 | LULUS (sebagian otomatis) | Urutan Tab, fokus terlihat, Enter membuka merek, fokus pindah ke judul, label kotak cari, area sentuh ≥ 44 px di Beranda/Tipe/Detail, kontras ≥ 4,5:1 pada elemen yang diperiksa. Pembaca layar sungguhan belum diuji. |
 | A10 | LULUS | Permintaan luar hanya ke file publik `1mgN8N15…`. Aset tidak memuat Harga_Modal atau ID file utama. Ekspor publik 6 Okt hanya berisi 7 kolom pelanggan, dan file utama berakses Dibatasi (dicek lewat Drive). |
 | A11 | LULUS (laporan pemilik) | 6 Okt 2026: pemilik mencoba link preview Cloudflare (commit 9e57432) di HP dan melaporkan semua fitur berjalan baik. Jenis HP/browser dan rincian per langkah belum dicatat. Perubahan Versi 3.1 dan 3.2 (Bagikan, tampilan tautan, ikon, info toko) belum direview. |
-| A12 | BELUM BERLAKU | Belum ada rilis produksi. PR tidak di-merge. |
+| A12 | BELUM DIUJI (sebagian) | Rilis 6 Okt 2026 (`d0f03a1`, PR #1): build produksi sukses, dan kartu WhatsApp tampil dengan gambar. **Temuan:** di jaringan WiFi seorang pelanggan, workers.dev menampilkan `NET::ERR_CERT_AUTHORITY_INVALID`, sedangkan lewat VPN normal. Ini blokir ISP. Solusinya domain sendiri `berkahcellbatam.com` (Versi 3.3); dicek ulang setelah domain aktif. |
 | A13 | LULUS (emulasi) | Detail → Back ke daftar Oppo dengan posisi gulir sama → Back ke Beranda dengan posisi gulir sama → Back keluar. Forward memulihkan posisi gulir. |
 | A14 | LULUS (emulasi) | Kata pencarian, hasil, dan posisi gulir pulih. Keyboard tidak muncul sendiri. Satu Back lagi langsung keluar. |
 | A15 | BELUM DIUJI (sebagian lulus) | Masuk langsung ke detail lalu Back mengikuti riwayat asli. "Semua merek" berfungsi. 10 huruf lalu 1 Back langsung keluar. Tipe yang tidak ada menampilkan pesan "belum tercantum". **Link yang dibuka dari aplikasi WhatsApp sungguhan belum diuji.** |
@@ -39,7 +39,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 | A21 | LULUS | Katalog kosong, hasil kosong, dan gagal jaringan masing-masing tampil berbeda. "Coba lagi" memulihkan katalog asli. |
 | A22 | LULUS (emulasi) | "Bagikan harga ini" mengirim tautan detail ke menu berbagi HP (tiruan `navigator.share`). Tanpa menu berbagi, tautan disalin dengan konfirmasi; jika clipboard ditolak, tautan tampil terpilih. Batal berbagi tidak memunculkan pesan. Tautan iPhone XS Max membuka detail yang sama, dan Back mengikuti riwayat asli. Tipe yang tidak ada tampil "belum tercantum". **Menu berbagi HP sungguhan belum diuji.** |
 | A23 | BELUM DIUJI (sebagian lulus) | Meta judul, deskripsi, gambar 1200×630 (91 KB, alamat absolut), dan kartu besar ada. Ikon 180/192/512 dan manifest termuat. Tanpa service worker dan tanpa request luar baru. **Kartu di WhatsApp/Facebook sungguhan belum bisa diuji:** gambar memakai alamat produksi, jadi baru tampil setelah merge ke `main`. |
-| A24 | LULUS (otomatis + laporan pemilik) | Alamat "Avava Jodoh, Lantai Dasar, Batam", jam "Setiap hari, 11.00–20.00 WIB", dan tautan Maps sama persis dengan data pemilik di beranda, Bantuan, kotak Bantuan detail, footer, dan JSON-LD (valid, tanpa rating). Tombol Maps membuka tab baru, area sentuh ≥ 44 px. Tanpa pelanggaran CSP. Blok toko juga tampil saat data gagal dimuat dan saat katalog kosong. Dengan `STORE: null`, blok toko tidak tampil. Tujuan tautan pendek `share.google` tidak bisa dibuka dari sesi ini; **pemilik mengecek di HP pada 6 Okt 2026 dan melaporkan lokasi toko muncul di Google Maps.** |
+| A24 | LULUS (otomatis + laporan pemilik) | Alamat "Avava Jodoh, Lantai Dasar, Batam", jam "Setiap hari, 11.00–20.00 WIB", dan tautan Maps sama persis dengan data pemilik di beranda, Bantuan, kotak Bantuan detail, footer, dan JSON-LD (valid, tanpa rating). Tombol Maps membuka tab baru, area sentuh ≥ 44 px. Tanpa pelanggaran CSP. Blok toko juga tampil saat data gagal dimuat dan saat katalog kosong. Dengan `STORE: null`, blok toko tidak tampil. Tautan Maps diganti pemilik pada 7 Okt 2026 menjadi `maps.app.goo.gl/9f942hFJcCKjUKnj9` (tautan lama `share.google` sudah dicek pemilik pada 6 Okt). Tautan pendek tidak bisa dibuka dari sesi ini; tujuan tautan baru dicek pemilik di HP setelah rilis. |
 
 **Pemeriksaan tambahan:**
 - **KEAMANAN, LULUS:** nama model dan layanan yang berisi HTML tampil sebagai teks, tidak ada skrip yang berjalan, dan tidak ada error JS. Pemindaian statis tidak menemukan `innerHTML`, `eval`, atau atribut `onclick`.
@@ -48,6 +48,66 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - Posisi gulir, pilihan layanan, dan fokus pulih setelah panel ditutup.
   - Isian disimpan selama perangkat sama dan dibersihkan saat perangkat berubah.
   - Back pertama hanya menutup panel. Back berikutnya berpindah layar. Forward tidak membuka panel lagi. Tab tetap di dalam panel.
+
+## Polesan premium (7 Okt 2026, PR #2)
+
+- **POLES: LULUS (emulasi).**
+  - Nama tipe dan jumlah layanan di baris terpisah (bug "A1K2 layanan" diperbaiki).
+  - Font Plus Jakarta Sans termuat.
+  - Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik, dan tersembunyi saat mencari.
+  - Halaman 404 bergaya situs, dengan tombol ke beranda dan WhatsApp, tanpa gulir ke samping di 360 px.
+  - robots/sitemap mengarah ke domain resmi, dan header keamanan disiapkan.
+- **Uji lama tetap lulus.** A13 disesuaikan: baris daftar sekarang lebih tinggi, jadi tautan A77S digulir ke tengah dulu dan posisinya dicatat tepat sebelum diklik. Tujuan uji tidak berubah: Back memulihkan posisi saat diklik.
+- **Belum diuji:** tampilan di HP sungguhan, dan `_headers`/404 di Cloudflare. Keduanya baru bisa dicek setelah rilis.
+
+## Tambahan pemilik (8 Okt 2026, PR #2)
+
+- **A02, LULUS:** ketikan tanpa spasi atau dengan spasi berbeda menemukan tipe yang benar di urutan pertama.
+  - Contoh: "vivoy91", "VivoY91", "y 91", "iphone11promax", "oppoa77s", "samsunga10".
+  - "redminote9" memunculkan Redmi Note 9 di merek Redmi dan Xiaomi.
+  - "e1" tidak memunculkan iPhone 13 atau Realme 10.
+  - Saringan di halaman Vivo menerima "vivoy91".
+  - Alias Samsung: "galaxy a10", "samsung galaxy a10", "Galaxy A10", dan "galaxya10" menemukan Samsung A10, dengan nama tetap tampil "Samsung A10".
+  - "galaxy" saja memunculkan 20 tipe Samsung, dan saringan di halaman Samsung menerima "galaxy a10".
+- **A15, bug lama diperbaiki:** mengetik di saringan lalu langsung Back (dalam 300 ms) dulu mengubah alamat beranda menjadi `?merek=vivo`.
+  - Uji baru gagal tanpa perbaikan dan lulus dengan perbaikan.
+  - Forward tetap kembali ke daftar tipe Vivo.
+- **POLES, LULUS (emulasi):** motif emboss termuat dari situs sendiri di latar halaman, hero, dan footer, tanpa request baru ke luar.
+- **Belum diuji:** tampilan motif di layar HP sungguhan. Motif ini sengaja tipis, jadi kecerahan layar memengaruhi seberapa terlihat.
+
+## Polesan terakhir (8 Okt 2026, PR #2)
+
+- **POLES, LULUS (emulasi):**
+  - Spasi kata di tombol sama dengan teks biasa, jadi tidak lagi tertulis "Garansi7hari".
+  - Beranda menampilkan "Cara servis" 3 langkah dengan teks yang hanya berisi fakta.
+- **A24, LULUS (emulasi, jam dikunci lewat Playwright):** status toko benar di semua kasus berikut:
+  - 09.00 WIB: Tutup, buka hari ini.
+  - 11.00 WIB: Buka.
+  - 12.30 WIB: Buka.
+  - 20.00 WIB: Tutup, buka besok.
+  - 12.30 WIB dengan HP di zona New York: tetap Buka.
+- **Footer dan Bantuan:** tautan WhatsApp di footer dan nomor di halaman Bantuan memakai format 0896-2505-0525.
+- **Tanpa data toko:** status tidak tampil, dan langkah 3 ditulis tanpa alamat.
+
+## Pencarian layanan dan badge andalan (8 Okt 2026, PR #2)
+
+- **A02, LULUS (emulasi):**
+  - "bypass", "icloud", "iphone bypass", dan "bypass iphone" menampilkan iPhone 7 plus (Rp 60.000) dan iPhone 8 (Rp 100.000).
+  - "lcd y91" menampilkan Ganti LCD Vivo Y91 Rp 230.000.
+  - "baterai" dan "bate" menemukan 25 tipe dengan Ganti Batrai.
+  - "zzz" tetap "belum tercantum".
+  - Saringan halaman iPhone menerima "bypass".
+  - Pencarian tipe lama tidak berubah.
+- **POLES, LULUS (emulasi):**
+  - Badge tampil dengan tinggi ≥ 44 px.
+  - Mengetuk badge menampilkan 2 harga bypass, dan Back kembali ke beranda.
+  - Badge tersembunyi saat mencari.
+  - Dengan data tanpa Bypass, badge tidak tampil.
+- **Catatan data:** baru 2 tipe yang punya layanan Bypass di ekspor 6 Okt 2026.
+
+## Urutan iPhone (8 Okt 2026, PR #2)
+
+- **A01, LULUS (emulasi):** daftar tipe iPhone dan hasil pencarian "iphone" sama-sama berurutan 6S Plus, 7, 7 plus, 8, 8 Plus, X, XR, XS, XS Max, 11, 11 Pro, 11 Pro Max, 12, 12 Pro, 12 Pro Max, 13, 13 Pro, 15 Plus.
 
 ## Temuan data (tanpa mengubah Sheet)
 

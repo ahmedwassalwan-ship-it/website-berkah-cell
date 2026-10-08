@@ -3,12 +3,21 @@
 {
   "name": "website-berkah-cell",
   "compatibility_date": "2025-09-01",
-  // Aktifkan alamat publik *.workers.dev dan link pratinjau per versi.
+  // Alamat cadangan *.workers.dev dan link pratinjau per versi.
+  // workers.dev diblokir sebagian ISP di Indonesia, jadi alamat resmi memakai domain sendiri.
   "workers_dev": true,
   "preview_urls": true,
+  // Domain resmi (dibeli di Hostinger, nameserver di Cloudflare). Cloudflare membuat
+  // DNS dan sertifikat HTTPS otomatis. www dialihkan ke domain utama oleh app.js.
+  "routes": [
+    { "pattern": "berkahcellbatam.com", "custom_domain": true },
+    { "pattern": "www.berkahcellbatam.com", "custom_domain": true }
+  ],
   "assets": {
     // Hanya folder ini yang dipublikasikan; PRD.md dan file lain tidak ikut.
-    "directory": "./site-live"
+    "directory": "./site-live",
+    // Alamat yang tidak ada → site-live/404.html (status 404) dengan tombol kembali ke beranda.
+    "not_found_handling": "404-page"
   },
   // Wajib untuk `wrangler preview` (build branch non-main). Boleh kosong karena
   // Worker ini tidak punya binding; aset tetap diambil dari "assets" di atas.

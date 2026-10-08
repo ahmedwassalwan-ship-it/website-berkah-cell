@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.5 · 6 Oktober 2026 · Bahasa Indonesia
+Versi 0.6 · 8 Oktober 2026 · Bahasa Indonesia
 
 **Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Setelah meninjau preview, pemilik menyetujui paket peningkatan profesional: tautan berbagi, tampilan tautan saat dibagikan, ikon, dan informasi toko (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.5 menggantikan versi 0.4 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.6 menggantikan versi 0.5 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -110,7 +110,7 @@ P0 adalah kebutuhan wajib untuk rilis pertama. P1 adalah peningkatan yang dikerj
 | ID | Prioritas | Kebutuhan dan hasil yang diharapkan |
 | --- | --- | --- |
 | F01 | P0 | Daftar merek dibentuk dari katalog yang valid. Setiap merek mengarah ke model yang sesuai. |
-| F02 | P0 | Pencarian mencakup seluruh merek dan model, mengabaikan kapitalisasi serta spasi di awal dan akhir. Hasil mencantumkan identitas perangkat. |
+| F02 | P0 | Pencarian mencakup seluruh merek dan model, mengabaikan kapitalisasi serta spasi di awal dan akhir. Ketikan tanpa spasi atau dengan spasi berbeda, seperti “vivoy91” atau “y 91”, tetap menemukan tipe yang sesuai. Nama lain yang umum diketik, seperti “galaxy a10” untuk Samsung A10, juga dikenali tanpa mengubah nama tampilan. Bila tidak ada nama tipe yang cocok, pencarian memakai nama layanan (“bypass”, “icloud”, “lcd y91”, “baterai”) dan menampilkan tipe yang punya layanan itu beserta harga dari data. Hasil mencantumkan identitas perangkat. |
 | F03 | P0 | Pemilihan model menampilkan seluruh layanan dan varian kualitas yang tersedia untuk model tersebut. Harga dari model lain tidak boleh tercampur. |
 | F04 | P0 | Setiap layanan menampilkan nama, kualitas bila ada, harga jual, estimasi bila tersedia, dan garansi sesuai sumber. |
 | F05 | P0 | WhatsApp membawa tipe yang dicari atau merek dan model yang dipilih, serta layanan dan kualitas jika tersedia. Harga hanya disertakan bila tersedia untuk pilihan tersebut. Pelanggan meninjau dan mengirim sendiri pesan. |
@@ -127,7 +127,7 @@ P0 adalah kebutuhan wajib untuk rilis pertama. P1 adalah peningkatan yang dikerj
 | F16 | P0 | Detail perangkat menyediakan “Layanan yang kamu cari belum ada? Tanyakan ke kami.” Pertanyaan membawa konteks perangkat walaupun layanan belum ada dalam katalog. |
 | F17 | P0 | Untuk pertanyaan umum, sebelum WhatsApp tawarkan kebutuhan LCD atau layar, baterai, layanan lainnya, atau belum tahu dan ingin menjelaskan keluhan. Pelanggan dapat melewati pilihan dan langsung membuka WhatsApp. Jika layanan sudah dipilih pada detail harga, WhatsApp langsung memakai konteks layanan tersebut. |
 | F18 | P0 | Tautan website yang dibagikan di WhatsApp atau media sosial menampilkan judul, deskripsi, dan gambar BERKAH CELL. Website memiliki ikon untuk layar utama HP. Tidak ada penyimpanan harga offline. |
-| F19 | P0 | Informasi toko berupa alamat, jam buka, dan tautan Google Maps tampil di website serta tersedia sebagai data lokal untuk mesin pencari. Isinya hanya dari data yang diberikan pemilik; bagian ini tidak tampil sebelum datanya tersedia. |
+| F19 | P0 | Informasi toko berupa alamat, jam buka, dan tautan Google Maps tampil di website serta tersedia sebagai data lokal untuk mesin pencari. Status “Buka sekarang” atau “Tutup” dihitung dari jam buka pemilik dalam WIB. Beranda memuat tiga langkah servis yang hanya berisi fakta: cek harga, tanya lewat WhatsApp, bawa HP ke toko dengan pemeriksaan gratis. Isinya hanya dari data yang diberikan pemilik; bagian ini tidak tampil sebelum datanya tersedia. |
 
 ### Pesan bantuan dan konteks WhatsApp
 
@@ -275,7 +275,7 @@ Tabel ini menjadi daftar pemeriksaan untuk developer dan AI. Status setiap pemer
 | ID | Pemeriksaan | Bukti kelulusan |
 | --- | --- | --- |
 | A01 | Merek dan model | Sampel lintas merek menampilkan model yang benar; jumlah berasal dari data valid. |
-| A02 | Pencarian | Nama lengkap, kapitalisasi berbeda, spasi tambahan, dan angka pendek menghasilkan perangkat yang sesuai. |
+| A02 | Pencarian | Nama lengkap, kapitalisasi berbeda, spasi tambahan, ketikan tanpa spasi (“vivoy91”), nama layanan (“bypass”), dan angka pendek menghasilkan perangkat yang sesuai. |
 | A03 | Pilihan layanan | Semua varian kualitas yang sah tetap muncul; tidak ada harga dari perangkat lain. |
 | A04 | Ketepatan data | Bandingkan nilai asli dan tampilan untuk harga, kualitas, estimasi, dan garansi pada sampel yang dicatat. |
 | A05 | Data bermasalah | Harga kosong atau tidak valid tidak berubah menjadi harga resmi atau layanan gratis. |
@@ -297,7 +297,7 @@ Tabel ini menjadi daftar pemeriksaan untuk developer dan AI. Status setiap pemer
 | A21 | Keadaan katalog dan pemulihan | Bedakan katalog sah yang kosong, hasil kosong, dan kegagalan jaringan atau data. “Coba lagi” memuat ulang data; pemulihan menampilkan katalog aktual tanpa harga contoh. |
 | A22 | Bagikan harga | Dari detail iPhone 11, “Bagikan harga ini” membuka menu berbagi HP atau menyalin tautan. Tautan membuka detail perangkat yang sama di tab baru, dan Kembali mengikuti A15. Tautan ke tipe yang sudah tidak ada menampilkan pesan belum tercantum. |
 | A23 | Tampilan tautan | Halaman memuat judul, deskripsi, dan gambar untuk pratinjau tautan; gambar dapat dimuat dari alamat publik. Ikon layar utama tersedia. Tidak ada permintaan jaringan baru selain sumber data. |
-| A24 | Informasi toko | Alamat, jam buka, dan tautan Maps sama persis dengan data dari pemilik dan tampil di beranda, bantuan, dan footer. Data lokal untuk mesin pencari memuat nilai yang sama. Tanpa data, bagian ini tidak tampil. |
+| A24 | Informasi toko | Alamat, jam buka, dan tautan Maps sama persis dengan data dari pemilik dan tampil di beranda, bantuan, dan footer. Status buka/tutup benar sebelum, selama, dan sesudah jam buka WIB, termasuk saat HP memakai zona waktu lain. Data lokal untuk mesin pencari memuat nilai yang sama. Tanpa data, bagian ini tidak tampil. |
 
 ### Pemetaan kebutuhan tambahan ke pengujian
 
@@ -385,7 +385,7 @@ Pemilik menyetujui mockup revisi sebagai acuan implementasi preview dan menetapk
 Setelah meninjau preview v3 di HP dan melaporkan semua fitur berjalan baik, pemilik memilih paket peningkatan berikut:
 
 1. **Paket 1, dikerjakan:** tombol “Bagikan harga ini” pada detail harga (F11 naik dari P1 ke P0), tampilan tautan saat dibagikan, dan ikon layar utama HP (F18).
-2. **Paket 2:** informasi toko dan data lokal untuk mesin pencari (F19). Data dari pemilik, 6 Oktober 2026: alamat “Avava Jodoh, Lantai Dasar, Batam”; buka setiap hari pukul 11.00–20.00 WIB; tautan Google Maps https://share.google/xDIH18tkS00piTNIv. Data ini tidak boleh diubah tanpa konfirmasi pemilik. Rating dan ulasan tidak ditampilkan sampai pemilik memberikan datanya.
+2. **Paket 2:** informasi toko dan data lokal untuk mesin pencari (F19). Data dari pemilik, 6 Oktober 2026: alamat “Avava Jodoh, Lantai Dasar, Batam”; buka setiap hari pukul 11.00–20.00 WIB; tautan Google Maps https://maps.app.goo.gl/9f942hFJcCKjUKnj9 (diganti pemilik pada 7 Oktober 2026; sebelumnya share.google). Data ini tidak boleh diubah tanpa konfirmasi pemilik. Rating dan ulasan tidak ditampilkan sampai pemilik memberikan datanya.
 3. **Ditunda:** domain sendiri dinilai sangat dibutuhkan, tetapi belum sekarang (D08). Pengukuran pengunjung dan Meta Pixel belum dipilih (D09).
 
 ### Keputusan yang masih terbuka
@@ -394,15 +394,16 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 
 | ID | Keputusan | Status awal |
 | --- | --- | --- |
-| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview; tampilan final menunggu review preview |
+| D01 | Desain final website, font, nilai warna, dan bentuk komponen | Mockup revisi disetujui 6 Okt 2026 sebagai acuan implementasi preview. 7 Okt 2026: pemilik meminta polesan premium sebelum rilis domain; arah Katalog Bertingkat, warna navy-emas, dan alur tetap. Font Plus Jakarta Sans disimpan di situs sendiri. Pemilik menilai tampilan sudah elegan dan mewah. 8 Okt 2026: atas permintaan pemilik, latar diberi motif emboss jalur PCB (cetak timbul, tanpa warna baru). Motif menunggu review pemilik di preview |
 | D02 | Biaya jasa, pemeriksaan, pajak, dan biaya tambahan | Sebagian diputuskan 6 Okt 2026: harga termasuk jasa pemasangan, pemeriksaan tidak dikenakan biaya. Pajak dan biaya tambahan lain masih terbuka |
 | D03 | Garansi serta arti nilai “Tidak Ada” dan “Jasa” | Sebagian diputuskan 6 Okt 2026: garansi mengikuti data, “Tidak Ada” berarti tanpa garansi, arti “Jasa” ditetapkan. Syarat garansi lengkap dan pemakaian “Jasa” atau “Tidak Ada” yang tidak konsisten pada kolom Kualitas masih perlu konfirmasi |
 | D04 | Nomor toko dan owner | Diputuskan 6 Okt 2026: satu nomor 089625050525 untuk servis dan komplain |
 | D05 | Pemetaan merek dan model serta penanganan salah ketik | Merek diputuskan 6 Okt 2026 (Xiomi → Xiaomi; Redmi dan Poco terpisah). Model yang berpotensi ganda, termasuk lintas Xiaomi, Redmi, dan Poco, menunggu pemeriksaan pemilik |
 | D06 | Siapa pengelola Sheet, sumber publik yang aman, dan aturan pembaruan harga | Alur kerja perlu didokumentasikan |
 | D07 | Lokasi kode produksi, cara deploy, cadangan, dan prosedur pemulihan | Belum terdokumentasi di paket ini |
-| D08 | Domain sendiri untuk website | Ditunda 6 Okt 2026: dinilai perlu, terutama sebelum iklan Meta; dibeli dan dipasang setelah data siap. Sampai saat itu tautan publik memakai alamat workers.dev |
+| D08 | Domain sendiri untuk website | Diputuskan 7 Okt 2026: berkahcellbatam.com (Hostinger, 3 tahun sampai 7 Okt 2029, perpanjangan otomatis), nameserver di Cloudflare. Dipercepat karena workers.dev diblokir sebagian ISP di Indonesia. www dialihkan ke domain utama; workers.dev tetap sebagai cadangan |
 | D09 | Pengukuran pengunjung dan Meta Pixel | Ditunda 6 Okt 2026. Bila dipilih, perlu ID, perubahan kebijakan keamanan halaman, dan keterangan privasi |
+| D10 | Keahlian andalan | Diputuskan 8 Okt 2026: Bypass iCloud iPhone (layar Hello), tampil sebagai badge di beranda yang membuka harga layanan Bypass. Judul utama tetap umum. Syarat bukti kepemilikan belum ada, sehingga website tidak menulis syarat apa pun |
 
 ### Urutan pengerjaan berikutnya
 
@@ -420,7 +421,8 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.2, 5 Oktober 2026:** memasukkan tujuh ide dan semua aturan pendukung yang disetujui pemilik. Memperjelas F05 sampai F07; menambah F13 sampai F17; memperbarui A07 dan menambah A13 sampai A21. Menyesuaikan perjalanan pelanggan, panduan UI, konteks katalog, status persetujuan, serta petunjuk GitHub. Total 17 kebutuhan fungsional dan 21 kriteria penerimaan. F11 dan F12 tetap P1.
 - **Versi 0.3, 6 Oktober 2026:** mencatat arah desain Katalog Bertingkat yang disetujui pemilik beserta keputusan warna, tindakan kontak utama, maskot, dan aturan pemicu F17. Memperjelas F17 dan A20; memperbarui bagian 2, 5, dan 9 serta status D01 dan cakupan D03. Mockup final masih menunggu review. Prioritas P0/P1 tidak berubah.
 - **Versi 0.4, 6 Oktober 2026:** mencatat persetujuan mockup revisi sebagai acuan implementasi preview serta lima keputusan pemilik: harga termasuk jasa pemasangan dan pemeriksaan tanpa biaya, aturan garansi “Tidak Ada” dan kolom kosong, arti “Jasa”, satu nomor WhatsApp untuk servis dan komplain, serta normalisasi merek Xiomi → Xiaomi dengan Redmi dan Poco terpisah. Memperbarui bagian 2, 3, 4, 8, dan 9 serta status D01 sampai D05. Pajak, biaya tambahan lain, syarat garansi lengkap, dan model yang berpotensi ganda tetap terbuka. Prioritas P0/P1 tidak berubah.
-- **Versi 0.5, 6 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Data toko untuk F19 diterima pada hari yang sama.
+- **Versi 0.5, 6–7 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Data toko untuk F19 diterima pada hari yang sama. Pada 7 Oktober 2026 D08 diputuskan: domain berkahcellbatam.com, setelah workers.dev diketahui diblokir sebagian ISP.
+- **Versi 0.6, 8 Oktober 2026:** atas permintaan pemilik, F02 dan A02 mencakup ketikan tanpa spasi atau dengan spasi berbeda (“vivoy91”, “y 91”), karena banyak pelanggan mengetik tipe HP tanpa spasi; alias pencarian “galaxy” untuk Samsung (F10) ditambahkan atas persetujuan pemilik. D01 mencatat motif emboss jalur PCB di latar. Pada polesan terakhir, F19 dan A24 ditambah status buka/tutup dari jam pemilik (WIB) serta tiga langkah servis di beranda; nomor WhatsApp ditulis 0896-2505-0525. D10 mencatat keahlian andalan Bypass iCloud iPhone, dan F02 mencakup pencarian nama layanan. Atas permintaan pemilik, tipe iPhone diurutkan menurut generasi: X, XR, XS, dan XS Max berada di antara 8 Plus dan 11. Prioritas P0/P1 tidak berubah.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -436,7 +438,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.5 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.6 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 
