@@ -1,11 +1,15 @@
-/* Membuat video launching 9:16 yang memperlihatkan cara memakai website BERKAH CELL.
+/* Membuat video 9:16 yang memperlihatkan cara memakai website BERKAH CELL.
  *
- *   node tools/buat_video.js [folder-hasil]      (default: video-hasil/, tidak ikut di-commit)
+ *   node tools/buat_video.js [folder-hasil] [--alur cari|demo|semua]
+ *   (default: video-hasil/ yang tidak ikut di-commit, alur "cari")
  *
- * Hasil:
- *   berkahcell-launching-organik-9x16.mp4  dengan adegan "Andalan: Bypass iCloud iPhone" (posting organik)
- *   berkahcell-launching-iklan-9x16.mp4    tanpa adegan Bypass (aman untuk iklan Meta)
- *   berkahcell-launching-cover.png         cover Reels/TikTok 1080×1920
+ * Alur "cari" (9 Okt 2026): hook → buka berkahcellbatam.com di browser → cari "iphone 11" → klik Ganti LCD
+ * → pesan WhatsApp otomatis → Lokasi toko → penutup.
+ *   berkahcell-cari-harga-organik-9x16.mp4 / -iklan-9x16.mp4 / berkahcell-cari-harga-cover.png
+ * Alur "demo" (8 Okt 2026): tur fitur website.
+ *   berkahcell-launching-organik-9x16.mp4 / -iklan-9x16.mp4 / berkahcell-launching-cover.png
+ * Versi "organik" menampilkan website apa adanya; versi "iklan" menyembunyikan semua yang menyebut
+ * Bypass iCloud supaya aman untuk iklan Meta.
  *
  * Website direkam dari site-live/ lokal di dalam bingkai HP. Harga memakai
  * tests/fixtures/price_list_publik_2026-10-06.csv (dikonfirmasi pemilik masih berlaku, 8 Okt 2026).
@@ -21,13 +25,17 @@ const { chromium } = require(process.env.PLAYWRIGHT_PATH || '/opt/node22/lib/nod
 
 const ROOT = path.join(__dirname, '..');
 const SITE = path.join(ROOT, 'site-live');
-const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'video-hasil'));
+const ARGS = process.argv.slice(2);
+const ALUR = (ARGS.find((a) => a.startsWith('--alur=')) || '').slice(7) || (ARGS.includes('--alur') ? ARGS[ARGS.indexOf('--alur') + 1] : 'cari');
+const OUT = path.resolve(ARGS.find((a, i) => !a.startsWith('--') && ARGS[i - 1] !== '--alur') || path.join(ROOT, 'video-hasil'));
+// Sama dengan CONFIG.STORE di site-live/app.js (untuk kartu lokasi di video).
+const TOKO = { alamat: 'Avava Jodoh, Lantai Dasar, Batam', status: 'Buka sekarang · sampai 20.00 WIB' };
 const CSV = fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'price_list_publik_2026-10-06.csv'), 'utf8');
 const NOW = new Date('2026-10-08T05:30:00Z'); // 12.30 WIB: toko buka
 const S = 0.82; // skala layar HP (390×844) di kanvas 540×960
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const STUDIO = `<!doctype html><html lang="id"><head><meta charset="utf-8">
+const studioHtml = (cari) => `<!doctype html><html lang="id"><head><meta charset="utf-8">
 <style>
 @font-face{font-family:PJS;font-weight:200 800;src:url(/assets/fonts/plus-jakarta-sans-latin.woff2) format("woff2")}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -48,7 +56,51 @@ html,body{width:540px;height:960px;overflow:hidden;background:#071226;color:#fff
 .sbar{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px;font-size:15px;font-weight:700;color:#fff;background:#0A1A33}
 .sbar svg{display:block}
 .island{position:absolute;left:50%;top:9px;width:96px;height:26px;margin-left:-48px;border-radius:14px;background:#000;z-index:2}
-iframe{display:block;width:390px;height:804px;border:0;background:#F6F4EF}
+iframe{display:block;width:390px;height:${cari ? 748 : 804}px;border:0;background:#F6F4EF}
+/* Bilah browser generik (alur cari) */
+.bbar{position:relative;height:56px;padding:8px 12px;background:#EEF1F5;border-bottom:1px solid #D9DEE6}
+.field{height:40px;border-radius:20px;background:#fff;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:15.5px;color:#1F2430;box-shadow:inset 0 0 0 1px #D5DAE2}
+.field .ph{color:#7D8594}.field .lock{display:none;color:#5B6576}.field.done .lock{display:block}
+.caret{display:none;width:2px;height:19px;background:#0A1A33;animation:blink 1s steps(1) infinite}.field.focus .caret{display:block}
+@keyframes blink{50%{opacity:0}}
+.prog{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:linear-gradient(90deg,#B48A32,#F3DC9A)}
+.prog.go{width:100%;transition:width .9s cubic-bezier(.3,.6,.3,1)}
+.ntab{position:absolute;left:0;top:96px;width:390px;height:748px;background:#F7F8FA;z-index:3;transition:opacity .35s ease}
+.ntab.hide{opacity:0;pointer-events:none}
+.ntab .globe{position:absolute;left:50%;top:150px;margin-left:-38px;width:76px;height:76px;border-radius:50%;background:#E6EAF0;display:flex;align-items:center;justify-content:center}
+.ntab .tiles{position:absolute;left:47px;right:47px;top:270px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px 18px}
+.ntab .tiles i{display:block;height:56px;border-radius:16px;background:#E6EAF0}
+.sugg{position:absolute;left:0;right:0;top:0;background:#fff;box-shadow:0 10px 24px -14px rgba(10,26,51,.5);display:none}
+.sugg.on{display:block}
+.sugg .row{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.sugg .row img{width:34px;height:34px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(216,181,102,.7)}
+.sugg b{display:block;font-size:16px;color:#0F1B2D}.sugg small{display:block;font-size:13px;color:#5B6576;margin-top:1px}
+/* Kartu pesan WhatsApp & lokasi (alur cari) */
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:4;background:#fff;color:#0F1B2D;border-radius:24px 24px 0 0;padding:20px 20px 28px;box-shadow:0 -18px 40px -16px rgba(10,26,51,.55);transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.sheet.on{transform:none}
+.sheet .hd{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800}
+.sheet .hd .ic{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#25D366;color:#fff}
+.sheet .hd small{display:block;font-size:12.5px;font-weight:600;color:#5B6576}
+.bubble{margin-top:16px;padding:12px 14px 22px;border-radius:14px 14px 4px 14px;background:#E3F8D9;font-size:15px;line-height:1.45;position:relative}
+.bubble::after{content:"✓✓";position:absolute;right:10px;bottom:4px;font-size:11px;color:#4FA3E0;letter-spacing:-2px}
+.sheet .send{margin-top:14px;height:48px;border-radius:24px;background:#25D366;color:#fff;font-weight:800;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px}
+.map{height:200px;border-radius:16px;overflow:hidden;margin-top:14px;background:#F1ECE0;position:relative}
+.map svg{position:absolute;inset:0}
+.map .pin{position:absolute;left:236px;top:84px;width:34px;height:44px;margin:-44px 0 0 -17px}
+.map .pin svg{position:static;display:block;width:34px;height:44px}
+.map .pulse{position:absolute;left:50%;top:100%;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:50%;background:rgba(201,165,78,.45);animation:pulse 1.6s ease-out infinite}
+.map .label{position:absolute;left:236px;top:22px;transform:translateX(-50%);padding:4px 10px;border-radius:12px;background:#0A1A33;color:#F1E3BC;font-size:11.5px;font-weight:800;letter-spacing:1px;white-space:nowrap;box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
+@keyframes pulse{0%{transform:scale(.3);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.sheet .addr{margin-top:14px;font-size:17px;font-weight:800}
+.sheet .open{margin-top:6px;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#137A3F}
+.sheet .open i{width:8px;height:8px;border-radius:50%;background:#22B35E;box-shadow:0 0 0 3px rgba(34,179,94,.2)}
+.sheet .dir{margin-top:14px;height:48px;border-radius:24px;background:#0A1A33;color:#fff;font-weight:800;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:inset 0 0 0 1px rgba(216,181,102,.4)}
+/* Zoom penekanan */
+.stage{position:absolute;inset:0;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.hook .big{font-size:46px;line-height:1.08;font-weight:800;letter-spacing:-1.2px}
+.hook .sub{margin-top:22px;font-size:18px;color:#D5DEEC;font-weight:600}
+.hook .arrow{margin-top:26px;animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(8px)}}
 /* URL tetap di bawah */
 .url{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;background:rgba(216,181,102,.12);box-shadow:inset 0 0 0 1px rgba(216,181,102,.55);font-size:15px;font-weight:700;color:#F1E3BC;white-space:nowrap;opacity:0;transition:opacity .5s ease}
 .url.in{opacity:1}
@@ -73,12 +125,20 @@ iframe{display:block;width:390px;height:804px;border:0;background:#F6F4EF}
 </style></head><body>
 <div class="bg"></div>
 <div class="cap out" id="cap"><div class="l1"></div><div class="l2 gold"></div></div>
-<div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="scaled">
+<div class="stage" id="stage"><div class="phone" id="phone"><div class="screen"><div class="island"></div><div class="scaled">
   <div class="sbar"><span>12.30</span><svg width="62" height="14" viewBox="0 0 62 14" fill="#fff"><rect x="0" y="9" width="3" height="5" rx="1"/><rect x="5" y="6" width="3" height="8" rx="1"/><rect x="10" y="3" width="3" height="11" rx="1"/><rect x="15" y="0" width="3" height="14" rx="1"/><path d="M29 12.5l-2-2.2a3 3 0 014 0zM24.6 8a6.3 6.3 0 018.8 0l-1.4 1.5a4.3 4.3 0 00-6 0zM22 5.2a10 10 0 0114 0l-1.4 1.5a8 8 0 00-11.2 0z"/><rect x="40" y="2" width="19" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.4"/><rect x="42" y="4" width="13" height="6" rx="1.5"/><rect x="60" y="5" width="2" height="4" rx="1"/></svg></div>
+  ${cari ? `<div class="bbar" id="bbar"><div class="field" id="field"><svg class="lock" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span class="u" id="burl"></span><span class="ph" id="bph">Cari atau ketik alamat web</span><i class="caret"></i></div><div class="prog" id="prog"></div></div>` : ''}
   <iframe id="site" src="/"></iframe>
-</div></div></div>
+  ${cari ? `<div class="ntab" id="ntab"><div class="globe"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A1A33" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></div><div class="tiles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="sugg" id="sugg"><div class="row"><img src="/assets/logo.webp" alt=""><div><b>berkahcellbatam.com</b><small>BERKAH CELL — Daftar Harga Servis HP Batam</small></div></div></div></div>
+  <div class="sheet" id="wa"><div class="hd"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2a8.7 8.7 0 00-7.5 13.1L3.3 20.8l4.6-1.2A8.7 8.7 0 1012 3.2zm4 10.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a5.9 5.9 0 01-2.9-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4a.8.8 0 00-.6.3 2.5 2.5 0 00-.8 1.9 4.4 4.4 0 00.9 2.3 10 10 0 003.8 3.4c1.4.6 2 .7 2.7.6.4-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1l-.5-.2z"/></svg></span><div>Pesan otomatis ke BERKAH CELL<small>0896-2505-0525</small></div></div><div class="bubble" id="wamsg"></div><div class="send">Kirim pesan</div></div>
+  <div class="sheet" id="map"><div class="hd"><span class="ic" style="background:#0A1A33"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8B566" stroke-width="2"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span><div>Lokasi toko<small>Ketuk untuk petunjuk arah</small></div></div>
+    <div class="map"><svg width="350" height="200" viewBox="0 0 350 200"><rect width="350" height="200" fill="#EFE9DB"/><g fill="#E3DAC4"><rect x="10" y="10" width="96" height="62" rx="7"/><rect x="128" y="10" width="86" height="62" rx="7"/><rect x="10" y="94" width="64" height="96" rx="7"/><rect x="96" y="150" width="70" height="40" rx="7"/><rect x="190" y="94" width="72" height="96" rx="7"/><rect x="284" y="94" width="56" height="96" rx="7"/></g><rect x="96" y="94" width="70" height="40" rx="7" fill="#D3E2C2"/><rect x="236" y="10" width="104" height="62" rx="7" fill="#E9D9AE"/><path d="M0 83h350M117 0v200M225 0v200M0 141h350" stroke="#fff" stroke-width="10"/><path d="M40 200V141H117V83H225V70" fill="none" stroke="#C9A54E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9"/><circle cx="40" cy="186" r="7" fill="#1F5FBF" stroke="#fff" stroke-width="3"/></svg><div class="label">BERKAH CELL</div><div class="pin"><i class="pulse"></i><svg viewBox="0 0 34 44"><path d="M17 43s-15-13-15-25a15 15 0 0130 0c0 12-15 25-15 25z" fill="#0A1A33" stroke="#D8B566" stroke-width="2"/><circle cx="17" cy="18" r="5.5" fill="#D8B566"/></svg></div></div>
+    <div class="addr">BERKAH CELL · ${TOKO.alamat}</div><div class="open"><i></i>${TOKO.status}</div><div class="dir">Petunjuk arah</div></div>` : ''}
+</div></div></div></div>
 <div class="url" id="url"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D8B566" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg>berkahcellbatam.com</div>
-<div class="full" id="intro">
+${cari ? `<div class="full hook" id="hook"><div class="big pop">Mau tahu harga</div><div class="big gold pop d1">ganti LCD iPhone 11?</div><div class="sub pop d2">Cek langsung dari HP kamu</div><svg class="arrow pop d3" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D8B566" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>` : ''}
+<div class="full${cari ? ' hide' : ''}" id="intro">
   <img class="mascot pop" src="/assets/maskot-melambai.webp" alt="">
   <div class="brand pop d1">BERKAH CELL</div><div class="tag pop d1">SERVICE HP · BATAM</div>
   <div class="rule pop d2"></div>
@@ -89,15 +149,17 @@ iframe{display:block;width:390px;height:804px;border:0;background:#F6F4EF}
   <img class="logo pop" src="/assets/logo.webp" alt="">
   <div class="brand pop">BERKAH CELL</div><div class="tag pop">SERVICE HP · BATAM</div>
   <div class="rule pop d1"></div>
-  <h1 class="pop d1">Cek harga servis<br><span class="gold">langsung di</span></h1>
+  <h1 class="pop d1"><span id="o1">Cek harga servis</span><br><span class="gold" id="o2">langsung di</span></h1>
   <div class="pill pop d2">berkahcellbatam.com</div>
   <div class="meta pop d3">WhatsApp <b>0896-2505-0525</b><br>Avava Jodoh, Lantai Dasar, Batam</div>
 </div>
 <script>
 window.studio = {
   intro() { document.getElementById('intro').classList.add('on'); },
+  hook() { document.getElementById('hook').classList.add('on'); },
   phoneIn() {
     document.getElementById('intro').classList.add('hide');
+    const hk = document.getElementById('hook'); if (hk) hk.classList.add('hide');
     document.getElementById('phone').classList.add('in');
     document.getElementById('url').classList.add('in');
   },
@@ -110,7 +172,26 @@ window.studio = {
     const t = document.createElement('div'); t.className = 'tap'; t.style.left = x + 'px'; t.style.top = y + 'px';
     document.body.appendChild(t); setTimeout(() => t.remove(), 700);
   },
-  outro() {
+  browserFocus() { const f = document.getElementById('field'); f.classList.add('focus'); document.getElementById('bph').style.display = 'none'; },
+  browserText(t) { document.getElementById('burl').textContent = t; document.getElementById('sugg').classList.toggle('on', t.length >= 4); },
+  browserGo() {
+    document.getElementById('sugg').classList.remove('on');
+    const f = document.getElementById('field'); f.classList.remove('focus'); f.classList.add('done');
+    document.getElementById('burl').textContent = 'berkahcellbatam.com';
+    document.getElementById('prog').classList.add('go');
+    setTimeout(() => { document.getElementById('prog').style.opacity = '0'; document.getElementById('ntab').classList.add('hide'); }, 650);
+    document.getElementById('site').contentWindow.location.reload();
+  },
+  zoom(x, k) {
+    const s = document.getElementById('stage'); const u = document.getElementById('url');
+    if (!k) { s.style.transform = ''; u.classList.add('in'); return; }
+    // Titik tetap di y=192: HP membesar ke bawah dan tidak menutupi teks keterangan.
+    u.classList.remove('in'); s.style.transformOrigin = x + 'px 192px'; s.style.transform = 'scale(' + k + ')';
+  },
+  sheet(id, on, text) { if (text) document.getElementById('wamsg').textContent = text; document.getElementById(id).classList.toggle('on', on); },
+  outro(a, b) {
+    if (a) document.getElementById('o1').textContent = a;
+    if (b) document.getElementById('o2').textContent = b;
     document.getElementById('cap').classList.add('out');
     document.getElementById('url').classList.remove('in');
     document.getElementById('phone').classList.remove('in');
@@ -124,7 +205,7 @@ function serve() {
   return new Promise((resolve) => {
     const srv = http.createServer((req, res) => {
       const u = new URL(req.url, 'http://x');
-      if (u.pathname === '/__studio') { res.writeHead(200, { 'Content-Type': TYPES['.html'] }); return res.end(STUDIO); }
+      if (u.pathname === '/__studio') { res.writeHead(200, { 'Content-Type': TYPES['.html'] }); return res.end(studioHtml(u.searchParams.get('alur') === 'cari')); }
       let p = path.normalize(path.join(SITE, decodeURIComponent(u.pathname)));
       if (!p.startsWith(SITE)) { res.writeHead(403); return res.end(); }
       if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
@@ -136,7 +217,7 @@ function serve() {
   });
 }
 
-async function record(browser, base, { bypass, file, cover }) {
+async function record(browser, base, { alur, bypass, file, cover }) {
   const ctx = await browser.newContext({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2 });
   await ctx.route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV }));
   await ctx.route('https://wa.me/**', (r) => r.abort());
@@ -149,7 +230,7 @@ async function record(browser, base, { bypass, file, cover }) {
   }
   const page = await ctx.newPage();
   await page.clock.setFixedTime(NOW);
-  await page.goto(base + '/__studio');
+  await page.goto(base + '/__studio?alur=' + alur);
   const fr = await (await page.$('#site')).contentFrame();
   await fr.waitForFunction(() => !document.querySelector('[aria-busy="true"]') && document.querySelector('.tile'));
   await page.evaluate(() => document.fonts.ready);
@@ -158,8 +239,8 @@ async function record(browser, base, { bypass, file, cover }) {
 
   const st = (fn, ...a) => page.evaluate(([f, args]) => window.studio[f](...args), [fn, a]);
   const scrollTo = (y) => fr.evaluate((t) => window.scrollTo({ top: t, behavior: 'smooth' }), y);
-  async function tap(selector, click = true) {
-    const el = fr.locator(selector).first();
+  async function tap(selector, click = true, where = fr) {
+    const el = where.locator(selector).first();
     const b = await el.boundingBox();
     await st('tap', b.x + b.width / 2, b.y + b.height / 2);
     await sleep(170);
@@ -178,6 +259,59 @@ async function record(browser, base, { bypass, file, cover }) {
   });
   await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
 
+  await (alur === 'cari' ? alurCari : alurDemo)({ page, fr, st, tap, scrollTo, bypass, cover });
+
+  await cdp.send('Page.stopScreencast');
+  await sleep(200);
+  await ctx.close();
+  encode(frames, tmp, file);
+  fs.rmSync(tmp, { recursive: true, force: true });
+}
+
+// Alur "cari" (ide pemilik 9 Okt 2026): buka website dari browser → iphone 11 → Ganti LCD → WhatsApp + Lokasi.
+async function alurCari({ page, fr, st, tap, scrollTo, cover }) {
+  // 1. Hook: penonton memutuskan lanjut/skip dalam 1–2 detik pertama.
+  await st('hook'); await sleep(2100);
+  if (cover) await page.screenshot({ path: cover });
+  // 2. Buka website di browser (tanpa merek browser/mesin pencari tertentu)
+  await st('phoneIn'); await sleep(700);
+  await st('say', 'Buka berkahcellbatam.com', 'dari HP mana saja'); await sleep(350);
+  await tap('#field', false, page); await st('browserFocus'); await sleep(250);
+  const url = 'berkahcellbatam.com';
+  for (let i = 1; i <= url.length; i++) { await st('browserText', url.slice(0, i)); await sleep(65); }
+  await sleep(450);
+  await tap('#sugg .row', false, page); await st('browserGo');
+  await sleep(300);
+  await fr.waitForFunction(() => !document.querySelector('[aria-busy="true"]') && document.querySelector('.tile'));
+  await sleep(1100);
+  // 3. Cari tipe
+  await st('say', 'Ketik tipe HP kamu,', 'harga langsung muncul'); await sleep(350);
+  await tap('#q'); await sleep(200);
+  await page.keyboard.type('iphone 11', { delay: 105 }); await sleep(800);
+  await tap('.list a.li'); await fr.waitForSelector('.dev h1'); await sleep(1000);
+  // 4. Klik Ganti LCD, harga diperbesar
+  await st('say', 'Klik layanannya,', 'harga & garansi jelas'); await sleep(300);
+  await scrollTo(110); await sleep(650);
+  await tap('.var'); await sleep(450);
+  const pb = await fr.locator('.var .price').first().boundingBox();
+  await st('zoom', pb.x + pb.width / 2, 1.32); await sleep(1600);
+  await st('zoom'); await sleep(750);
+  // 5. WhatsApp: pesan diambil dari tautan asli di website
+  await st('say', 'Chat WhatsApp,', 'pesan sudah terisi otomatis'); await sleep(300);
+  const msg = new URL(await fr.getAttribute('.cta a.btn-pri', 'href')).searchParams.get('text');
+  await tap('.cta a.btn-pri', false); await sleep(250);
+  await st('sheet', 'wa', true, msg); await sleep(2700);
+  await st('sheet', 'wa', false); await sleep(450);
+  // 6. Lokasi
+  await st('say', 'Atau langsung datang', 'Avava Jodoh, Lantai Dasar'); await sleep(300);
+  await tap('.cta a.btn-loc', false); await sleep(250);
+  await st('sheet', 'map', true); await sleep(2900);
+  // 7. Penutup
+  await st('outro', 'Cek harga HP kamu', 'sekarang juga di'); await sleep(3400);
+}
+
+// Alur "demo" (8 Okt 2026): tur fitur website.
+async function alurDemo({ page, fr, st, tap, scrollTo, bypass, cover }) {
   // 1. Intro
   await st('intro'); await sleep(2700);
   if (cover) await page.screenshot({ path: cover });
@@ -213,12 +347,6 @@ async function record(browser, base, { bypass, file, cover }) {
   await tap('main .store a', false); await sleep(1700);
   // 8. Outro
   await st('outro'); await sleep(3400);
-
-  await cdp.send('Page.stopScreencast');
-  await sleep(200);
-  await ctx.close();
-  encode(frames, tmp, file);
-  fs.rmSync(tmp, { recursive: true, force: true });
 }
 
 // Frame dengan jeda tidak rata → MP4 H.264 30 fps konstan (aman untuk WhatsApp, Instagram, TikTok).
@@ -243,8 +371,12 @@ function encode(frames, tmp, file) {
   const { srv, url } = await serve();
   const browser = await chromium.launch();
   try {
-    await record(browser, url, { bypass: true, file: path.join(OUT, 'berkahcell-launching-organik-9x16.mp4'), cover: path.join(OUT, 'berkahcell-launching-cover.png') });
-    await record(browser, url, { bypass: false, file: path.join(OUT, 'berkahcell-launching-iklan-9x16.mp4') });
+    const nama = { cari: 'berkahcell-cari-harga', demo: 'berkahcell-launching' };
+    for (const alur of ALUR === 'semua' ? ['cari', 'demo'] : [ALUR]) {
+      if (!nama[alur]) throw new Error('Alur tidak dikenal: ' + alur + ' (pilih cari, demo, atau semua)');
+      await record(browser, url, { alur, bypass: true, file: path.join(OUT, nama[alur] + '-organik-9x16.mp4'), cover: path.join(OUT, nama[alur] + '-cover.png') });
+      await record(browser, url, { alur, bypass: false, file: path.join(OUT, nama[alur] + '-iklan-9x16.mp4') });
+    }
   } finally {
     await browser.close(); srv.close();
   }
