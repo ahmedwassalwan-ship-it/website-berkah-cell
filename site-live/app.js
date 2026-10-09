@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.3
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.4
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
@@ -823,7 +823,9 @@
         appendAll(ctaCtx, h('span', null, 'Dipilih: ', h('b', { text: sel.service.name + (sel.variant.kualitas.text ? ' · ' + sel.variant.kualitas.text : '') })),
           h('span', { class: 'p', text: sel.variant.price.ok ? formatRp(sel.variant.price.value) : 'Tanyakan harga' }));
         ctaCtx.hidden = false;
-        ctaSlot.append(waLink(selectedMessage(m, sel), 'Tanya servis ini via WhatsApp', 'btn-pri'));
+        // Setelah memilih layanan: chat WhatsApp atau langsung ke lokasi toko (pemilik 9 Okt 2026).
+        const wa = waLink(selectedMessage(m, sel), hasStore() ? 'Tanya via WhatsApp' : 'Tanya servis ini via WhatsApp', 'btn-pri');
+        ctaSlot.append(hasStore() ? h('div', { class: 'cta-row' }, wa, mapsLink('btn-loc', 'Lokasi')) : wa);
       } else {
         ctaCtx.hidden = true;
         ctaSlot.append(h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'device', model: m }) }, waIcon(), 'Tanya servis via WhatsApp'));

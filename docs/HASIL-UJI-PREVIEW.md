@@ -131,6 +131,16 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **Status:** A12, A23, dan DOMAIN menjadi LULUS. A15 (membuka link dari aplikasi WhatsApp sungguhan) tetap tercatat sebagai emulasi.
 - Sesi ini tidak bisa membuka domain (proxy 403), jadi semua hasil di atas berasal dari laporan pemilik.
 
+## Versi 3.4: tombol Lokasi (9 Okt 2026)
+
+- **A24, LULUS (emulasi):**
+  - Di iPhone 11, setelah memilih Ganti LCD (Incel), bar bawah berisi "Tanya via WhatsApp" dan "Lokasi".
+  - Di 360 dan 390 px, kedua tombol sebaris dan teksnya tidak terpotong.
+  - Pesan WhatsApp tetap: "…servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000."
+  - Lokasi membuka tautan Maps pemilik, dan memakai intent di Android Chrome.
+  - Tanpa data toko, tombol Lokasi tidak tampil.
+- **Belum diuji:** tampilan di HP sungguhan (setelah build preview).
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

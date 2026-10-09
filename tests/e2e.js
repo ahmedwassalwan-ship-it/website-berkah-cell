@@ -829,6 +829,30 @@ async function testStore() {
     expect('A24', ok, label + ': tombol Maps dan footer ' + (intent ? 'membuka aplikasi Google Maps (intent, cadangan tautan yang sama)' : 'memakai tautan Maps biasa'), links);
     await pa.context().close();
   }
+  // Versi 3.4: setelah memilih layanan, bar bawah berisi [Tanya via WhatsApp] [Lokasi] (pemilik 9 Okt 2026)
+  for (const w of [360, 390]) {
+    const pl = await newPage({ viewport: { width: w, height: 740 } }); await pl.goto(base + '?merek=iphone&tipe=11'); await ready(pl);
+    await pl.click('.var >> nth=0'); await sleep(100);
+    const bar = await pl.evaluate(() => {
+      const wa = document.querySelector('.cta a.btn-pri'); const loc = document.querySelector('.cta a.btn-loc');
+      if (!wa || !loc) return null;
+      const a = wa.getBoundingClientRect(); const b = loc.getBoundingClientRect();
+      return { fits: wa.scrollWidth <= wa.clientWidth + 1 && loc.scrollWidth <= loc.clientWidth + 1, wa: wa.textContent.trim(), loc: loc.textContent.trim(), href: loc.getAttribute('href'), target: loc.target, rel: loc.rel, sameRow: Math.abs(a.top - b.top) < 2, waH: Math.round(a.height), locH: Math.round(b.height), right: Math.round(b.right), wide: document.documentElement.scrollWidth > innerWidth };
+    });
+    const msg = bar && decodeWa(await pl.getAttribute('.cta a.btn-pri', 'href')).text;
+    expect('A24', bar && bar.wa === 'Tanya via WhatsApp' && bar.loc === 'Lokasi' && bar.href === STORE.maps && bar.target === '_blank' && /noopener/.test(bar.rel)
+      && bar.fits && bar.sameRow && bar.waH <= 60 && bar.locH >= 44 && bar.right <= w && !bar.wide && msg === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.',
+      `Layanan terpilih (${w} px): tombol WhatsApp dan Lokasi sebaris, tidak terpotong, pesan WhatsApp tetap sama`, { bar, msg });
+    await pl.context().close();
+  }
+  const pla = await newPage({ ua: uaAndroid, mobile: true, touch: true }); await pla.goto(base + '?merek=iphone&tipe=11'); await ready(pla);
+  await pla.click('.var >> nth=0'); await sleep(100);
+  expect('A24', (await pla.getAttribute('.cta a.btn-loc', 'href')) === want, 'Android Chrome: tombol Lokasi membuka aplikasi Google Maps');
+  await pla.context().close();
+  await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
+  await q.click('.var >> nth=0'); await sleep(100);
+  const nl = await q.evaluate(() => ({ loc: !!document.querySelector('.cta a.btn-loc'), wa: document.querySelector('.cta a.btn-pri').textContent.trim() }));
+  expect('A24', !nl.loc && nl.wa === 'Tanya servis ini via WhatsApp', 'Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh', nl);
   rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
 }

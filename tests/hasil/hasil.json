@@ -48,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 21 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 24 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -333,6 +333,10 @@
       "✓ Android Chrome: tombol Maps dan footer membuka aplikasi Google Maps (intent, cadangan tautan yang sama)",
       "✓ WebView aplikasi Android: tombol Maps dan footer memakai tautan Maps biasa",
       "✓ iPhone: tombol Maps dan footer memakai tautan Maps biasa",
+      "✓ Layanan terpilih (360 px): tombol WhatsApp dan Lokasi sebaris, tidak terpotong, pesan WhatsApp tetap sama",
+      "✓ Layanan terpilih (390 px): tombol WhatsApp dan Lokasi sebaris, tidak terpotong, pesan WhatsApp tetap sama",
+      "✓ Android Chrome: tombol Lokasi membuka aplikasi Google Maps",
+      "✓ Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh",
       "✓ Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis."
     ]
   },

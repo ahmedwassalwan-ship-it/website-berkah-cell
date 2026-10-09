@@ -162,6 +162,18 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - Caranya: `m.sortKey` membaca awalan X sebagai 10 (angka romawi), lalu dipakai oleh `byModel()` di daftar merek, hasil pencarian, dan pencarian layanan.
 - Nama yang tampil tidak berubah.
 
+## Versi 3.4: tombol Lokasi di bar bawah (9 Okt 2026)
+
+- **Kapan tampil:** setelah layanan dipilih dan data toko ada.
+- **Isi `.cta-row`:**
+  - `waLink(..., 'Tanya via WhatsApp', 'btn-pri')`. Labelnya dipendekkan supaya muat satu baris di 360 px.
+  - `mapsLink('btn-loc', 'Lokasi')`. Memakai helper yang sama dengan tombol Maps lain, jadi intent Android, `target=_blank`, dan `noopener` ikut berlaku.
+- **Pesan WhatsApp** tidak berubah.
+- **Tanpa data toko:** tetap satu tombol berlabel penuh "Tanya servis ini via WhatsApp".
+- **Gaya `.btn-loc`:** tombol sekunder bergaris navy dengan ikon pin emas, tinggi sama dengan `.btn-pri`.
+  - Tombol WhatsApp memakai `white-space:nowrap`.
+  - Uji memastikan kedua tombol sebaris dan teksnya tidak terpotong.
+
 ## Riwayat, Back, dan posisi gulir
 
 - `history.scrollRestoration = 'manual'`.
