@@ -97,7 +97,7 @@ async function run() {
     await browser.close(); srv.srv.close();
   }
   rec('A11', 'LULUS', 'Pemilik melaporkan preview v3 dan tombol Maps berjalan baik di HP (6 Okt 2026), lalu menyetujui rilis.');
-  rec('A12', 'BELUM DIUJI', 'Rilis 6 Okt 2026 (d0f03a1): build produksi sukses dan kartu WhatsApp tampil, tetapi workers.dev diblokir di jaringan WiFi seorang pelanggan (ERR_CERT_AUTHORITY_INVALID, normal lewat VPN). Dicek ulang di berkahcellbatam.com setelah domain aktif.');
+  rec('A12', 'LULUS', 'Rilis 8 Okt 2026 (fa2ae79) di berkahcellbatam.com: website, www → apex, halaman 404, kartu WhatsApp, dan tombol Maps aman di HP dan PC (laporan pemilik). Riwayat: workers.dev dari rilis 6 Okt diblokir sebagian ISP, karena itu pindah ke domain sendiri.');
   fs.writeFileSync(path.join(OUT, 'hasil.json'), JSON.stringify(results, null, 2));
   const ids = Object.keys(results).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   for (const id of ids) {
@@ -286,7 +286,8 @@ async function testStates() {
   await pn.context().close();
   const pr = await newPage({ data: (n) => (n === 1 ? 'abort' : 'ok') }); await pr.goto(base); await pr.waitForSelector('#retry');
   await pr.click('#retry'); await pr.waitForSelector('.tile');
-  expect('A21', (await pr.$$('.tile')).length === 10 && !(await pr.textContent('main')).includes('belum berhasil'), '"Coba lagi" memuat ulang dan menampilkan katalog asli');
+  const rt = { tiles: (await pr.$$('.tile')).length, gagal: (await pr.textContent('main')).includes('belum berhasil'), url: pr.url() };
+  expect('A21', rt.tiles === 10 && !rt.gagal, '"Coba lagi" memuat ulang dan menampilkan katalog asli', rt);
   expect('A06', (await pr.$$('.tile')).length === 10, 'Pemulihan setelah gagal tanpa harga contoh');
   await pr.context().close();
 }
@@ -731,7 +732,7 @@ async function testMeta() {
   expect('A23', !sw, 'Tanpa service worker atau cache offline (harga lama tidak tampil)');
   const ext = p.__requests.filter((u) => !u.startsWith(base) && !u.startsWith('data:'));
   expect('A23', ext.every((u) => u.startsWith('https://docs.google.com/spreadsheets/')), 'Tidak ada permintaan jaringan baru selain sumber data', ext);
-  rec('A23', 'BELUM DIUJI', 'Kartu pratinjau di WhatsApp/Facebook sungguhan belum diuji: gambar memakai alamat produksi, jadi baru tampil setelah merge ke main.');
+  rec('A23', 'LULUS', 'Kartu link WhatsApp untuk berkahcellbatam.com tampil dengan gambar (laporan pemilik, 8 Okt 2026). Facebook belum dicek.');
   await p.context().close();
 }
 
@@ -828,6 +829,30 @@ async function testStore() {
     expect('A24', ok, label + ': tombol Maps dan footer ' + (intent ? 'membuka aplikasi Google Maps (intent, cadangan tautan yang sama)' : 'memakai tautan Maps biasa'), links);
     await pa.context().close();
   }
+  // Versi 3.4: setelah memilih layanan, bar bawah berisi [Tanya via WhatsApp] [Lokasi] (pemilik 9 Okt 2026)
+  for (const w of [360, 390]) {
+    const pl = await newPage({ viewport: { width: w, height: 740 } }); await pl.goto(base + '?merek=iphone&tipe=11'); await ready(pl);
+    await pl.click('.var >> nth=0'); await sleep(100);
+    const bar = await pl.evaluate(() => {
+      const wa = document.querySelector('.cta a.btn-pri'); const loc = document.querySelector('.cta a.btn-loc');
+      if (!wa || !loc) return null;
+      const a = wa.getBoundingClientRect(); const b = loc.getBoundingClientRect();
+      return { fits: wa.scrollWidth <= wa.clientWidth + 1 && loc.scrollWidth <= loc.clientWidth + 1, wa: wa.textContent.trim(), loc: loc.textContent.trim(), href: loc.getAttribute('href'), target: loc.target, rel: loc.rel, sameRow: Math.abs(a.top - b.top) < 2, waH: Math.round(a.height), locH: Math.round(b.height), right: Math.round(b.right), wide: document.documentElement.scrollWidth > innerWidth };
+    });
+    const msg = bar && decodeWa(await pl.getAttribute('.cta a.btn-pri', 'href')).text;
+    expect('A24', bar && bar.wa === 'Tanya via WhatsApp' && bar.loc === 'Lokasi' && bar.href === STORE.maps && bar.target === '_blank' && /noopener/.test(bar.rel)
+      && bar.fits && bar.sameRow && bar.waH <= 60 && bar.locH >= 44 && bar.right <= w && !bar.wide && msg === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.',
+      `Layanan terpilih (${w} px): tombol WhatsApp dan Lokasi sebaris, tidak terpotong, pesan WhatsApp tetap sama`, { bar, msg });
+    await pl.context().close();
+  }
+  const pla = await newPage({ ua: uaAndroid, mobile: true, touch: true }); await pla.goto(base + '?merek=iphone&tipe=11'); await ready(pla);
+  await pla.click('.var >> nth=0'); await sleep(100);
+  expect('A24', (await pla.getAttribute('.cta a.btn-loc', 'href')) === want, 'Android Chrome: tombol Lokasi membuka aplikasi Google Maps');
+  await pla.context().close();
+  await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
+  await q.click('.var >> nth=0'); await sleep(100);
+  const nl = await q.evaluate(() => ({ loc: !!document.querySelector('.cta a.btn-loc'), wa: document.querySelector('.cta a.btn-pri').textContent.trim() }));
+  expect('A24', !nl.loc && nl.wa === 'Tanya servis ini via WhatsApp', 'Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh', nl);
   rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
 }
@@ -852,7 +877,7 @@ async function testDomain() {
     'og:image dan JSON-LD memakai https://berkahcellbatam.com', meta);
   expect('DOMAIN', p.__errors.length === 0, 'Tanpa error JS', p.__errors);
   await p.context().close();
-  rec('DOMAIN', 'BELUM DIUJI', 'Domain sungguhan (DNS, sertifikat, akses dari ISP yang memblokir workers.dev) baru bisa dicek setelah nameserver aktif di Cloudflare dan PR di-merge.');
+  rec('DOMAIN', 'LULUS', 'Domain sungguhan (DNS, sertifikat, www → apex, 404) aman di HP dan PC (laporan pemilik, 8 Okt 2026). Laptop yang sempat mencoba sebelum domain aktif perlu flush DNS sekali.');
 }
 
 /* ---------- POLES: review sebelum rilis domain (tampilan & kelengkapan situs) ---------- */
