@@ -925,8 +925,25 @@ async function testPolish() {
   expect('POLES', r.ok() && info.home === '/' && info.wa === 'https://wa.me/6289625050525' && info.css === 'rgb(10, 26, 51)' && !info.wide, 'Halaman 404: bergaya situs, tombol ke beranda dan WhatsApp toko, tanpa gulir ke samping', info);
   await shot(nf, 'poles-404-360');
   await nf.context().close();
+  // Kebijakan Privasi & Syarat Layanan (Versi 3.5): halaman statis dari draft pemilik, link kecil di footer
+  for (const [slug, title] of [['privacy', 'Kebijakan Privasi'], ['terms', 'Syarat Layanan']]) {
+    const lp = await newPage({ viewport: { width: 360, height: 740 } });
+    const errs = []; lp.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); }); lp.on('pageerror', (e) => errs.push(String(e)));
+    const lr = await lp.goto(base + slug);
+    const li = await lp.evaluate(() => ({ h1: document.querySelector('h1').textContent, en: !!document.querySelector('#en[lang=en]'), text: document.body.innerText, mail: [...document.querySelectorAll('a[href^="mailto:"]')].map((a) => a.getAttribute('href')), canon: document.querySelector('link[rel=canonical]').href, css: getComputedStyle(document.querySelector('.hdr')).backgroundColor, cur: document.querySelector('.legal-links a[aria-current=page]')?.textContent, wide: document.documentElement.scrollWidth > innerWidth }));
+    expect('POLES', lr.ok() && li.h1 === title && li.en && li.mail.length === 2 && li.mail.every((m) => m === 'mailto:bc@berkahcellbatam.com') && li.canon === 'https://berkahcellbatam.com/' + slug
+      && !/\[EMAIL TOKO\]|\[SHOP EMAIL\]|EMAIL_TOKO_KAMU|DRAF/.test(li.text) && /berlaku 30 Oktober 2026/.test(li.text) && li.css === 'rgb(10, 26, 51)' && li.cur === title && !li.wide && errs.length === 0,
+      `Halaman /${slug}: "${title}" Indonesia + English, email bc@berkahcellbatam.com, tanpa placeholder, tanpa gulir ke samping di 360 px`, { ...li, text: undefined, errs });
+    await shot(lp, 'poles-' + slug + '-360');
+    await lp.context().close();
+  }
+  const ftrLinks = async (pg) => pg.$$eval('.ftr .legal-links a', (as) => as.map((a) => a.textContent + '=' + a.getAttribute('href')).join(','));
+  const fl = await newPage(); await fl.goto(base); await ready(fl);
+  const flHome = await ftrLinks(fl); await fl.goto(base + '404.html'); const fl404 = await ftrLinks(fl);
+  expect('POLES', [flHome, fl404].every((x) => x === 'Kebijakan Privasi=/privacy,Syarat Layanan=/terms'), 'Link kecil "Kebijakan Privasi" dan "Syarat Layanan" ada di footer beranda dan 404', { flHome, fl404 });
+  await fl.context().close();
   const read = (f) => fs.readFileSync(path.join(__dirname, '..', 'site-live', f), 'utf8');
-  expect('POLES', /Sitemap: https:\/\/berkahcellbatam\.com\/sitemap\.xml/.test(read('robots.txt')) && read('sitemap.xml').includes('<loc>https://berkahcellbatam.com/</loc>'), 'robots.txt dan sitemap.xml mengarah ke domain resmi');
+  expect('POLES', /Sitemap: https:\/\/berkahcellbatam\.com\/sitemap\.xml/.test(read('robots.txt')) && ['/', '/privacy', '/terms'].every((u) => read('sitemap.xml').includes('<loc>https://berkahcellbatam.com' + u + '</loc>')), 'robots.txt dan sitemap.xml mengarah ke domain resmi');
   const hdrs = read('_headers');
   expect('POLES', ['X-Content-Type-Options: nosniff', 'X-Frame-Options: DENY', 'Referrer-Policy:', 'Strict-Transport-Security:'].every((x) => hdrs.includes(x)), 'Header keamanan disiapkan di _headers');
   await shot(p, 'poles-beranda-cari-390');

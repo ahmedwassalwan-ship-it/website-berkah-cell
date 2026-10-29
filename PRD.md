@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.7 · 9 Oktober 2026 · Bahasa Indonesia
+Versi 0.8 · 29 Oktober 2026 · Bahasa Indonesia
 
 **Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Setelah meninjau preview, pemilik menyetujui paket peningkatan profesional: tautan berbagi, tampilan tautan saat dibagikan, ikon, dan informasi toko (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.7 menggantikan versi 0.6 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.8 menggantikan versi 0.7 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -128,6 +128,7 @@ P0 adalah kebutuhan wajib untuk rilis pertama. P1 adalah peningkatan yang dikerj
 | F17 | P0 | Untuk pertanyaan umum, sebelum WhatsApp tawarkan kebutuhan LCD atau layar, baterai, layanan lainnya, atau belum tahu dan ingin menjelaskan keluhan. Pelanggan dapat melewati pilihan dan langsung membuka WhatsApp. Jika layanan sudah dipilih pada detail harga, WhatsApp langsung memakai konteks layanan tersebut. |
 | F18 | P0 | Tautan website yang dibagikan di WhatsApp atau media sosial menampilkan judul, deskripsi, dan gambar BERKAH CELL. Website memiliki ikon untuk layar utama HP. Tidak ada penyimpanan harga offline. |
 | F19 | P0 | Informasi toko berupa alamat, jam buka, dan tautan Google Maps tampil di website serta tersedia sebagai data lokal untuk mesin pencari. Status “Buka sekarang” atau “Tutup” dihitung dari jam buka pemilik dalam WIB. Setelah pelanggan memilih layanan, bar tombol bawah menampilkan “Tanya via WhatsApp” dan “Lokasi” (Google Maps) berdampingan. Beranda memuat tiga langkah servis yang hanya berisi fakta: cek harga, tanya lewat WhatsApp, bawa HP ke toko dengan pemeriksaan gratis. Isinya hanya dari data yang diberikan pemilik; bagian ini tidak tampil sebelum datanya tersedia. |
+| F20 | P0 | Halaman statis /privacy (Kebijakan Privasi) dan /terms (Syarat Layanan) dalam bahasa Indonesia dan English untuk pendaftaran aplikasi TikTok. Isinya persis dari draft pemilik 29 Oktober 2026 dengan email bc@berkahcellbatam.com; klausul tidak ditambah atau diubah tanpa persetujuan pemilik. Link kecil ke kedua halaman ada di footer beranda, halaman 404, dan kedua halaman itu. |
 
 ### Pesan bantuan dan konteks WhatsApp
 
@@ -424,6 +425,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.5, 6–7 Oktober 2026:** mencatat review pemilik atas preview v3 dan paket peningkatan profesional. F11 naik dari P1 ke P0 dengan tombol “Bagikan harga ini”; menambah F18 (tampilan tautan dan ikon) dan F19 (informasi toko) serta A22 sampai A24; menambah D08 (domain) dan D09 (pengukuran), keduanya ditunda. Data toko untuk F19 diterima pada hari yang sama. Pada 7 Oktober 2026 D08 diputuskan: domain berkahcellbatam.com, setelah workers.dev diketahui diblokir sebagian ISP.
 - **Versi 0.6, 8 Oktober 2026:** atas permintaan pemilik, F02 dan A02 mencakup ketikan tanpa spasi atau dengan spasi berbeda (“vivoy91”, “y 91”), karena banyak pelanggan mengetik tipe HP tanpa spasi; alias pencarian “galaxy” untuk Samsung (F10) ditambahkan atas persetujuan pemilik. D01 mencatat motif emboss jalur PCB di latar. Pada polesan terakhir, F19 dan A24 ditambah status buka/tutup dari jam pemilik (WIB) serta tiga langkah servis di beranda; nomor WhatsApp ditulis 0896-2505-0525. D10 mencatat keahlian andalan Bypass iCloud iPhone, dan F02 mencakup pencarian nama layanan. Atas permintaan pemilik, tipe iPhone diurutkan menurut generasi: X, XR, XS, dan XS Max berada di antara 8 Plus dan 11. Prioritas P0/P1 tidak berubah.
 - **Versi 0.7, 9 Oktober 2026:** atas permintaan pemilik, F19 dan A24 menambah tombol “Lokasi” di samping “Tanya via WhatsApp” setelah layanan dipilih, supaya pelanggan bisa langsung chat atau datang ke toko. Website menjadi Versi 3.4. Prioritas P0/P1 tidak berubah.
+- **Versi 0.8, 29 Oktober 2026:** atas permintaan pemilik, F20 menambah halaman Kebijakan Privasi dan Syarat Layanan dari draft pemilik untuk aplikasi TikTok. Website menjadi Versi 3.5. Prioritas lain tidak berubah.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -439,7 +441,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.7 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.8 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 
