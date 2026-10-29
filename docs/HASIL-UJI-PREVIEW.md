@@ -141,6 +141,15 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - Tanpa data toko, tombol Lokasi tidak tampil.
 - **Belum diuji:** tampilan di HP sungguhan (setelah build preview).
 
+## Versi 3.5: Kebijakan Privasi & Syarat Layanan (29 Okt 2026)
+
+- **POLES, LULUS (emulasi Chromium):**
+  - `/privacy` dan `/terms` terbuka, Indonesia + English, email `bc@berkahcellbatam.com`, tanpa placeholder, tanpa gulir ke samping di 360 px, tanpa error console/CSP.
+  - Link "Kebijakan Privasi" dan "Syarat Layanan" ada di footer beranda dan 404. Sitemap memuat kedua halaman.
+- **`wrangler dev` (runtime Cloudflare lokal):** `/privacy` dan `/terms` 200, `/privacy.html` dialihkan ke `/privacy`, `/abc` tetap 404.
+- **Email Routing:** `bc@berkahcellbatam.com` sudah aktif dan diuji pemilik (email dari Gmail lain masuk).
+- **Belum diuji:** halaman di domain produksi dan HP sungguhan (dicek pemilik setelah rilis).
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

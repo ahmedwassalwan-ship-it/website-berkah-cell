@@ -188,6 +188,11 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
   - Back menutup panel tanpa membangun ulang layar.
   - Forward ke entri panel tidak membuka panel lagi; entri itu dibersihkan dengan `replaceState`.
 
+## Halaman Kebijakan Privasi & Syarat Layanan (Versi 3.5)
+- `site-live/privacy.html` dan `site-live/terms.html`: HTML statis tanpa JavaScript (CSP `script-src 'none'`), path absolut seperti `404.html`, gaya `.legal` di `styles.css`.
+- Cloudflare assets (`html_handling` bawaan) melayani `/privacy` dari `privacy.html`; `tests/server.js` meniru aturan ini.
+- Isi dari draft pemilik; perubahan klausul hanya atas persetujuan pemilik.
+
 ## Data
 
 - **Sumber:** file publik "Berkah Cell - Harga Publik (website)", ekspor CSV gviz. Tidak ada Harga_Modal.

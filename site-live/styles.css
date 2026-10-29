@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.4
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.5
    Arah desain: Katalog Bertingkat (PRD bagian 5), polesan premium navy & emas.
    Font: Plus Jakarta Sans (OFL, assets/fonts/OFL-plus-jakarta-sans.txt), disimpan di situs sendiri. */
 @font-face{
@@ -241,6 +241,23 @@ body.searching .hero .searchbox{margin-top:8px}
 .nf{flex:1;display:flex;align-items:center}
 .nf .state{padding-top:40px;padding-bottom:40px}
 .nf .state .acts{max-width:360px}
+
+/* ===== Kebijakan Privasi & Syarat Layanan (privacy.html, terms.html) ===== */
+.legal{padding:22px 0 36px}
+.legal-doc{max-width:68ch;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 20px 26px;box-shadow:0 1px 2px rgba(10,26,51,.04),0 8px 24px rgba(10,26,51,.05);overflow-wrap:anywhere}
+.legal-doc h1{font-size:24px;font-weight:800;letter-spacing:-.4px;line-height:1.25}
+.legal-doc h2{font-size:18px;font-weight:800;letter-spacing:-.2px}
+.legal-doc .legal-sub{color:var(--ink-2);margin-top:6px}
+.legal-doc p,.legal-doc ul,.legal-doc ol{margin-top:12px;color:var(--ink);font-size:15.5px;line-height:1.65}
+.legal-doc ul,.legal-doc ol{padding-left:22px}
+.legal-doc li+li{margin-top:6px}
+.legal-doc a{color:var(--blue);font-weight:700;text-underline-offset:3px}
+.legal-doc .legal-lang{margin:0 0 6px;font-size:13.5px;text-align:right}
+.legal-en{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.ftr .legal-links{margin-top:4px}
+.ftr .legal-links a{font-size:12.5px;font-weight:600;color:#C3CEDF;text-decoration-color:rgba(195,206,223,.45)}
+.ftr .legal-links a[aria-current="page"]{color:var(--gold-on-navy)}
+.ftr-mini{padding:14px 0}
 
 /* ===== Help page ===== */
 .help h2{font-size:16px;font-weight:800;margin-top:4px}

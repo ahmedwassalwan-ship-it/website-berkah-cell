@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.4
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.5
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.

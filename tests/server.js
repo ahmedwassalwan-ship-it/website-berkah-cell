@@ -9,6 +9,8 @@ function start(port = 0) {
       let p = path.normalize(path.join(ROOT, decodeURIComponent(u.pathname)));
       if (!p.startsWith(ROOT)) { res.writeHead(403); return res.end(); }
       if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
+      // Seperti Cloudflare assets (html_handling bawaan): /privacy dilayani dari privacy.html.
+      if (!fs.existsSync(p) && fs.existsSync(p + '.html')) p += '.html';
       if (!fs.existsSync(p)) { res.writeHead(404); return res.end('not found'); }
       res.writeHead(200, { 'Content-Type': TYPES[path.extname(p)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
       fs.createReadStream(p).pipe(res);
