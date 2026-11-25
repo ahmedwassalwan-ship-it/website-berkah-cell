@@ -174,6 +174,16 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **Berkahtron bergerak:** lapisan badan dan lengan dibuat dari gambar asli (`tools/buat_rig_maskot.js`), sambungan dicek lewat pratinjau sudut 0°, ±14°, −45°, −80°.
 - **Belum diuji:** kehalusan animasi di HP sungguhan (dicek pemilik lewat link preview).
 
+## Versi 3.8 (preview): prototipe meja service 3D WebGL (25 Nov 2026)
+
+- **HERO3D, LULUS (Chromium tanpa GPU, WebGL perangkat lunak):**
+  - Beranda biasa tidak memuat Three.js; mode 3D hanya lewat `?hero=3d`.
+  - Kanvas WebGL menggantikan adegan CSS; kolom cari tetap di layar pertama; `touch-action: pan-y` sehingga geser vertikal di HP tetap menggulir halaman.
+  - Drag memutar adegan (±0,95 rad); saat mengetik adegan disembunyikan; tanpa error JS dan tanpa request luar.
+  - Bila `bench3d.js` gagal dimuat, adegan CSS diputar sebagai cadangan.
+- **Catatan kinerja:** di Chromium tanpa GPU hanya ±18 fps; HP sungguhan memakai GPU. Kehalusan, panas, dan baterai perlu dicoba pemilik.
+- **Ditemukan saat uji:** kelas `.grab` bentrok dengan gaya panel (kanvas menyusut saat drag), diganti `.dragging`.
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

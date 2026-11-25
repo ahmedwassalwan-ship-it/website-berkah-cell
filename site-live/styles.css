@@ -134,6 +134,15 @@ main:focus{outline:none}
 .bench.play .hello{animation:helloOut 3.2s linear both}
 @keyframes helloOut{0%,90%{opacity:1}100%{opacity:0}}
 .hero .bench.play~.searchbox{animation:glint .5s ease-out 3.9s both}
+/* Prototipe 3D (WebGL, ?hero=3d): kanvas di atas adegan CSS; adegan CSS disembunyikan setelah 3D siap */
+.bench.has3d{height:206px}
+.bench3d{position:absolute;inset:-6px -16px -4px;pointer-events:auto;opacity:0;transition:opacity .45s ease}
+.bench3d.ready{opacity:1}
+.bench.ready3d>:not(.bench3d){visibility:hidden}
+.bench3d-canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.bench3d.dragging .bench3d-canvas{cursor:grabbing}
+.bench3d::after{content:"⟲ Geser untuk memutar";position:absolute;right:18px;top:4px;font-size:11px;font-weight:700;color:#EFE2BF;background:rgba(10,26,51,.55);border:1px solid rgba(216,181,102,.45);border-radius:10px;padding:2px 8px;pointer-events:none;transition:opacity .3s}
+.bench3d[data-touched]::after{opacity:0}
 @keyframes glint{0%{box-shadow:0 0 0 0 rgba(216,181,102,0),0 14px 34px -14px rgba(0,0,0,.55)}45%{box-shadow:0 0 0 3px rgba(216,181,102,.9),0 14px 34px -14px rgba(0,0,0,.55)}100%{box-shadow:0 0 0 0 rgba(216,181,102,0),0 14px 34px -14px rgba(0,0,0,.55)}}
 .searchbox{margin-top:16px;height:58px;background:#fff;border-radius:var(--r-md);display:flex;align-items:center;gap:8px;padding:0 6px 0 16px;color:var(--ink);box-shadow:0 14px 34px -14px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.6);transition:box-shadow .18s var(--ease)}
 .searchbox:focus-within{box-shadow:0 0 0 3px var(--gold),0 14px 34px -14px rgba(0,0,0,.55)}
@@ -418,6 +427,7 @@ body.locked{overflow:hidden}
   .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) 440px;column-gap:40px;align-items:start}
   .hero .wrap>*{grid-column:1}
   .hero .bench{grid-column:2;grid-row:1 / span 6;align-self:center;height:250px;margin:0;max-width:none;perspective:760px}
+  .hero .bench.has3d{height:320px}
   .hero .bench .mat{height:230px}
   .hero .bench .bt{width:104px;height:127px}
   .hero .bench .and{width:72px;height:140px}

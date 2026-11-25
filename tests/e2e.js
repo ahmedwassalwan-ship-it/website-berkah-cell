@@ -94,6 +94,7 @@ async function run() {
     await testDomain();
     await testPolish();
     await testHero();
+    await testHero3d();
   } finally {
     await browser.close(); srv.srv.close();
   }
@@ -1024,6 +1025,46 @@ async function testHero() {
     await shot(sp, 'hero-' + w); await sp.context().close();
   }
   rec('HERO', 'LULUS', 'Dinilai lewat emulasi Chromium; kehalusan animasi perlu dicoba pemilik di HP sungguhan.');
+}
+
+
+/* ---------- HERO3D: prototipe meja service WebGL (?hero=3d, Versi 3.8) ---------- */
+async function testHero3d() {
+  // Beranda biasa tidak memuat Three.js sama sekali
+  const n = await newPage(); await n.goto(base); await ready(n); await sleep(500);
+  const vendorReq = n.__requests.filter((u) => /vendor\/three|bench3d/.test(u));
+  await n.context().close();
+  expect('HERO3D', vendorReq.length === 0, 'Tanpa ?hero=3d, beranda tidak memuat Three.js (tetap ringan)', vendorReq);
+  const p = await newPage({ viewport: { width: 390, height: 844 } });
+  await p.goto(base + '?hero=3d'); await p.waitForSelector('.bench3d[data-state="done"]', { timeout: 45000 });
+  const s = await p.evaluate(() => {
+    const c = document.querySelector('.bench3d canvas'); const sb = document.querySelector('.searchbox').getBoundingClientRect();
+    return { canvas: !!c && c.width > 0, cssHidden: getComputedStyle(document.querySelector('.bench .mat')).visibility, searchBottom: Math.round(sb.bottom), touch: getComputedStyle(c).touchAction, wide: document.documentElement.scrollWidth > innerWidth };
+  });
+  expect('HERO3D', s.canvas && s.cssHidden === 'hidden' && s.searchBottom <= 844 && s.touch === 'pan-y' && !s.wide,
+    'Dengan ?hero=3d: kanvas WebGL tampil menggantikan adegan CSS; kolom cari tetap di layar pertama; geser vertikal di HP tetap menggulir halaman', s);
+  const box = await p.locator('.bench3d-canvas').boundingBox(); const y = box.y + box.height / 2;
+  const yaw0 = await p.evaluate(() => document.querySelector('.bench3d').benchYaw);
+  await p.mouse.move(box.x + box.width / 2, y); await p.mouse.down();
+  for (let i = 1; i <= 8; i++) await p.mouse.move(box.x + box.width / 2 - i * 15, y);
+  await p.mouse.up(); await sleep(400);
+  const yaw1 = await p.evaluate(() => document.querySelector('.bench3d').benchYaw);
+  expect('HERO3D', Math.abs(yaw1 - yaw0) > 0.3, 'Drag memutar adegan 3D', { yaw0, yaw1 });
+  await p.fill('#q', 'iphone 11'); await p.waitForSelector('.list .li');
+  expect('HERO3D', await p.locator('.bench').isHidden(), 'Saat mengetik, adegan 3D disembunyikan');
+  expect('HERO3D', p.__errors.length === 0 && p.__requests.every((u) => u.startsWith(base) || u.startsWith('https://docs.google.com/')), 'Tanpa error JavaScript dan tanpa request luar (Three.js disimpan di situs sendiri)', { errors: p.__errors });
+  await shot(p, 'hero3d-390-cari');
+  await p.context().close();
+  // Bila modul 3D gagal dimuat, adegan CSS kembali diputar
+  const f = await newPage({ viewport: { width: 390, height: 844 } });
+  await f.context().route('**/bench3d.js*', (r) => r.fulfill({ status: 404, body: '' }));
+  await f.goto(base + '?hero=3d'); await ready(f); await sleep(800);
+  const fb = await f.evaluate(() => ({ cls: document.querySelector('.bench').className, host: !!document.querySelector('.bench3d') }));
+  await f.context().close();
+  expect('HERO3D', fb.cls === 'bench play' && !fb.host, 'Bila 3D gagal dimuat, adegan CSS diputar sebagai cadangan', fb);
+  const sp = await newPage({ viewport: { width: 390, height: 844 } }); await sp.goto(base + '?hero=3d'); await sp.waitForSelector('.bench3d[data-state="done"]', { timeout: 45000 });
+  await shot(sp, 'hero3d-390'); await sp.context().close();
+  rec('HERO3D', 'LULUS', 'Dinilai di Chromium tanpa GPU (WebGL perangkat lunak); kehalusan dan panas HP perlu dicoba pemilik di HP sungguhan.');
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });

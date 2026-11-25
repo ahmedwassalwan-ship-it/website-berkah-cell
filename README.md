@@ -4,6 +4,7 @@ Website daftar harga servis HP BERKAH CELL.
 
 - `site-live/` — kode website:
   - `index.html`, `styles.css`, `app.js`, `assets/` (termasuk font Plus Jakarta Sans dengan lisensi OFL)
+  - `bench3d.js` + `vendor/three/` — prototipe meja service 3D (WebGL), aktif lewat `/?hero=3d`
   - `404.html` untuk alamat yang tidak ada
   - `robots.txt` dan `sitemap.xml`
   - `_headers` untuk header keamanan

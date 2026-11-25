@@ -205,6 +205,13 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - Berkahtron: `assets/berkahtron-badan.webp` + `berkahtron-lengan.webp` dari `tools/buat_rig_maskot.js`; lengan diputar di `transform-origin: 39% 57.4%` (sendi bahu).
 - Desktop ≥ 1024 px: hero dua kolom, adegan di kanan.
 
+## Prototipe meja service 3D WebGL (Versi 3.8, `?hero=3d`)
+- `site-live/bench3d.js` (modul ES) dimuat dengan `import()` hanya bila `?hero=3d`. Three.js r170 (MIT) disimpan di `site-live/vendor/three/` beserta `RoundedBoxGeometry.js` dan `RoomEnvironment.js` (impor diarahkan ke `three.module.min.js`), jadi CSP `script-src 'self'` tidak berubah.
+- Render sesuai kebutuhan: hanya saat animasi pembuka, drag, dan inersia. Tekstur layar laptop/iPhone/Android dan karpet digambar dengan canvas.
+- Kontrol sendiri (bukan OrbitControls): drag horizontal memutar, drag vertikal (mouse) memiringkan; di HP sentuhan vertikal tetap menggulir halaman.
+- Jarak kamera dihitung dari ukuran kanvas agar karpet selalu mengisi bingkai.
+- Kait uji: `benchYaw`, `benchSeek(t)`, `benchView(yaw)` di elemen `.bench3d`.
+
 ## Data
 
 - **Sumber:** file publik "Berkah Cell - Harga Publik (website)", ekspor CSV gviz. Tidak ada Harga_Modal.

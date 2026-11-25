@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Service HP · Versi 3.7
+/* BERKAH CELL — Daftar Harga Service HP · Versi 3.8
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
@@ -508,6 +508,21 @@
         h('img', { class: 'bt-body', src: 'assets/berkahtron-badan.webp', alt: '', width: 359, height: 439 }),
         h('img', { class: 'bt-arm', src: 'assets/berkahtron-lengan.webp', alt: '', width: 359, height: 439 })));
   }
+  // Prototipe 3D sungguhan (WebGL, pemilik 25 Nov 2026): hanya bila beranda dibuka dengan ?hero=3d.
+  // Adegan CSS di atas tetap jadi cadangan: tampil diam selama 3D dimuat, dan diputar bila WebGL gagal.
+  const HERO_3D = new URLSearchParams(location.search).get('hero') === '3d';
+  function mountBench3d(bench, mode) {
+    const host = h('div', { class: 'bench3d' });
+    bench.append(host);
+    const fallback = () => { host.remove(); bench.className = 'bench ' + mode; };
+    requestAnimationFrame(() => {
+      import('./bench3d.js?v=3.8.0').then((m) => m.mount(host, { play: mode === 'play' })).then((dispose) => {
+        if (!host.isConnected) { dispose(); return; }
+        bench.classList.add('ready3d');
+        cleanupFns.push(dispose);
+      }).catch(() => { if (host.isConnected) fallback(); });
+    });
+  }
   // Pintasan [iPhone] [Android]; angka dihitung dari daftar harga, tidak tampil sebelum data termuat.
   function deviceLinks(disabled) {
     if (disabled || !S.catalog) return null;
@@ -550,7 +565,9 @@
       h('label', { for: 'q', class: 'vh', text: 'Cari tipe HP' }), icon('search', 22), input, clearBtn);
     // Hero (pemilik 25 Nov 2026): judul iPhone & Android, meja service 3D, kolom cari, lalu pintasan perangkat.
     // Saat data dimuat adegan diam di frame awal; animasi diputar sekali saat beranda pertama tampil.
-    const bench = benchScene(disabled ? 'pre' : heroIntroShown() ? 'done' : 'play');
+    const mode = disabled ? 'pre' : heroIntroShown() ? 'done' : 'play';
+    const bench = benchScene(HERO_3D && !disabled ? 'pre has3d' : mode);
+    if (HERO_3D && !disabled) mountBench3d(bench, mode);
     const hero = h('section', { class: 'hero' }, h('div', { class: 'wrap' },
       h('h1', null, 'Service ', h('span', { class: 'gold', text: 'iPhone & Android' }), ' di Batam'),
       bench,
