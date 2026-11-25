@@ -210,6 +210,7 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - Render sesuai kebutuhan: hanya saat animasi pembuka, drag, dan inersia. Tekstur layar laptop/iPhone/Android dan karpet digambar dengan canvas.
 - Kontrol sendiri (bukan OrbitControls): drag horizontal memutar, drag vertikal (mouse) memiringkan; di HP sentuhan vertikal tetap menggulir halaman.
 - Jarak kamera dihitung dari ukuran kanvas agar karpet selalu mengisi bingkai.
+- Berkahtron 3D: bentuk dasar Three.js (Sphere, Capsule, Torus, Cylinder terbuka untuk jubah); wajah = `assets/berkahtron-badan.webp` dipetakan lurus dari depan ke tutup bola ±72°. Lengan kanan: bahu → siku → tangan, pose diam/lambai/silakan dicampur per waktu.
 - Kait uji: `benchYaw`, `benchSeek(t)`, `benchView(yaw)` di elemen `.bench3d`.
 
 ## Data

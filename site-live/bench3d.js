@@ -1,8 +1,8 @@
 /* BERKAH CELL — meja service 3D (WebGL, prototipe Versi 3.8, pemilik 25 Nov 2026)
  * Dimuat hanya bila beranda dibuka dengan ?hero=3d. Laptop, iPhone, Android, dan karpet adalah
  * model 3D sungguhan (bentuk generik, tanpa logo merek) yang bisa diputar dengan geser/drag.
- * Berkahtron masih gambar 2D asli (badan + lengan) yang selalu menghadap kamera, karena belum ada
- * model 3D maskot. Tidak ada request luar: Three.js disimpan di vendor/three (lisensi MIT).
+ * Berkahtron juga 3D (bentuk dasar + wajah dari gambar asli), dengan lengan bersendi yang bergerak.
+ * Tidak ada request luar: Three.js disimpan di vendor/three (lisensi MIT).
  * Hemat baterai: hanya merender saat animasi pembuka, saat diputar, dan sesaat sesudahnya. */
 import * as THREE from './vendor/three/three.module.min.js';
 import { RoundedBoxGeometry } from './vendor/three/RoundedBoxGeometry.js';
@@ -169,27 +169,81 @@ export async function mount(host, opts) {
   const tagIp = tagSprite('iPhone'); tagIp.position.set(-0.4, 1.4, 9.4); stage.add(tagIp);
   const tagAn = tagSprite('Android'); tagAn.position.set(12.4, 0.9, 1.9); stage.add(tagAn);
 
-  // Berkahtron (gambar asli 2D): badan + lengan berputar di bahu, selalu menghadap kamera
+  // Berkahtron 3D: kepala bola, badan, jubah, lengan bersendi, dan kaki sebagai objek 3D sungguhan.
+  // Wajah (cincin, emblem, mata, pipi, senyum) diambil dari gambar asli dan ditempel melengkung di
+  // depan kepala, jadi karakternya tetap sama. Ukuran mengikuti proporsi gambar asli (tinggi ±8,4).
   const loader = new THREE.TextureLoader();
-  const loadTex = (u) => new Promise((ok, bad) => loader.load(u, (t) => { t.colorSpace = THREE.SRGBColorSpace; ok(keep(t)); }, undefined, bad));
-  const [tBody, tArm] = await Promise.all([loadTex('assets/berkahtron-badan.webp'), loadTex('assets/berkahtron-lengan.webp')]);
-  const BH = 8.6; const BW = BH * 359 / 439; const PX = (0.39 - 0.5) * BW; const PY = (0.5 - 0.574) * BH;
-  const bt = new THREE.Group(); bt.position.set(5.6, 0, 0.8); stage.add(bt);
-  const lean = new THREE.Group(); bt.add(lean);
-  const spriteMat = (map) => keep(new THREE.MeshBasicMaterial({ map, transparent: true, alphaTest: 0.4, toneMapped: false, side: THREE.DoubleSide }));
-  const depthMat = (map) => keep(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, map, alphaTest: 0.4 }));
-  const body = new THREE.Mesh(keep(new THREE.PlaneGeometry(BW, BH)), spriteMat(tBody)); body.position.y = BH / 2; body.castShadow = true; body.customDepthMaterial = depthMat(tBody); lean.add(body);
-  const shoulder = new THREE.Group(); shoulder.position.set(PX, BH / 2 + PY, 0.02); lean.add(shoulder);
-  const arm = new THREE.Mesh(keep(new THREE.PlaneGeometry(BW, BH)), spriteMat(tArm)); arm.position.set(-PX, -PY, 0); arm.castShadow = true; arm.customDepthMaterial = depthMat(tArm); shoulder.add(arm);
+  const faceTex = await new Promise((ok, bad) => loader.load('assets/berkahtron-badan.webp', (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; ok(keep(t)); }, undefined, bad));
+  const skin = keep(new THREE.MeshPhysicalMaterial({ color: '#1662EC', roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.3 }));
+  const dark = keep(new THREE.MeshPhysicalMaterial({ color: '#1140B8', roughness: 0.42, clearcoat: 0.4 }));
+  const capeMat = keep(new THREE.MeshPhysicalMaterial({ color: '#1A4CCB', roughness: 0.55, sheen: 0.6, sheenColor: '#6FA0FF', side: THREE.DoubleSide }));
+  const part = (geo, m, x = 0, y = 0, z = 0) => { const o = mesh(geo, m); o.position.set(x, y, z); return o; };
+  const capsule = (r, len) => new THREE.CapsuleGeometry(r, len, 6, 16);
+
+  const bt = new THREE.Group(); bt.position.set(5.4, 0, 0.9); bt.rotation.y = -0.12; bt.scale.setScalar(1.12); stage.add(bt);
+  const root = new THREE.Group(); bt.add(root); // untuk lompat dan condong
+  // kaki
+  [-0.6, 0.6].forEach((x) => {
+    root.add(part(capsule(0.5, 0.5), skin, x, 0.85, 0));
+    const foot = part(new THREE.SphereGeometry(0.62, 20, 14), skin, x * 1.05, 0.32, 0.18); foot.scale.set(1, 0.6, 1.25); root.add(foot);
+  });
+  // badan + kerah syal
+  const torso = part(capsule(1.32, 0.75), skin, 0, 2.55, 0); torso.scale.set(1, 1, 0.86); root.add(torso);
+  const collar = part(new THREE.TorusGeometry(0.98, 0.36, 12, 28), dark, 0, 3.86, 0.05); collar.rotation.x = Math.PI / 2 - 0.12; root.add(collar);
+  // jubah: permukaan melengkung di punggung, melebar ke bawah
+  const cape = part(new THREE.CylinderGeometry(1.1, 2.35, 3.5, 32, 6, true, Math.PI * 0.32, Math.PI * 1.36), capeMat, 0, 2.15, -0.12);
+  const cp = cape.geometry.attributes.position;
+  for (let i = 0; i < cp.count; i++) { const y = cp.getY(i); const z = cp.getZ(i); cp.setZ(i, z - (1.75 - y) * 0.18 * (z < 0 ? 1 : 0.3)); } // ujung bawah sedikit berkibar ke belakang
+  cape.geometry.computeVertexNormals(); root.add(cape);
+  // kepala: bola biru tua + wajah asli di depan
+  const head = new THREE.Group(); head.position.set(0, 5.95, 0.05); root.add(head);
+  const HR = 2.45;
+  head.add(part(new THREE.SphereGeometry(HR, 48, 32), dark));
+  // Wajah menutup ±72° di depan kepala; lingkaran kepala gambar asli (pusat 192,124; r 125) dipetakan
+  // lurus dari depan ke area itu, sehingga cincin wajah tidak melar ke samping kepala.
+  const FA = 72 * Math.PI / 180; const FS = HR * Math.sin(FA);
+  const faceGeo = new THREE.SphereGeometry(HR * 1.004, 64, 48, Math.PI / 2 - FA, FA * 2, Math.PI / 2 - FA, FA * 2);
+  const fp = faceGeo.attributes.position; const fuv = faceGeo.attributes.uv;
+  for (let i = 0; i < fp.count; i++) {
+    const u = (192 + (fp.getX(i) / FS) * 125) / 359; const v = 1 - (124 - (fp.getY(i) / FS) * 125) / 439;
+    fuv.setXY(i, u, v);
+  }
+  const faceMat = keep(new THREE.MeshStandardMaterial({ map: faceTex, roughness: 0.42, metalness: 0.05, emissive: '#ffffff', emissiveMap: faceTex, emissiveIntensity: 0.22, alphaTest: 0.5, alphaToCoverage: true }));
+  head.add(mesh(faceGeo, faceMat, true));
+  // lengan bersendi: bahu → siku → tangan (manset biru tua seperti gambar asli)
+  function makeArm(side) {
+    const shoulder = new THREE.Group(); shoulder.position.set(side * 1.28, 3.5, 0.05); root.add(shoulder);
+    shoulder.add(part(capsule(0.4, 0.55), skin, 0, -0.55, 0));
+    const elbow = new THREE.Group(); elbow.position.y = -1.05; shoulder.add(elbow);
+    elbow.add(part(capsule(0.38, 0.45), skin, 0, -0.4, 0));
+    const cuff = part(new THREE.TorusGeometry(0.38, 0.13, 10, 20), dark, 0, -0.78, 0); cuff.rotation.x = Math.PI / 2; elbow.add(cuff);
+    const hand = part(new THREE.SphereGeometry(0.52, 20, 16), skin, 0, -1.15, 0.02); hand.scale.set(0.95, 1.05, 0.72); elbow.add(hand);
+    const thumb = part(capsule(0.15, 0.25), skin, side * -0.38, -1.05, 0.2); thumb.rotation.z = side * 0.6; elbow.add(thumb);
+    return { shoulder, elbow };
+  }
+  const armR = makeArm(-1); // lengan kanan Berkahtron (kiri layar): melambai lalu mempersilakan
+  const armL = makeArm(1);  // lengan kiri: di pinggang
+  const REST_R = { sz: -0.28, sx: 0, ez: 0 }; const WAVE_R = { sz: -2.05, sx: -0.5, ez: -0.55 }; const PRESENT_R = { sz: -1.0, sx: -0.75, ez: -0.25 };
+  const mix = (a, b2, k) => ({ sz: a.sz + (b2.sz - a.sz) * k, sx: a.sx + (b2.sx - a.sx) * k, ez: a.ez + (b2.ez - a.ez) * k });
+  armL.shoulder.rotation.z = 0.42; armL.elbow.rotation.z = 1.35; armL.elbow.rotation.x = -0.4;
 
   // ===== Keadaan adegan pada waktu t (detik). t >= 4.4 = selesai.
-  const ARM_END = 80 * Math.PI / 180; // lengan "silakan", searah jarum jam di layar = rotasi z positif
   let lastLap = '';
   function pose(t) {
-    // lambaian 0,4–1,2 dtk, lalu mempersilakan 3,3–4,0 dtk
-    const wave = t > 0.4 && t < 1.2 ? Math.sin(seg(t, 0.4, 1.2) * Math.PI * 4) * 0.28 * Math.sin(seg(t, 0.4, 1.2) * Math.PI) : 0;
-    shoulder.rotation.z = -wave + ease(seg(t, 3.3, 4.0)) * ARM_END;
-    lean.rotation.z = ease(seg(t, 3.3, 4.0)) * 0.07;
+    // Berkahtron: lompat masuk 0–0,6 dtk; lambai 0,4–1,6 dtk; menoleh ke laptop 1,6–3,0 dtk;
+    // lompat senang saat ✓ 3,0–3,4 dtk; mempersilakan ke kolom cari 3,4–4,2 dtk
+    const hop = (a, b2, hgt) => (t > a && t < b2 ? Math.sin(seg(t, a, b2) * Math.PI) * hgt : 0);
+    root.position.y = (1 - ease(seg(t, 0, 0.45))) * 4 + hop(0.45, 0.7, 0.35) + hop(3.0, 3.4, 0.9);
+    root.scale.set(1, 1 - hop(0.42, 0.55, 0.12), 1);
+    let arm = REST_R;
+    if (t >= 0.3 && t < 1.8) arm = mix(REST_R, WAVE_R, ease(seg(t, 0.3, 0.6)) * (1 - ease(seg(t, 1.5, 1.8))));
+    if (t >= 3.0 && t < 3.4) arm = mix(REST_R, WAVE_R, Math.sin(seg(t, 3.0, 3.4) * Math.PI) * 0.8);
+    if (t >= 3.4) arm = mix(REST_R, PRESENT_R, ease(seg(t, 3.4, 4.1)));
+    const waveOsc = t > 0.6 && t < 1.5 ? Math.sin(seg(t, 0.6, 1.5) * Math.PI * 4) * 0.42 : 0;
+    armR.shoulder.rotation.z = arm.sz; armR.shoulder.rotation.x = arm.sx; armR.elbow.rotation.z = arm.ez + waveOsc;
+    head.rotation.y = -0.55 * (ease(seg(t, 1.6, 2.0)) - ease(seg(t, 2.8, 3.1))) - 0.15 * ease(seg(t, 3.4, 4.1));
+    head.rotation.x = 0.12 * (ease(seg(t, 1.6, 2.0)) - ease(seg(t, 2.8, 3.1)));
+    root.rotation.z = 0.06 * ease(seg(t, 3.4, 4.1));
     // kabel menyala 0,5–3,3 dtk
     cableMat.emissiveIntensity = (seg(t, 0.5, 0.9) - seg(t, 3.0, 3.4)) * 1.6;
     // log laptop, progress 0,9–3,0 dtk, selesai 3,0 dtk
@@ -208,7 +262,6 @@ export async function mount(host, opts) {
     const r = camDist; const el = 0.52 + pitch;
     camera.position.set(Math.sin(yaw) * Math.cos(el) * r + CAM_TARGET.x, Math.sin(el) * r + CAM_TARGET.y, Math.cos(yaw) * Math.cos(el) * r + CAM_TARGET.z);
     camera.lookAt(CAM_TARGET);
-    bt.rotation.y = yaw; // Berkahtron selalu menghadap kamera (billboard sumbu Y)
   }
   function resize() {
     const w = host.clientWidth; const h = host.clientHeight; if (!w || !h) return;

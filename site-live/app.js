@@ -516,7 +516,7 @@
     bench.append(host);
     const fallback = () => { host.remove(); bench.className = 'bench ' + mode; };
     requestAnimationFrame(() => {
-      import('./bench3d.js?v=3.8.0').then((m) => m.mount(host, { play: mode === 'play' })).then((dispose) => {
+      import('./bench3d.js?v=3.8.1').then((m) => m.mount(host, { play: mode === 'play' })).then((dispose) => {
         if (!host.isConnected) { dispose(); return; }
         bench.classList.add('ready3d');
         cleanupFns.push(dispose);

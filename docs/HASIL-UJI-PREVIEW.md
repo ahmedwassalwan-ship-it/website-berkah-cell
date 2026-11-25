@@ -182,6 +182,8 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
   - Drag memutar adegan (±0,95 rad); saat mengetik adegan disembunyikan; tanpa error JS dan tanpa request luar.
   - Bila `bench3d.js` gagal dimuat, adegan CSS diputar sebagai cadangan.
 - **Catatan kinerja:** di Chromium tanpa GPU hanya ±18 fps; HP sungguhan memakai GPU. Kehalusan, panas, dan baterai perlu dicoba pemilik.
+- **Laporan pemilik (25 Nov 2026):** mode 3D lancar di HP pemilik, tanpa patah-patah.
+- **Berkahtron 3D:** kepala bola + wajah asli (proyeksi dari depan, ±72°), badan, jubah, lengan bersendi, kaki; dicek di sudut 0 dan ±0,95 rad serta frame animasi 0–4,2 dtk.
 - **Ditemukan saat uji:** kelas `.grab` bentrok dengan gaya panel (kanvas menyusut saat drag), diganti `.dragging`.
 
 ## Temuan data (tanpa mengubah Sheet)
