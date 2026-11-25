@@ -48,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 30 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 15 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -151,7 +151,7 @@
   "A09": {
     "status": "LULUS",
     "notes": [
-      "✓ Tab mencapai kotak pencarian lalu kartu merek",
+      "✓ Tab mencapai kotak pencarian, tombol iPhone/Android, lalu kartu merek",
       "✓ Fokus keyboard terlihat (outline)",
       "✓ Enter pada kartu merek membuka daftar tipe",
       "✓ Setelah pindah layar, fokus berada di judul halaman",
@@ -372,6 +372,22 @@
       "✓ robots.txt dan sitemap.xml mengarah ke domain resmi",
       "✓ Header keamanan disiapkan di _headers",
       "✓ Tampilan premium dinilai lewat tangkapan layar emulasi Chromium; perlu dilihat pemilik di HP sungguhan."
+    ]
+  },
+  "HERO": {
+    "status": "LULUS",
+    "notes": [
+      "✓ Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, maskot, dan tombol perangkat disembunyikan seperti sebelumnya",
+      "✓ Judul hero menyebut iPhone & Android",
+      "✓ Di layar 360×640, kolom cari, tombol iPhone/Android, dan badge terlihat tanpa menggulir; tanpa gulir ke samping",
+      "✓ Maskot tidak menutupi kolom cari",
+      "✓ Tombol [iPhone] dan [Android] dengan angka dari daftar harga (18 tipe iPhone, 9 merek Android), area sentuh ≥ 44 px",
+      "✓ Tombol Android menggulir ke \"Pilih merek\" tanpa mengubah alamat atau riwayat",
+      "✓ Tombol iPhone membuka 18 tipe iPhone; Back kembali ke beranda tanpa mengulang animasi",
+      "✓ Tanpa error JavaScript dan tanpa request luar baru",
+      "✓ Maskot melompat masuk sekali (animasi \"hop\"); dengan pengaturan kurangi gerakan, tanpa animasi",
+      "✓ Tombol hanya tampil untuk jenis HP yang ada di daftar harga; tidak tampil saat daftar harga gagal dimuat",
+      "✓ Dinilai lewat emulasi Chromium; kehalusan animasi perlu dicoba pemilik di HP sungguhan."
     ]
   },
   "A11": {

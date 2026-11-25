@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.5
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.6
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
@@ -467,6 +467,40 @@
   }
 
   /* ================= Beranda & pencarian ================= */
+  // Maskot melompat masuk hanya pada beranda pertama dalam satu kunjungan (tidak diulang saat Back).
+  let heroIntroDone = false;
+  function heroIntroShown() {
+    if (heroIntroDone) return true;
+    heroIntroDone = true;
+    try {
+      if (sessionStorage.getItem('bc-hero-intro')) return true;
+      sessionStorage.setItem('bc-hero-intro', '1');
+    } catch (e) { /* tanpa sessionStorage: cukup flag di memori */ }
+    return false;
+  }
+  // Pintasan [iPhone] [Android]; angka dihitung dari daftar harga, tidak tampil sebelum data termuat.
+  function deviceLinks(disabled) {
+    if (disabled || !S.catalog) return null;
+    const ip = S.catalog.brands.get('iphone');
+    const android = S.catalog.brandList.filter((b) => b.key !== 'iphone');
+    const card = (ico, label, sub, attrs) => h('a', Object.assign({ class: 'devlink' }, attrs), icon(ico, 26),
+      h('span', null, h('b', { text: label }), h('small', { text: sub })));
+    const toBrands = (e) => {
+      const sec = document.getElementById('judul-merek');
+      if (!sec) return;
+      e.preventDefault();
+      sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      sec.setAttribute('tabindex', '-1');
+      sec.focus({ preventScroll: true });
+      const grid = sec.parentNode.querySelector('.grid-brands');
+      if (grid) { grid.classList.remove('flash'); void grid.offsetWidth; grid.classList.add('flash'); }
+    };
+    const links = [
+      ip ? card('iphone', 'iPhone', ip.list.length + ' tipe', { href: brandHref(ip), 'data-nav': true }) : null,
+      android.length ? card('android', 'Android', android.length + ' merek', { href: '#judul-merek', onclick: toBrands }) : null,
+    ].filter(Boolean);
+    return links.length ? h('nav', { class: 'devices' + (links.length === 1 ? ' one' : ''), 'aria-label': 'Pilih jenis HP' }, links) : null;
+  }
   // Badge keahlian andalan (D10). Tidak tampil bila daftar harga belum punya layanannya.
   function specialtyLink(disabled) {
     const sp = CONFIG.SPECIALTY;
@@ -484,12 +518,14 @@
     const clearBtn = h('button', { type: 'button', class: 'clear', 'aria-label': 'Hapus kata pencarian', hidden: true }, icon('x', 18));
     const form = h('form', { class: 'searchbox' + (disabled ? ' disabled' : ''), role: 'search', onsubmit: (e) => { e.preventDefault(); input.blur(); } },
       h('label', { for: 'q', class: 'vh', text: 'Cari tipe HP' }), icon('search', 22), input, clearBtn);
+    // Hero "Langsung Ketik" (pemilik 25 Nov 2026): judul iPhone & Android, kolom cari, lalu pintasan perangkat.
+    const mascot = h('img', { class: 'mascot', src: 'assets/maskot-melambai.webp', alt: '', width: 66, height: 81 });
+    if (!disabled && !heroIntroShown()) mascot.classList.add('intro');
     const hero = h('section', { class: 'hero' }, h('div', { class: 'wrap' },
-      h('img', { class: 'mascot', src: 'assets/maskot-melambai.webp', alt: '', width: 66, height: 81 }),
-      h('p', { class: 'eyebrow', text: 'Daftar harga servis HP' }),
-      h('h1', null, 'Cari harga ', h('span', { class: 'gold', text: 'servis' }), ' untuk HP kamu'),
-      h('p', { class: 'lead', text: 'Ketik tipe HP atau pilih merek di bawah.' }),
+      mascot,
+      h('h1', null, 'Servis ', h('span', { class: 'gold', text: 'iPhone & Android' }), ' di Batam'),
       form,
+      deviceLinks(disabled),
       specialtyLink(disabled),
       // Hanya fakta yang sudah diputuskan pemilik (PRD v0.4): tidak boleh ada klaim karangan.
       h('ul', { class: 'trust', 'aria-label': 'Ketentuan servis' },

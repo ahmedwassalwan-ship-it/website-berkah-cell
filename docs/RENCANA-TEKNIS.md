@@ -193,6 +193,12 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - Cloudflare assets (`html_handling` bawaan) melayani `/privacy` dari `privacy.html`; `tests/server.js` meniru aturan ini.
 - Isi dari draft pemilik; perubahan klausul hanya atas persetujuan pemilik.
 
+## Hero "Langsung Ketik" (Versi 3.6)
+- `heroBlock()` (`site-live/app.js`): h1, kolom cari, `deviceLinks()`, `specialtyLink()`, trust. Eyebrow dan lead dihapus.
+- `deviceLinks()`: [iPhone] = tautan biasa ke `?merek=iphone`; [Android] = `#judul-merek` dengan gulir halus, fokus ke judul grid, dan kilau `.grid-brands.flash`, tanpa mengubah riwayat.
+- Maskot: kelas `intro` (animasi `hop`, hanya transform/opacity) sekali per kunjungan lewat `sessionStorage` `bc-hero-intro`; kolom cari mendapat kilau `glint` setelahnya.
+- Ikon `i-iphone` dan `i-android` di sprite `index.html`: siluet generik tanpa logo merek.
+
 ## Data
 
 - **Sumber:** file publik "Berkah Cell - Harga Publik (website)", ekspor CSV gviz. Tidak ada Harga_Modal.

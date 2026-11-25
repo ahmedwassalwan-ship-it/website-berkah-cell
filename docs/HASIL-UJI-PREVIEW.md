@@ -150,6 +150,18 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **Email Routing:** `bc@berkahcellbatam.com` sudah aktif dan diuji pemilik (email dari Gmail lain masuk).
 - **Belum diuji:** halaman di domain produksi dan HP sungguhan (dicek pemilik setelah rilis).
 
+## Versi 3.6 (preview): hero "Langsung Ketik" (25 Nov 2026)
+
+- **HERO, LULUS (emulasi Chromium):**
+  - Di 360×640: judul "Servis iPhone & Android di Batam", kolom cari, tombol [iPhone] [Android], dan badge Bypass terlihat tanpa menggulir. Maskot tidak menutupi kolom cari.
+  - Kolom cari bisa diketik saat animasi berjalan. Saat mengetik, judul, maskot, dan tombol perangkat disembunyikan.
+  - [iPhone] membuka 18 tipe iPhone; Back kembali tanpa mengulang animasi. [Android] menggulir ke "Pilih merek" tanpa mengubah alamat.
+  - Angka tombol dari daftar harga (18 tipe, 9 merek). Tanpa iPhone di data hanya [Android] tampil; saat gagal memuat tidak ada tombol.
+  - Animasi "hop" sekali per kunjungan; dengan "kurangi gerakan" tanpa animasi. Tanpa request luar baru.
+- **A09** disesuaikan: urutan Tab kini kotak cari → iPhone → Android → kartu merek.
+- **A21** diperbaiki: uji kini menunggu kartu merek asli, bukan kerangka memuat (penyebab gagal sesekali sebelumnya).
+- **Belum diuji:** kehalusan animasi di HP sungguhan (dicek pemilik lewat link preview).
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

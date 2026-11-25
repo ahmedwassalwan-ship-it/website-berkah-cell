@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.5
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.6
    Arah desain: Katalog Bertingkat (PRD bagian 5), polesan premium navy & emas.
    Font: Plus Jakarta Sans (OFL, assets/fonts/OFL-plus-jakarta-sans.txt), disimpan di situs sendiri. */
 @font-face{
@@ -62,11 +62,17 @@ main:focus{outline:none}
 .hero .wrap{position:relative;z-index:1}
 .eyebrow{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--gold-on-navy);text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-top:10px}
 .eyebrow::before{content:"";width:18px;height:2px;border-radius:2px;background:var(--gold-grad)}
-.hero h1{font-size:clamp(27px,7.2vw,40px);font-weight:800;line-height:1.14;letter-spacing:-.8px;margin-top:8px;max-width:14em;padding-right:80px}
+.hero h1{font-size:clamp(26px,7vw,40px);font-weight:800;line-height:1.14;letter-spacing:-.8px;margin-top:14px;max-width:14em;padding-right:78px}
 .hero h1 .gold{color:var(--gold-on-navy);background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero .lead{color:#C9D4E8;font-size:15px;margin-top:8px;max-width:30em;padding-right:80px}
 .hero .mascot{position:absolute;right:12px;top:4px;width:70px;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
-.searchbox{margin-top:18px;height:58px;background:#fff;border-radius:var(--r-md);display:flex;align-items:center;gap:8px;padding:0 6px 0 16px;color:var(--ink);box-shadow:0 14px 34px -14px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.6);transition:box-shadow .18s var(--ease)}
+/* Maskot melompat masuk sekali lalu diam, condong ke kolom cari (hanya transform/opacity). */
+.hero .mascot{width:60px;top:-4px;transform:rotate(-6deg);transform-origin:50% 100%}
+.hero .mascot.intro{animation:hop .6s cubic-bezier(.2,.7,.2,1) .15s both}
+@keyframes hop{0%{opacity:0;transform:translateY(18px) scale(.85)}60%{opacity:1;transform:translateY(-6px) scale(1.04)}100%{opacity:1;transform:rotate(-6deg)}}
+.hero .mascot.intro~.searchbox{animation:glint .5s ease-out .7s both}
+@keyframes glint{0%{box-shadow:0 0 0 0 rgba(216,181,102,0),0 14px 34px -14px rgba(0,0,0,.55)}45%{box-shadow:0 0 0 3px rgba(216,181,102,.9),0 14px 34px -14px rgba(0,0,0,.55)}100%{box-shadow:0 0 0 0 rgba(216,181,102,0),0 14px 34px -14px rgba(0,0,0,.55)}}
+.searchbox{margin-top:16px;height:58px;background:#fff;border-radius:var(--r-md);display:flex;align-items:center;gap:8px;padding:0 6px 0 16px;color:var(--ink);box-shadow:0 14px 34px -14px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.6);transition:box-shadow .18s var(--ease)}
 .searchbox:focus-within{box-shadow:0 0 0 3px var(--gold),0 14px 34px -14px rgba(0,0,0,.55)}
 .searchbox svg{flex:0 0 auto;color:var(--gold-text)}
 .searchbox input{flex:1;min-width:0;height:100%;border:0;background:transparent;font-size:16px;outline:none}
@@ -76,6 +82,19 @@ main:focus{outline:none}
 .searchbox.disabled{background:#E9ECF1;box-shadow:none}
 .clear{flex:0 0 44px;width:44px;height:44px;border-radius:22px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
 .clear:hover{background:#F1F3F6}
+/* Pintasan perangkat: [iPhone] [Android] */
+.devices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.devices.one{grid-template-columns:1fr}
+.devlink{display:flex;align-items:center;gap:10px;min-height:58px;padding:8px 12px;border-radius:var(--r-md);background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(216,181,102,.45);color:#fff;text-decoration:none;transition:background .18s var(--ease),box-shadow .18s var(--ease)}
+.devlink:hover{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(216,181,102,.85)}
+.devlink svg{flex:none;color:var(--gold-on-navy)}
+.devlink span{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.devlink b{font-size:15.5px;font-weight:800;letter-spacing:-.1px}
+.devlink small{font-size:12px;font-weight:600;color:#B9C6DB;margin-top:2px}
+.devices+.andalan{margin-top:12px}
+.grid-brands.flash{animation:flash .8s ease-out}
+@keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(201,165,78,0);border-radius:var(--r-md)}35%{box-shadow:0 0 0 3px rgba(201,165,78,.75);border-radius:var(--r-md)}}
+#judul-merek:focus{outline:none}
 .andalan{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:14px;padding:0 14px 0 12px;border-radius:22px;background:rgba(216,181,102,.12);box-shadow:inset 0 0 0 1px rgba(216,181,102,.55);color:#EFE2BF;font-size:13.5px;font-weight:600;text-decoration:none;transition:background .18s var(--ease)}
 .andalan b{color:var(--gold-on-navy);font-weight:800}
 .andalan svg{flex:none;color:var(--gold-on-navy)}
@@ -84,7 +103,7 @@ main:focus{outline:none}
 .trust{list-style:none;display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:13px;font-weight:600;color:#D5DEEC}
 .trust li{display:inline-flex;align-items:center;gap:7px}
 .trust svg{flex:0 0 auto;width:18px;height:18px;padding:3px;border-radius:50%;background:rgba(216,181,102,.16);color:var(--gold-on-navy)}
-body.searching .hero .eyebrow,body.searching .hero h1,body.searching .hero .lead,body.searching .hero .mascot,body.searching .hero .trust,body.searching .hero .andalan{display:none}
+body.searching .hero .devices,body.searching .hero .eyebrow,body.searching .hero h1,body.searching .hero .lead,body.searching .hero .mascot,body.searching .hero .trust,body.searching .hero .andalan{display:none}
 body.searching .hero{padding-top:4px;padding-bottom:16px}
 body.searching .hero .searchbox{margin-top:8px}
 
@@ -313,6 +332,7 @@ body.locked{overflow:hidden}
 /* ===== Larger screens ===== */
 @media (min-width:640px){
   .grid-brands{grid-template-columns:repeat(4,1fr);gap:12px}
+  .devices{grid-template-columns:repeat(2,minmax(0,260px))}
   .trust{font-size:13.5px}
   .steps-list{display:grid;grid-template-columns:repeat(3,1fr);padding:4px 0}
   .steps-list li{flex-direction:column;gap:10px;padding:14px 18px}
@@ -330,7 +350,7 @@ body.locked{overflow:hidden}
   .hero{padding:22px 0 40px}
   .hero h1{font-size:46px;letter-spacing:-1.2px;padding-right:140px}
   .hero .lead{font-size:16.5px;padding-right:140px}
-  .hero .mascot{width:112px;top:10px;right:24px}
+  .hero .mascot{width:96px;top:4px;right:24px}
   .searchbox{height:62px;margin-top:24px}
   .trust{margin-top:18px}
   .dev h1{font-size:36px}

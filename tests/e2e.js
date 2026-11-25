@@ -93,6 +93,7 @@ async function run() {
     await testStore();
     await testDomain();
     await testPolish();
+    await testHero();
   } finally {
     await browser.close(); srv.srv.close();
   }
@@ -285,8 +286,9 @@ async function testStates() {
   expect('A21', tn.includes('belum tercantum') && !tn.includes('belum berhasil dimuat'), 'Hasil kosong dibedakan dari kegagalan');
   await pn.context().close();
   const pr = await newPage({ data: (n) => (n === 1 ? 'abort' : 'ok') }); await pr.goto(base); await pr.waitForSelector('#retry');
-  await pr.click('#retry'); await pr.waitForSelector('.tile');
-  const rt = { tiles: (await pr.$$('.tile')).length, gagal: (await pr.textContent('main')).includes('belum berhasil'), url: pr.url() };
+  // Tunggu kartu merek asli (a.tile), bukan kerangka memuat (div.tile.skel) yang tampil sesaat setelah klik.
+  await pr.click('#retry'); await pr.waitForSelector('a.tile');
+  const rt = { tiles: (await pr.$$('a.tile')).length, gagal: (await pr.textContent('main')).includes('belum berhasil'), url: pr.url() };
   expect('A21', rt.tiles === 10 && !rt.gagal, '"Coba lagi" memuat ulang dan menampilkan katalog asli', rt);
   expect('A06', (await pr.$$('.tile')).length === 10, 'Pemulihan setelah gagal tanpa harga contoh');
   await pr.context().close();
@@ -376,8 +378,9 @@ async function testMobileEmulation() {
 async function testKeyboard() {
   const p = await newPage(); await p.goto(base); await ready(p);
   const seq = [];
-  for (let i = 0; i < 6; i++) { await p.keyboard.press('Tab'); seq.push(await p.evaluate(() => { const e = document.activeElement; return (e.getAttribute('aria-label') || e.id || e.textContent || '').trim().slice(0, 24); })); }
-  expect('A09', seq.includes('q') && seq.some((s) => s.startsWith('Infinix')), 'Tab mencapai kotak pencarian lalu kartu merek', seq);
+  for (let i = 0; i < 9; i++) { await p.keyboard.press('Tab'); seq.push(await p.evaluate(() => { const e = document.activeElement; return (e.getAttribute('aria-label') || e.id || e.textContent || '').trim().slice(0, 24); })); }
+  const at = (pre) => seq.findIndex((s) => s.startsWith(pre));
+  expect('A09', at('q') >= 0 && at('q') < at('iPhone') && at('iPhone') < at('Android') && at('Android') < at('Infinix'), 'Tab mencapai kotak pencarian, tombol iPhone/Android, lalu kartu merek', seq);
   const outline = await p.evaluate(() => getComputedStyle(document.activeElement).outlineStyle);
   expect('A09', outline !== 'none', 'Fokus keyboard terlihat (outline)', outline);
   await p.focus('.tile:has(b:text-is("iPhone"))'); await p.keyboard.press('Enter'); await p.waitForSelector('.list');
@@ -949,6 +952,71 @@ async function testPolish() {
   await shot(p, 'poles-beranda-cari-390');
   await p.context().close();
   rec('POLES', 'LULUS', 'Tampilan premium dinilai lewat tangkapan layar emulasi Chromium; perlu dilihat pemilik di HP sungguhan.');
+}
+
+
+/* ---------- HERO "Langsung Ketik" (Versi 3.6, pemilik 25 Nov 2026) ---------- */
+async function testHero() {
+  const p = await newPage({ viewport: { width: 360, height: 640 } });
+  await p.goto(base); await p.waitForSelector('.devices');
+  // Kolom cari harus bisa diketik segera, tanpa menunggu animasi maskot selesai.
+  const t0 = Date.now(); await p.fill('#q', 'iphone 11'); const typedMs = Date.now() - t0;
+  await p.waitForSelector('.list .li');
+  const s = await p.evaluate(() => ({ first: document.querySelector('.list .li .t').textContent, hid: ['.devices', '.mascot', '.hero h1'].map((q) => getComputedStyle(document.querySelector(q)).display) }));
+  expect('HERO', typedMs < 600 && s.first === 'iPhone 11' && s.hid.every((d) => d === 'none'), 'Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, maskot, dan tombol perangkat disembunyikan seperti sebelumnya', { typedMs, ...s });
+  await p.fill('#q', ''); await p.waitForSelector('.devices');
+  await p.waitForTimeout(1000);
+  const v = await p.evaluate(() => {
+    const r = (q) => { const e = document.querySelector(q); return e ? Math.round(e.getBoundingClientRect().bottom) : null; };
+    const devs = [...document.querySelectorAll('.devices a')].map((a) => ({ label: a.querySelector('b').textContent, sub: a.querySelector('small').textContent, href: a.getAttribute('href'), h: Math.round(a.getBoundingClientRect().height) }));
+    const m = document.querySelector('.hero .mascot').getBoundingClientRect(); const sb = document.querySelector('.searchbox').getBoundingClientRect();
+    return { h1: document.querySelector('.hero h1').textContent, search: r('.searchbox'), devices: r('.devices'), badge: r('.andalan'), devs, wide: document.documentElement.scrollWidth > innerWidth, mascotOverSearch: m.bottom > sb.top + 2 && m.right > sb.left };
+  });
+  expect('HERO', v.h1 === 'Servis iPhone & Android di Batam', 'Judul hero menyebut iPhone & Android', v.h1);
+  expect('HERO', v.search <= 640 && v.devices <= 640 && v.badge <= 640 && !v.wide, 'Di layar 360×640, kolom cari, tombol iPhone/Android, dan badge terlihat tanpa menggulir; tanpa gulir ke samping', v);
+  expect('HERO', !v.mascotOverSearch, 'Maskot tidak menutupi kolom cari', v);
+  expect('HERO', v.devs.length === 2 && v.devs[0].label === 'iPhone' && v.devs[0].sub === '18 tipe' && v.devs[1].label === 'Android' && v.devs[1].sub === '9 merek' && v.devs.every((d) => d.h >= 44),
+    'Tombol [iPhone] dan [Android] dengan angka dari daftar harga (18 tipe iPhone, 9 merek Android), area sentuh ≥ 44 px', v.devs);
+  await shot(p, 'hero-360x640');
+  // Android: gulir ke grid merek tanpa mengubah URL atau riwayat
+  const before = await p.evaluate(() => [location.href, history.length]);
+  await p.click('.devices a:nth-child(2)'); await p.waitForTimeout(900);
+  const a = await p.evaluate(() => { const g = document.querySelector('.grid-brands').getBoundingClientRect(); return { url: location.href, len: history.length, gridTop: Math.round(g.top), focus: document.activeElement.id }; });
+  expect('HERO', a.url === before[0] && a.len === before[1] && a.gridTop >= 0 && a.gridTop < 640 && a.focus === 'judul-merek', 'Tombol Android menggulir ke "Pilih merek" tanpa mengubah alamat atau riwayat', a);
+  // iPhone: buka daftar tipe iPhone, Back kembali ke beranda tanpa animasi ulang
+  await p.evaluate(() => window.scrollTo(0, 0));
+  await p.click('.devices a:nth-child(1)'); await p.waitForSelector('.list .li');
+  const ip = await p.evaluate(() => ({ url: location.search, n: document.querySelectorAll('.list .li').length }));
+  await p.goBack(); await p.waitForSelector('.devices');
+  const intro = await p.evaluate(() => document.querySelector('.hero .mascot').classList.contains('intro'));
+  expect('HERO', ip.url === '?merek=iphone' && ip.n === 18 && !intro, 'Tombol iPhone membuka 18 tipe iPhone; Back kembali ke beranda tanpa mengulang animasi', { ...ip, intro });
+  expect('HERO', p.__errors.length === 0 && p.__requests.every((u) => u.startsWith(base) || u.startsWith('https://docs.google.com/')), 'Tanpa error JavaScript dan tanpa request luar baru', { errors: p.__errors });
+  await p.context().close();
+  // Frame animasi pertama: maskot masuk dengan animasi "hop"; reduced motion: tanpa animasi
+  const an = await newPage(); await an.goto(base); await an.waitForSelector('.devices');
+  const anim = await an.evaluate(() => { const m = document.querySelector('.hero .mascot'); return { intro: m.classList.contains('intro'), name: getComputedStyle(m).animationName }; });
+  await an.context().close();
+  const rmCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+  await rmCtx.route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV }));
+  const rm = await rmCtx.newPage(); await rm.goto(base); await rm.waitForSelector('.devices');
+  const rmName = await rm.evaluate(() => getComputedStyle(document.querySelector('.hero .mascot')).animationName);
+  await rmCtx.close();
+  expect('HERO', anim.intro && anim.name === 'hop' && rmName === 'none', 'Maskot melompat masuk sekali (animasi "hop"); dengan pengaturan kurangi gerakan, tanpa animasi', { ...anim, rmName });
+  // Tanpa iPhone di daftar harga: hanya tombol Android. Saat gagal memuat: tanpa tombol.
+  const ni = await newPage();
+  await ni.context().route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV.split('\n').filter((l) => !/^"?iphone/i.test(l)).join('\n') }));
+  await ni.goto(base); await ni.waitForSelector('.grid-brands');
+  const niLabels = await ni.$$eval('.devices a b', (bs) => bs.map((b) => b.textContent));
+  await ni.context().close();
+  const fl = await newPage({ data: 'abort' }); await fl.goto(base); await fl.waitForSelector('#retry');
+  const flDev = await fl.$('.devices');
+  await fl.context().close();
+  expect('HERO', JSON.stringify(niLabels) === '["Android"]' && flDev === null, 'Tombol hanya tampil untuk jenis HP yang ada di daftar harga; tidak tampil saat daftar harga gagal dimuat', { niLabels });
+  for (const [w, hh] of [[390, 844], [1440, 900]]) {
+    const sp = await newPage({ viewport: { width: w, height: hh } }); await sp.goto(base); await sp.waitForSelector('.devices'); await sp.waitForTimeout(1000);
+    await shot(sp, 'hero-' + w); await sp.context().close();
+  }
+  rec('HERO', 'LULUS', 'Dinilai lewat emulasi Chromium; kehalusan animasi perlu dicoba pemilik di HP sungguhan.');
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });
