@@ -162,6 +162,18 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **A21** diperbaiki: uji kini menunggu kartu merek asli, bukan kerangka memuat (penyebab gagal sesekali sebelumnya).
 - **Belum diuji:** kehalusan animasi di HP sungguhan (dicek pemilik lewat link preview).
 
+## Versi 3.7 (preview): meja service 3D + kata "service" (25 Nov 2026)
+
+- **HERO, LULUS (emulasi Chromium):**
+  - Adegan meja service tidak menutupi judul maupun kolom cari; kolom cari, tombol iPhone/Android, dan badge tetap terlihat tanpa menggulir di 360×640.
+  - Laptop menampilkan "BERKAH CELL · Bypass Tool" → "iPhone terhubung" → "Membaca perangkat…" → "Bypass iCloud…" → "✓ Selesai" (tanpa nama atau logo software pihak lain).
+  - Animasi (`btArm`, `barGrow`) hanya pada kunjungan pertama; Back dan "kurangi gerakan" langsung menampilkan keadaan selesai. Saat data dimuat atau gagal, adegan diam di frame awal.
+  - Kolom cari bisa diketik saat animasi berjalan; saat mengetik adegan disembunyikan.
+- **Kata "service":** semua uji pesan WhatsApp (A07, A17, A18, A20, A24) dan label memakai "service".
+- **A13** disesuaikan: hero lebih tinggi, jadi uji menggulir kartu Oppo ke tengah layar sebelum mengklik.
+- **Berkahtron bergerak:** lapisan badan dan lengan dibuat dari gambar asli (`tools/buat_rig_maskot.js`), sambungan dicek lewat pratinjau sudut 0°, ±14°, −45°, −80°.
+- **Belum diuji:** kehalusan animasi di HP sungguhan (dicek pemilik lewat link preview).
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).

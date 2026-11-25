@@ -199,6 +199,12 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - Maskot: kelas `intro` (animasi `hop`, hanya transform/opacity) sekali per kunjungan lewat `sessionStorage` `bc-hero-intro`; kolom cari mendapat kilau `glint` setelahnya.
 - Ikon `i-iphone` dan `i-android` di sprite `index.html`: siluet generik tanpa logo merek.
 
+## Meja service 3D (Versi 3.7)
+- `benchScene(mode)` di `site-live/app.js`: div berlapis dengan CSS 3D (`perspective`, `preserve-3d`), tanpa WebGL atau library. Mode `play` (kunjungan pertama), `done` (Back/kunjungan berikutnya), `pre` (data dimuat/gagal).
+- Gaya dasar CSS = frame akhir, jadi `prefers-reduced-motion` (aturan global) otomatis menampilkan keadaan selesai.
+- Berkahtron: `assets/berkahtron-badan.webp` + `berkahtron-lengan.webp` dari `tools/buat_rig_maskot.js`; lengan diputar di `transform-origin: 39% 57.4%` (sendi bahu).
+- Desktop ≥ 1024 px: hero dua kolom, adegan di kanan.
+
 ## Data
 
 - **Sumber:** file publik "Berkah Cell - Harga Publik (website)", ekspor CSV gviz. Tidak ada Harga_Modal.

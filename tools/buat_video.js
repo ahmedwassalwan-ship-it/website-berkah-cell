@@ -130,7 +130,7 @@ iframe{display:block;width:390px;height:${cari ? 748 : 804}px;border:0;backgroun
   ${cari ? `<div class="bbar" id="bbar"><div class="field" id="field"><svg class="lock" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span class="u" id="burl"></span><span class="ph" id="bph">Cari atau ketik alamat web</span><i class="caret"></i></div><div class="prog" id="prog"></div></div>` : ''}
   <iframe id="site" src="/"></iframe>
   ${cari ? `<div class="ntab" id="ntab"><div class="globe"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0A1A33" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></div><div class="tiles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="sugg" id="sugg"><div class="row"><img src="/assets/logo.webp" alt=""><div><b>berkahcellbatam.com</b><small>BERKAH CELL — Daftar Harga Servis HP Batam</small></div></div></div></div>
+    <div class="sugg" id="sugg"><div class="row"><img src="/assets/logo.webp" alt=""><div><b>berkahcellbatam.com</b><small>BERKAH CELL — Daftar Harga Service HP Batam</small></div></div></div></div>
   <div class="sheet" id="wa"><div class="hd"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2a8.7 8.7 0 00-7.5 13.1L3.3 20.8l4.6-1.2A8.7 8.7 0 1012 3.2zm4 10.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1l-.7.9c-.1.1-.3.2-.5.1a5.9 5.9 0 01-2.9-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4a.8.8 0 00-.6.3 2.5 2.5 0 00-.8 1.9 4.4 4.4 0 00.9 2.3 10 10 0 003.8 3.4c1.4.6 2 .7 2.7.6.4-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1l-.5-.2z"/></svg></span><div>Pesan otomatis ke BERKAH CELL<small>0896-2505-0525</small></div></div><div class="bubble" id="wamsg"></div><div class="send">Kirim pesan</div></div>
   <div class="sheet" id="map"><div class="hd"><span class="ic" style="background:#0A1A33"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8B566" stroke-width="2"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span><div>Lokasi toko<small>Ketuk untuk petunjuk arah</small></div></div>
     <div class="map"><svg width="350" height="200" viewBox="0 0 350 200"><rect width="350" height="200" fill="#EFE9DB"/><g fill="#E3DAC4"><rect x="10" y="10" width="96" height="62" rx="7"/><rect x="128" y="10" width="86" height="62" rx="7"/><rect x="10" y="94" width="64" height="96" rx="7"/><rect x="96" y="150" width="70" height="40" rx="7"/><rect x="190" y="94" width="72" height="96" rx="7"/><rect x="284" y="94" width="56" height="96" rx="7"/></g><rect x="96" y="94" width="70" height="40" rx="7" fill="#D3E2C2"/><rect x="236" y="10" width="104" height="62" rx="7" fill="#E9D9AE"/><path d="M0 83h350M117 0v200M225 0v200M0 141h350" stroke="#fff" stroke-width="10"/><path d="M40 200V141H117V83H225V70" fill="none" stroke="#C9A54E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9"/><circle cx="40" cy="186" r="7" fill="#1F5FBF" stroke="#fff" stroke-width="3"/></svg><div class="label">BERKAH CELL</div><div class="pin"><i class="pulse"></i><svg viewBox="0 0 34 44"><path d="M17 43s-15-13-15-25a15 15 0 0130 0c0 12-15 25-15 25z" fill="#0A1A33" stroke="#D8B566" stroke-width="2"/><circle cx="17" cy="18" r="5.5" fill="#D8B566"/></svg></div></div>
@@ -149,7 +149,7 @@ ${cari ? `<div class="full hook" id="hook"><div class="big pop">Mau tahu harga</
   <img class="logo pop" src="/assets/logo.webp" alt="">
   <div class="brand pop">BERKAH CELL</div><div class="tag pop">SERVICE HP · BATAM</div>
   <div class="rule pop d1"></div>
-  <h1 class="pop d1"><span id="o1">Cek harga servis</span><br><span class="gold" id="o2">langsung di</span></h1>
+  <h1 class="pop d1"><span id="o1">Cek harga service</span><br><span class="gold" id="o2">langsung di</span></h1>
   <div class="pill pop d2">berkahcellbatam.com</div>
   <div class="meta pop d3">WhatsApp <b>0896-2505-0525</b><br>Avava Jodoh, Lantai Dasar, Batam</div>
 </div>
@@ -317,7 +317,7 @@ async function alurDemo({ page, fr, st, tap, scrollTo, bypass, cover }) {
   if (cover) await page.screenshot({ path: cover });
   // 2. Beranda
   await st('phoneIn'); await sleep(350);
-  await st('say', 'Cek harga servis HP', 'kapan saja, dari HP kamu'); await sleep(2300);
+  await st('say', 'Cek harga service HP', 'kapan saja, dari HP kamu'); await sleep(2300);
   // 3. Cari tipe
   await st('say', 'Ketik tipe HP,', 'harga langsung muncul'); await sleep(500);
   await tap('#q'); await sleep(250);

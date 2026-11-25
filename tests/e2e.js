@@ -232,7 +232,7 @@ async function testDetailData() {
   await p.goto(base + '?merek=iphone&tipe=7'); await ready(p);
   const i7 = await p.$$eval('.var', (e) => e.map((x) => x.innerText.replace(/\s+/g, ' ')));
   const kunci = i7.find((t) => /Rp 50\.000/.test(t));
-  expect('A04', kunci && /Jasa servis/.test(kunci) && /Tanpa garansi/.test(kunci), 'Kualitas "Jasa" tampil sebagai label "Jasa servis", bukan harga atau gratis', i7);
+  expect('A04', kunci && /Jasa service/.test(kunci) && /Tanpa garansi/.test(kunci), 'Kualitas "Jasa" tampil sebagai label "Jasa service", bukan harga atau gratis', i7);
   await p.goto(base + '?merek=iphone&tipe=8+plus'); await ready(p);
   const p8 = await p.$$eval('.var', (e) => e.map((x) => ({ t: x.innerText.replace(/\s+/g, ' '), q: x.querySelector('.q') ? x.querySelector('.q').textContent : null })));
   const bk = p8.find((x) => /Rp 150\.000/.test(x.t) && x.q === null);
@@ -300,15 +300,15 @@ async function testWhatsApp() {
   await p.click('.var >> nth=0');
   const a = decodeWa(await p.getAttribute('.cta a.btn-pri', 'href'));
   expect('A07', a.host === 'wa.me' && a.path === '/6289625050525', 'Tautan ke wa.me/6289625050525', a);
-  expect('A07', a.text === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.', 'Layanan terpilih → pesan berisi tipe, layanan, kualitas, harga', a.text);
+  expect('A07', a.text === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.', 'Layanan terpilih → pesan berisi tipe, layanan, kualitas, harga', a.text);
   const c = decodeWa(await p.getAttribute('a.link-btn[href*="wa.me"]', 'href'));
-  expect('A07', c.path === '/6289625050525' && c.text.includes('mengonfirmasi harga servis iPhone 11') && c.text.includes('Ganti LCD (Incel)'), 'Konfirmasi ke owner memakai nomor yang sama dengan isi sesuai tujuan', c.text);
+  expect('A07', c.path === '/6289625050525' && c.text.includes('mengonfirmasi harga service iPhone 11') && c.text.includes('Ganti LCD (Incel)'), 'Konfirmasi ke owner memakai nomor yang sama dengan isi sesuai tujuan', c.text);
   const all = await p.$$eval('a[href*="wa.me"]', (e) => e.map((x) => new URL(x.href).pathname));
   expect('A07', all.length > 0 && all.every((x) => x === '/6289625050525'), 'Semua tautan WhatsApp menuju satu nomor toko', all);
   await p.goto(base + '?merek=iphone&tipe=8'); await ready(p);
-  await p.click('.var:has-text("Jasa servis")');
+  await p.click('.var:has-text("Jasa service")');
   const j = decodeWa(await p.getAttribute('.cta a.btn-pri', 'href'));
-  expect('A07', j.text === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 8: Bypass (jasa servis). Harga di website Rp100.000.', 'Baris "Jasa" → pesan tanpa menyebut kualitas komponen', j.text);
+  expect('A07', j.text === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 8: Bypass (jasa service). Harga di website Rp100.000.', 'Baris "Jasa" → pesan tanpa menyebut kualitas komponen', j.text);
   expect('A07', p.__requests.every((u) => !u.startsWith('https://wa.me')), 'Tidak ada pesan yang terkirim otomatis (WhatsApp tidak dibuka tanpa ketukan)');
   await p.context().close();
 }
@@ -416,7 +416,9 @@ async function testKeyboard() {
 async function testBackBrand() {
   const p = await newPage({ viewport: { width: 390, height: 640 } });
   await p.goto('about:blank'); await p.goto(base); await ready(p);
-  await p.evaluate(() => window.scrollTo(0, 200)); await sleep(250);
+  // Gulir sampai kartu Oppo terlihat penuh (klik tidak perlu menggulir lagi), lalu catat posisinya.
+  await p.evaluate(() => [...document.querySelectorAll('.tile')].find((a) => a.textContent.startsWith('Oppo')).scrollIntoView({ block: 'center' })); await sleep(250);
+  const y0 = await p.evaluate(() => window.scrollY);
   await p.click('.tile:has(b:text-is("Oppo"))'); await p.waitForSelector('.list');
   // Gulir sampai tautan A77S terlihat, lalu catat posisi tepat sebelum klik (klik tidak menggulir lagi).
   await p.evaluate(() => [...document.querySelectorAll('.list a')].find((a) => a.textContent.includes('A77S')).scrollIntoView({ block: 'center' })); await sleep(250);
@@ -428,7 +430,7 @@ async function testBackBrand() {
   expect('A13', back1.url === '?merek=oppo' && Math.abs(back1.y - y1) <= 2, 'Back dari detail → daftar tipe Oppo dengan posisi gulir sama', { back1, y1 });
   await p.goBack(); await p.waitForSelector('.tile'); await sleep(200);
   const back2 = await p.evaluate(() => ({ url: location.search, y: window.scrollY }));
-  expect('A13', back2.url === '' && Math.abs(back2.y - 200) <= 2, 'Back berikutnya → Beranda dengan posisi gulir grid sama', back2);
+  expect('A13', back2.url === '' && y0 > 100 && Math.abs(back2.y - y0) <= 2, 'Back berikutnya → Beranda dengan posisi gulir grid sama', { back2, y0 });
   await p.goBack(); await sleep(300);
   expect('A13', p.url() === 'about:blank', 'Back ketiga keluar ke halaman sebelum website (tidak keluar terlalu awal)', p.url());
   await p.goForward(); await p.waitForSelector('.tile'); await p.goForward(); await p.waitForSelector('.list'); await sleep(200);
@@ -523,10 +525,10 @@ async function testGanti() {
   await p.click('.list a:has-text("XR")'); await p.waitForSelector('.dev h1');
   expect('A17', (await p.textContent('.dev h1')) === 'iPhone XR' && (await p.$$('.var')).length === 3, 'Identitas dan daftar layanan berganti ke iPhone XR');
   await p.click('.cta button'); await p.waitForSelector('.sheet');
-  expect('A17', (await p.textContent('#panel-judul')) === 'Tanya servis iPhone XR' && (await p.textContent('.preview')).includes('iPhone XR'), 'Panel WhatsApp memakai konteks iPhone XR');
+  expect('A17', (await p.textContent('#panel-judul')) === 'Tanya service iPhone XR' && (await p.textContent('.preview')).includes('iPhone XR'), 'Panel WhatsApp memakai konteks iPhone XR');
   await p.keyboard.press('Escape'); await sleep(250);
   await p.click('.var >> nth=0');
-  expect('A17', decodeWa(await p.getAttribute('.cta a.btn-pri', 'href')).text.includes('servis iPhone XR: Ganti LCD (Incel)'), 'Pesan layanan terpilih memakai iPhone XR');
+  expect('A17', decodeWa(await p.getAttribute('.cta a.btn-pri', 'href')).text.includes('service iPhone XR: Ganti LCD (Incel)'), 'Pesan layanan terpilih memakai iPhone XR');
   await p.goBack(); await p.waitForSelector('.notice');
   expect('A17', p.url().endsWith('?merek=iphone'), 'Back → daftar tipe (layar yang dilalui)');
   await p.goBack(); await p.waitForSelector('.dev h1');
@@ -543,7 +545,7 @@ async function testNotFound() {
   await shot(p, 'tidak-ditemukan-390');
   await p.click('main .state button:has-text("Tanyakan lewat WhatsApp")'); await p.waitForSelector('.sheet');
   const skip = decodeWa(await p.getAttribute('.skip', 'href')).text;
-  expect('A18', skip === 'Halo BERKAH CELL, saya mencari harga servis samsung a55, tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.', '"Tanyakan lewat WhatsApp" → pesan sesuai PRD', skip);
+  expect('A18', skip === 'Halo BERKAH CELL, saya mencari harga service samsung a55, tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.', '"Tanyakan lewat WhatsApp" → pesan sesuai PRD', skip);
   await p.click('.opt[data-need="lcd"]');
   expect('A18', decodeWa(await p.getAttribute('.sheet .btn-pri', 'href')).text === 'Halo BERKAH CELL, saya ingin menanyakan harga ganti LCD atau layar samsung a55. Harganya belum tercantum di website.', 'Dengan kebutuhan LCD → pesan sesuai contoh PRD');
   await p.click('.x-btn'); await sleep(250);
@@ -575,13 +577,13 @@ async function testPanel() {
   await p.click('.cta button'); await p.waitForSelector('.sheet');
   const opts = await p.$$eval('.opt', (e) => e.map((x) => x.textContent.trim()));
   expect('A20', JSON.stringify(opts) === JSON.stringify(['Ganti LCD atau layar', 'Ganti baterai', 'Layanan lainnya', 'Belum tahu, ingin menjelaskan keluhan']), 'Empat pilihan kebutuhan sesuai PRD', opts);
-  expect('A20', decodeWa(await p.getAttribute('.skip', 'href')).text === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11.', '"Lewati" langsung ke WhatsApp tanpa memilih');
+  expect('A20', decodeWa(await p.getAttribute('.skip', 'href')).text === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11.', '"Lewati" langsung ke WhatsApp tanpa memilih');
   const msgs = {};
   for (const id of ['lcd', 'baterai', 'lainnya', 'keluhan']) {
     await p.click(`.opt[data-need="${id}"]`);
     msgs[id] = decodeWa(await p.getAttribute('.sheet .btn-pri', 'href')).text;
   }
-  expect('A20', msgs.keluhan === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11. Kebutuhan: belum tahu, ingin menjelaskan keluhan.' && msgs.lcd.endsWith('Kebutuhan: ganti LCD atau layar.'), 'Setiap pilihan menghasilkan pesan berkonteks; "Belum tahu" tanpa teks tambahan tetap bisa dikirim', msgs);
+  expect('A20', msgs.keluhan === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11. Kebutuhan: belum tahu, ingin menjelaskan keluhan.' && msgs.lcd.endsWith('Kebutuhan: ganti LCD atau layar.'), 'Setiap pilihan menghasilkan pesan berkonteks; "Belum tahu" tanpa teks tambahan tetap bisa dikirim', msgs);
   expect('A20', (await p.$$('.sheet [required]')).length === 0, 'Tidak ada isian wajib');
   await p.click('.opt[data-need="baterai"]'); await p.fill('#panel-ket', 'Baterai cepat habis');
   expect('A20', (await p.textContent('.preview')).endsWith('Kebutuhan: ganti baterai. Keterangan: Baterai cepat habis'), 'Keterangan tambahan masuk ke pesan');
@@ -592,7 +594,7 @@ async function testPanel() {
   await p.click('.x-btn'); await sleep(250);
   let s = await p.evaluate(() => ({ open: !document.getElementById('panel-layer').hidden, y: window.scrollY, url: location.search }));
   expect('PANEL', !s.open && Math.abs(s.y - yBefore) <= 2 && s.url === '?merek=iphone&tipe=11', 'X menutup panel; perangkat dan posisi gulir tetap', { s, yBefore });
-  expect('PANEL', (await focusName()) === 'Tanya servis via WhatsApp', 'Fokus kembali ke tombol pembuka setelah X');
+  expect('PANEL', (await focusName()) === 'Tanya service via WhatsApp', 'Fokus kembali ke tombol pembuka setelah X');
   // Isian tetap untuk perangkat yang sama
   await p.click('.cta button'); await p.waitForSelector('.sheet');
   expect('PANEL', (await p.getAttribute('.opt[data-need="baterai"]', 'aria-pressed')) === 'true' && (await p.inputValue('#panel-ket')) === 'Baterai cepat habis', 'Isian dipertahankan selama perangkat sama');
@@ -844,7 +846,7 @@ async function testStore() {
     });
     const msg = bar && decodeWa(await pl.getAttribute('.cta a.btn-pri', 'href')).text;
     expect('A24', bar && bar.wa === 'Tanya via WhatsApp' && bar.loc === 'Lokasi' && bar.href === STORE.maps && bar.target === '_blank' && /noopener/.test(bar.rel)
-      && bar.fits && bar.sameRow && bar.waH <= 60 && bar.locH >= 44 && bar.right <= w && !bar.wide && msg === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.',
+      && bar.fits && bar.sameRow && bar.waH <= 60 && bar.locH >= 44 && bar.right <= w && !bar.wide && msg === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.',
       `Layanan terpilih (${w} px): tombol WhatsApp dan Lokasi sebaris, tidak terpotong, pesan WhatsApp tetap sama`, { bar, msg });
     await pl.context().close();
   }
@@ -855,7 +857,7 @@ async function testStore() {
   await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
   await q.click('.var >> nth=0'); await sleep(100);
   const nl = await q.evaluate(() => ({ loc: !!document.querySelector('.cta a.btn-loc'), wa: document.querySelector('.cta a.btn-pri').textContent.trim() }));
-  expect('A24', !nl.loc && nl.wa === 'Tanya servis ini via WhatsApp', 'Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh', nl);
+  expect('A24', !nl.loc && nl.wa === 'Tanya service ini via WhatsApp', 'Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh', nl);
   rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
 }
@@ -905,7 +907,7 @@ async function testPolish() {
     'Motif emboss (permintaan pemilik 8 Okt 2026) termuat dari situs sendiri di latar halaman, hero, dan footer', motif);
   const steps = await p.$$eval('.steps li', (e) => e.map((x) => x.querySelector('b').textContent + ' | ' + x.querySelector('p').textContent));
   expect('POLES', JSON.stringify(steps) === JSON.stringify(['Cek harga di sini | Cari tipe HP kamu, lalu pilih layanan yang dibutuhkan.', 'Tanya lewat WhatsApp | Pesan sudah berisi tipe HP dan layanan pilihanmu.', 'Bawa HP ke toko | ' + STORE.address + '. Pemeriksaan gratis.']),
-    'Beranda: "Cara servis" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)', steps);
+    'Beranda: "Cara service" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)', steps);
   const trust = await p.$$eval('.hero .trust li', (e) => e.map((x) => x.textContent.trim()));
   expect('POLES', JSON.stringify(trust) === JSON.stringify(['Pemeriksaan gratis', 'Harga termasuk jasa pemasangan', 'Garansi tertera per layanan']), 'Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik', trust);
   const badge = await p.$eval('a.andalan', (a) => ({ text: a.textContent.trim(), href: a.getAttribute('href'), h: a.getBoundingClientRect().height })).catch(() => null);
@@ -962,19 +964,23 @@ async function testHero() {
   // Kolom cari harus bisa diketik segera, tanpa menunggu animasi maskot selesai.
   const t0 = Date.now(); await p.fill('#q', 'iphone 11'); const typedMs = Date.now() - t0;
   await p.waitForSelector('.list .li');
-  const s = await p.evaluate(() => ({ first: document.querySelector('.list .li .t').textContent, hid: ['.devices', '.mascot', '.hero h1'].map((q) => getComputedStyle(document.querySelector(q)).display) }));
-  expect('HERO', typedMs < 600 && s.first === 'iPhone 11' && s.hid.every((d) => d === 'none'), 'Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, maskot, dan tombol perangkat disembunyikan seperti sebelumnya', { typedMs, ...s });
+  const s = await p.evaluate(() => ({ first: document.querySelector('.list .li .t').textContent, hid: ['.devices', '.bench', '.hero h1'].map((q) => getComputedStyle(document.querySelector(q)).display) }));
+  expect('HERO', typedMs < 600 && s.first === 'iPhone 11' && s.hid.every((d) => d === 'none'), 'Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, meja service, dan tombol perangkat disembunyikan', { typedMs, ...s });
   await p.fill('#q', ''); await p.waitForSelector('.devices');
-  await p.waitForTimeout(1000);
+  await p.waitForTimeout(4600); // animasi meja service ±4,4 dtk
   const v = await p.evaluate(() => {
     const r = (q) => { const e = document.querySelector(q); return e ? Math.round(e.getBoundingClientRect().bottom) : null; };
     const devs = [...document.querySelectorAll('.devices a')].map((a) => ({ label: a.querySelector('b').textContent, sub: a.querySelector('small').textContent, href: a.getAttribute('href'), h: Math.round(a.getBoundingClientRect().height) }));
-    const m = document.querySelector('.hero .mascot').getBoundingClientRect(); const sb = document.querySelector('.searchbox').getBoundingClientRect();
-    return { h1: document.querySelector('.hero h1').textContent, search: r('.searchbox'), devices: r('.devices'), badge: r('.andalan'), devs, wide: document.documentElement.scrollWidth > innerWidth, mascotOverSearch: m.bottom > sb.top + 2 && m.right > sb.left };
+    const m = document.querySelector('.hero .bench').getBoundingClientRect(); const sb = document.querySelector('.searchbox').getBoundingClientRect();
+    const h1 = document.querySelector('.hero h1').getBoundingClientRect(); const lid = document.querySelector('.lap-lid').getBoundingClientRect();
+    const bench = { lidBelowTitle: lid.top >= h1.bottom - 1, aria: document.querySelector('.bench').getAttribute('aria-hidden'), log: [...document.querySelectorAll('.lap-screen .ln')].map((e) => e.textContent), ok: getComputedStyle(document.querySelector('.iph .ok')).opacity, arm: getComputedStyle(document.querySelector('.bt-arm')).transform };
+    return { h1: document.querySelector('.hero h1').textContent, search: r('.searchbox'), devices: r('.devices'), badge: r('.andalan'), devs, wide: document.documentElement.scrollWidth > innerWidth, mascotOverSearch: m.bottom > sb.top + 2, bench };
   });
-  expect('HERO', v.h1 === 'Servis iPhone & Android di Batam', 'Judul hero menyebut iPhone & Android', v.h1);
+  expect('HERO', v.h1 === 'Service iPhone & Android di Batam', 'Judul hero menyebut iPhone & Android', v.h1);
   expect('HERO', v.search <= 640 && v.devices <= 640 && v.badge <= 640 && !v.wide, 'Di layar 360×640, kolom cari, tombol iPhone/Android, dan badge terlihat tanpa menggulir; tanpa gulir ke samping', v);
-  expect('HERO', !v.mascotOverSearch, 'Maskot tidak menutupi kolom cari', v);
+  expect('HERO', !v.mascotOverSearch && v.bench.lidBelowTitle, 'Meja service tidak menutupi judul maupun kolom cari', v);
+  expect('HERO', v.bench.aria === 'true' && JSON.stringify(v.bench.log) === JSON.stringify(['BERKAH CELL · Bypass Tool', 'iPhone terhubung', 'Membaca perangkat…', 'Bypass iCloud…', '✓ Selesai']) && v.bench.ok === '1' && v.bench.arm !== 'none',
+    'Meja service (hiasan, aria-hidden): laptop tool bypass generik tanpa merek pihak lain, berakhir "✓ Selesai", Berkahtron mempersilakan', v.bench);
   expect('HERO', v.devs.length === 2 && v.devs[0].label === 'iPhone' && v.devs[0].sub === '18 tipe' && v.devs[1].label === 'Android' && v.devs[1].sub === '9 merek' && v.devs.every((d) => d.h >= 44),
     'Tombol [iPhone] dan [Android] dengan angka dari daftar harga (18 tipe iPhone, 9 merek Android), area sentuh ≥ 44 px', v.devs);
   await shot(p, 'hero-360x640');
@@ -988,20 +994,21 @@ async function testHero() {
   await p.click('.devices a:nth-child(1)'); await p.waitForSelector('.list .li');
   const ip = await p.evaluate(() => ({ url: location.search, n: document.querySelectorAll('.list .li').length }));
   await p.goBack(); await p.waitForSelector('.devices');
-  const intro = await p.evaluate(() => document.querySelector('.hero .mascot').classList.contains('intro'));
+  const intro = await p.evaluate(() => document.querySelector('.hero .bench').classList.contains('play'));
   expect('HERO', ip.url === '?merek=iphone' && ip.n === 18 && !intro, 'Tombol iPhone membuka 18 tipe iPhone; Back kembali ke beranda tanpa mengulang animasi', { ...ip, intro });
   expect('HERO', p.__errors.length === 0 && p.__requests.every((u) => u.startsWith(base) || u.startsWith('https://docs.google.com/')), 'Tanpa error JavaScript dan tanpa request luar baru', { errors: p.__errors });
   await p.context().close();
-  // Frame animasi pertama: maskot masuk dengan animasi "hop"; reduced motion: tanpa animasi
+  // Kunjungan pertama memutar animasi meja service; reduced motion: tanpa animasi, langsung frame akhir
   const an = await newPage(); await an.goto(base); await an.waitForSelector('.devices');
-  const anim = await an.evaluate(() => { const m = document.querySelector('.hero .mascot'); return { intro: m.classList.contains('intro'), name: getComputedStyle(m).animationName }; });
+  const anim = await an.evaluate(() => { const b = document.querySelector('.hero .bench'); return { intro: b.classList.contains('play'), name: getComputedStyle(b.querySelector('.bt-arm')).animationName, bar: getComputedStyle(b.querySelector('.bar i')).animationName }; });
   await an.context().close();
   const rmCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   await rmCtx.route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV }));
   const rm = await rmCtx.newPage(); await rm.goto(base); await rm.waitForSelector('.devices');
-  const rmName = await rm.evaluate(() => getComputedStyle(document.querySelector('.hero .mascot')).animationName);
+  const rmName = await rm.evaluate(() => getComputedStyle(document.querySelector('.hero .bt-arm')).animationName);
+  const rmDone = await rm.evaluate(() => getComputedStyle(document.querySelector('.lap-screen .l4')).opacity === '1' && getComputedStyle(document.querySelector('.bt-arm')).transform !== 'none');
   await rmCtx.close();
-  expect('HERO', anim.intro && anim.name === 'hop' && rmName === 'none', 'Maskot melompat masuk sekali (animasi "hop"); dengan pengaturan kurangi gerakan, tanpa animasi', { ...anim, rmName });
+  expect('HERO', anim.intro && anim.name === 'btArm' && anim.bar === 'barGrow' && rmName === 'none' && rmDone, 'Animasi meja service diputar sekali; dengan pengaturan kurangi gerakan, tanpa animasi dan langsung tampil keadaan selesai', { ...anim, rmName, rmDone });
   // Tanpa iPhone di daftar harga: hanya tombol Android. Saat gagal memuat: tanpa tombol.
   const ni = await newPage();
   await ni.context().route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV.split('\n').filter((l) => !/^"?iphone/i.test(l)).join('\n') }));

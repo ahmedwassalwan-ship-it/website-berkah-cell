@@ -48,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 15 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 19 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -65,7 +65,7 @@
     "notes": [
       "✓ Ganti LCD: Incel, Rp 300.000, 30 menit, 7 hari sesuai sumber",
       "✓ Garansi \"Tidak Ada\" → \"Tanpa garansi\"",
-      "✓ Kualitas \"Jasa\" tampil sebagai label \"Jasa servis\", bukan harga atau gratis",
+      "✓ Kualitas \"Jasa\" tampil sebagai label \"Jasa service\", bukan harga atau gratis",
       "✓ Kualitas \"Tidak Ada\" tidak tampil sebagai label kualitas"
     ]
   },
@@ -357,7 +357,7 @@
       "✓ Spasi kata di tombol sama dengan teks biasa (tidak \"Garansi7hari\")",
       "✓ Font Plus Jakarta Sans termuat dari situs sendiri",
       "✓ Motif emboss (permintaan pemilik 8 Okt 2026) termuat dari situs sendiri di latar halaman, hero, dan footer",
-      "✓ Beranda: \"Cara servis\" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)",
+      "✓ Beranda: \"Cara service\" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)",
       "✓ Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik",
       "✓ Badge andalan \"Bypass iCloud iPhone\" tampil di hero (area sentuh ≥ 44 px)",
       "✓ Mengetuk badge menampilkan semua harga bypass",
@@ -377,15 +377,16 @@
   "HERO": {
     "status": "LULUS",
     "notes": [
-      "✓ Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, maskot, dan tombol perangkat disembunyikan seperti sebelumnya",
+      "✓ Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, meja service, dan tombol perangkat disembunyikan",
       "✓ Judul hero menyebut iPhone & Android",
       "✓ Di layar 360×640, kolom cari, tombol iPhone/Android, dan badge terlihat tanpa menggulir; tanpa gulir ke samping",
-      "✓ Maskot tidak menutupi kolom cari",
+      "✓ Meja service tidak menutupi judul maupun kolom cari",
+      "✓ Meja service (hiasan, aria-hidden): laptop tool bypass generik tanpa merek pihak lain, berakhir \"✓ Selesai\", Berkahtron mempersilakan",
       "✓ Tombol [iPhone] dan [Android] dengan angka dari daftar harga (18 tipe iPhone, 9 merek Android), area sentuh ≥ 44 px",
       "✓ Tombol Android menggulir ke \"Pilih merek\" tanpa mengubah alamat atau riwayat",
       "✓ Tombol iPhone membuka 18 tipe iPhone; Back kembali ke beranda tanpa mengulang animasi",
       "✓ Tanpa error JavaScript dan tanpa request luar baru",
-      "✓ Maskot melompat masuk sekali (animasi \"hop\"); dengan pengaturan kurangi gerakan, tanpa animasi",
+      "✓ Animasi meja service diputar sekali; dengan pengaturan kurangi gerakan, tanpa animasi dan langsung tampil keadaan selesai",
       "✓ Tombol hanya tampil untuk jenis HP yang ada di daftar harga; tidak tampil saat daftar harga gagal dimuat",
       "✓ Dinilai lewat emulasi Chromium; kehalusan animasi perlu dicoba pemilik di HP sungguhan."
     ]
