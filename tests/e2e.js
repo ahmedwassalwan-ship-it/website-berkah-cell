@@ -94,7 +94,6 @@ async function run() {
     await testDomain();
     await testPolish();
     await testHero();
-    await testHero3d();
   } finally {
     await browser.close(); srv.srv.close();
   }
@@ -965,25 +964,25 @@ async function testHero() {
   // Kolom cari harus bisa diketik segera, tanpa menunggu animasi maskot selesai.
   const t0 = Date.now(); await p.fill('#q', 'iphone 11'); const typedMs = Date.now() - t0;
   await p.waitForSelector('.list .li');
-  const s = await p.evaluate(() => ({ first: document.querySelector('.list .li .t').textContent, hid: ['.devices', '.bench', '.hero h1'].map((q) => getComputedStyle(document.querySelector(q)).display) }));
-  expect('HERO', typedMs < 600 && s.first === 'iPhone 11' && s.hid.every((d) => d === 'none'), 'Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, meja service, dan tombol perangkat disembunyikan', { typedMs, ...s });
+  const s = await p.evaluate(() => ({ first: document.querySelector('.list .li .t').textContent, hid: ['.devices', '.mascot', '.hero h1'].map((q) => getComputedStyle(document.querySelector(q)).display) }));
+  expect('HERO', typedMs < 600 && s.first === 'iPhone 11' && s.hid.every((d) => d === 'none'), 'Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, maskot, dan tombol perangkat disembunyikan seperti sebelumnya', { typedMs, ...s });
   await p.fill('#q', ''); await p.waitForSelector('.devices');
-  await p.waitForTimeout(4600); // animasi meja service ±4,4 dtk
+  await p.waitForTimeout(1000);
   const v = await p.evaluate(() => {
     const r = (q) => { const e = document.querySelector(q); return e ? Math.round(e.getBoundingClientRect().bottom) : null; };
     const devs = [...document.querySelectorAll('.devices a')].map((a) => ({ label: a.querySelector('b').textContent, sub: a.querySelector('small').textContent, href: a.getAttribute('href'), h: Math.round(a.getBoundingClientRect().height) }));
-    const m = document.querySelector('.hero .bench').getBoundingClientRect(); const sb = document.querySelector('.searchbox').getBoundingClientRect();
-    const h1 = document.querySelector('.hero h1').getBoundingClientRect(); const lid = document.querySelector('.lap-lid').getBoundingClientRect();
-    const bench = { lidBelowTitle: lid.top >= h1.bottom - 1, aria: document.querySelector('.bench').getAttribute('aria-hidden'), log: [...document.querySelectorAll('.lap-screen .ln')].map((e) => e.textContent), ok: getComputedStyle(document.querySelector('.iph .ok')).opacity, arm: getComputedStyle(document.querySelector('.bt-arm')).transform };
-    return { h1: document.querySelector('.hero h1').textContent, search: r('.searchbox'), devices: r('.devices'), badge: r('.andalan'), devs, wide: document.documentElement.scrollWidth > innerWidth, mascotOverSearch: m.bottom > sb.top + 2, bench };
+    const m = document.querySelector('.hero .mascot').getBoundingClientRect(); const sb = document.querySelector('.searchbox').getBoundingClientRect();
+    return { h1: document.querySelector('.hero h1').textContent, search: r('.searchbox'), devices: r('.devices'), badge: r('.andalan'), devs, wide: document.documentElement.scrollWidth > innerWidth, mascotOverSearch: m.bottom > sb.top + 2 && m.right > sb.left };
   });
   expect('HERO', v.h1 === 'Service iPhone & Android di Batam', 'Judul hero menyebut iPhone & Android', v.h1);
   expect('HERO', v.search <= 640 && v.devices <= 640 && v.badge <= 640 && !v.wide, 'Di layar 360×640, kolom cari, tombol iPhone/Android, dan badge terlihat tanpa menggulir; tanpa gulir ke samping', v);
-  expect('HERO', !v.mascotOverSearch && v.bench.lidBelowTitle, 'Meja service tidak menutupi judul maupun kolom cari', v);
-  expect('HERO', v.bench.aria === 'true' && JSON.stringify(v.bench.log) === JSON.stringify(['BERKAH CELL · Bypass Tool', 'iPhone terhubung', 'Membaca perangkat…', 'Bypass iCloud…', '✓ Selesai']) && v.bench.ok === '1' && v.bench.arm !== 'none',
-    'Meja service (hiasan, aria-hidden): laptop tool bypass generik tanpa merek pihak lain, berakhir "✓ Selesai", Berkahtron mempersilakan', v.bench);
+  expect('HERO', !v.mascotOverSearch, 'Maskot tidak menutupi kolom cari', v);
   expect('HERO', v.devs.length === 2 && v.devs[0].label === 'iPhone' && v.devs[0].sub === '18 tipe' && v.devs[1].label === 'Android' && v.devs[1].sub === '9 merek' && v.devs.every((d) => d.h >= 44),
     'Tombol [iPhone] dan [Android] dengan angka dari daftar harga (18 tipe iPhone, 9 merek Android), area sentuh ≥ 44 px', v.devs);
+  const extra = await p.evaluate(() => ({ latar: getComputedStyle(document.querySelector('.hero-latar')).backgroundImage, pe: getComputedStyle(document.querySelector('.hero-latar')).pointerEvents,
+    aria: document.querySelector('.hero-latar').getAttribute('aria-hidden'), cams: document.querySelectorAll('#i-iphone circle').length, green: !!document.querySelector('#i-android [fill="#3DDC84"]'), attr: (document.querySelector('.ftr .attr') || {}).textContent }));
+  expect('HERO', /latar-hero-m\.webp/.test(extra.latar) && extra.pe === 'none' && extra.aria === 'true', 'Latar samar laptop bypass + iPhone 14 Pro Max ungu di belakang teks hero (hiasan, tidak menerima sentuhan)', extra);
+  expect('HERO', extra.cams === 3 && extra.green && /Robot Android .*Google.*CC BY 3\.0/.test(extra.attr || ''), 'Ikon tombol: iPhone dengan modul 3 kamera (tanpa logo Apple), robot Android hijau dengan atribusi CC BY 3.0 di footer', extra);
   await shot(p, 'hero-360x640');
   // Android: gulir ke grid merek tanpa mengubah URL atau riwayat
   const before = await p.evaluate(() => [location.href, history.length]);
@@ -995,21 +994,20 @@ async function testHero() {
   await p.click('.devices a:nth-child(1)'); await p.waitForSelector('.list .li');
   const ip = await p.evaluate(() => ({ url: location.search, n: document.querySelectorAll('.list .li').length }));
   await p.goBack(); await p.waitForSelector('.devices');
-  const intro = await p.evaluate(() => document.querySelector('.hero .bench').classList.contains('play'));
+  const intro = await p.evaluate(() => document.querySelector('.hero .mascot').classList.contains('intro'));
   expect('HERO', ip.url === '?merek=iphone' && ip.n === 18 && !intro, 'Tombol iPhone membuka 18 tipe iPhone; Back kembali ke beranda tanpa mengulang animasi', { ...ip, intro });
   expect('HERO', p.__errors.length === 0 && p.__requests.every((u) => u.startsWith(base) || u.startsWith('https://docs.google.com/')), 'Tanpa error JavaScript dan tanpa request luar baru', { errors: p.__errors });
   await p.context().close();
-  // Kunjungan pertama memutar animasi meja service; reduced motion: tanpa animasi, langsung frame akhir
+  // Frame animasi pertama: maskot masuk dengan animasi "hop"; reduced motion: tanpa animasi
   const an = await newPage(); await an.goto(base); await an.waitForSelector('.devices');
-  const anim = await an.evaluate(() => { const b = document.querySelector('.hero .bench'); return { intro: b.classList.contains('play'), name: getComputedStyle(b.querySelector('.bt-arm')).animationName, bar: getComputedStyle(b.querySelector('.bar i')).animationName }; });
+  const anim = await an.evaluate(() => { const m = document.querySelector('.hero .mascot'); return { intro: m.classList.contains('intro'), name: getComputedStyle(m).animationName }; });
   await an.context().close();
   const rmCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   await rmCtx.route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV }));
   const rm = await rmCtx.newPage(); await rm.goto(base); await rm.waitForSelector('.devices');
-  const rmName = await rm.evaluate(() => getComputedStyle(document.querySelector('.hero .bt-arm')).animationName);
-  const rmDone = await rm.evaluate(() => getComputedStyle(document.querySelector('.lap-screen .l4')).opacity === '1' && getComputedStyle(document.querySelector('.bt-arm')).transform !== 'none');
+  const rmName = await rm.evaluate(() => getComputedStyle(document.querySelector('.hero .mascot')).animationName);
   await rmCtx.close();
-  expect('HERO', anim.intro && anim.name === 'btArm' && anim.bar === 'barGrow' && rmName === 'none' && rmDone, 'Animasi meja service diputar sekali; dengan pengaturan kurangi gerakan, tanpa animasi dan langsung tampil keadaan selesai', { ...anim, rmName, rmDone });
+  expect('HERO', anim.intro && anim.name === 'hop' && rmName === 'none', 'Maskot melompat masuk sekali (animasi "hop"); dengan pengaturan kurangi gerakan, tanpa animasi', { ...anim, rmName });
   // Tanpa iPhone di daftar harga: hanya tombol Android. Saat gagal memuat: tanpa tombol.
   const ni = await newPage();
   await ni.context().route('https://docs.google.com/**', (r) => r.fulfill({ status: 200, contentType: 'text/csv', headers: { 'access-control-allow-origin': '*' }, body: CSV.split('\n').filter((l) => !/^"?iphone/i.test(l)).join('\n') }));
@@ -1025,46 +1023,6 @@ async function testHero() {
     await shot(sp, 'hero-' + w); await sp.context().close();
   }
   rec('HERO', 'LULUS', 'Dinilai lewat emulasi Chromium; kehalusan animasi perlu dicoba pemilik di HP sungguhan.');
-}
-
-
-/* ---------- HERO3D: prototipe meja service WebGL (?hero=3d, Versi 3.8) ---------- */
-async function testHero3d() {
-  // Beranda biasa tidak memuat Three.js sama sekali
-  const n = await newPage(); await n.goto(base); await ready(n); await sleep(500);
-  const vendorReq = n.__requests.filter((u) => /vendor\/three|bench3d/.test(u));
-  await n.context().close();
-  expect('HERO3D', vendorReq.length === 0, 'Tanpa ?hero=3d, beranda tidak memuat Three.js (tetap ringan)', vendorReq);
-  const p = await newPage({ viewport: { width: 390, height: 844 } });
-  await p.goto(base + '?hero=3d'); await p.waitForSelector('.bench3d[data-state="done"]', { timeout: 45000 });
-  const s = await p.evaluate(() => {
-    const c = document.querySelector('.bench3d canvas'); const sb = document.querySelector('.searchbox').getBoundingClientRect();
-    return { canvas: !!c && c.width > 0, cssHidden: getComputedStyle(document.querySelector('.bench .mat')).visibility, searchBottom: Math.round(sb.bottom), touch: getComputedStyle(c).touchAction, wide: document.documentElement.scrollWidth > innerWidth };
-  });
-  expect('HERO3D', s.canvas && s.cssHidden === 'hidden' && s.searchBottom <= 844 && s.touch === 'pan-y' && !s.wide,
-    'Dengan ?hero=3d: kanvas WebGL tampil menggantikan adegan CSS; kolom cari tetap di layar pertama; geser vertikal di HP tetap menggulir halaman', s);
-  const box = await p.locator('.bench3d-canvas').boundingBox(); const y = box.y + box.height / 2;
-  const yaw0 = await p.evaluate(() => document.querySelector('.bench3d').benchYaw);
-  await p.mouse.move(box.x + box.width / 2, y); await p.mouse.down();
-  for (let i = 1; i <= 8; i++) await p.mouse.move(box.x + box.width / 2 - i * 15, y);
-  await p.mouse.up(); await sleep(400);
-  const yaw1 = await p.evaluate(() => document.querySelector('.bench3d').benchYaw);
-  expect('HERO3D', Math.abs(yaw1 - yaw0) > 0.3, 'Drag memutar adegan 3D', { yaw0, yaw1 });
-  await p.fill('#q', 'iphone 11'); await p.waitForSelector('.list .li');
-  expect('HERO3D', await p.locator('.bench').isHidden(), 'Saat mengetik, adegan 3D disembunyikan');
-  expect('HERO3D', p.__errors.length === 0 && p.__requests.every((u) => u.startsWith(base) || u.startsWith('https://docs.google.com/')), 'Tanpa error JavaScript dan tanpa request luar (Three.js disimpan di situs sendiri)', { errors: p.__errors });
-  await shot(p, 'hero3d-390-cari');
-  await p.context().close();
-  // Bila modul 3D gagal dimuat, adegan CSS kembali diputar
-  const f = await newPage({ viewport: { width: 390, height: 844 } });
-  await f.context().route('**/bench3d.js*', (r) => r.fulfill({ status: 404, body: '' }));
-  await f.goto(base + '?hero=3d'); await ready(f); await sleep(800);
-  const fb = await f.evaluate(() => ({ cls: document.querySelector('.bench').className, host: !!document.querySelector('.bench3d') }));
-  await f.context().close();
-  expect('HERO3D', fb.cls === 'bench play' && !fb.host, 'Bila 3D gagal dimuat, adegan CSS diputar sebagai cadangan', fb);
-  const sp = await newPage({ viewport: { width: 390, height: 844 } }); await sp.goto(base + '?hero=3d'); await sp.waitForSelector('.bench3d[data-state="done"]', { timeout: 45000 });
-  await shot(sp, 'hero3d-390'); await sp.context().close();
-  rec('HERO3D', 'LULUS', 'Dinilai di Chromium tanpa GPU (WebGL perangkat lunak); kehalusan dan panas HP perlu dicoba pemilik di HP sungguhan.');
 }
 
 run().catch((e) => { console.error(e); process.exitCode = 2; });

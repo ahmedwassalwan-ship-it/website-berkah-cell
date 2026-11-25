@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Service HP · Versi 3.8
+/* BERKAH CELL — Daftar Harga Service HP · Versi 3.7
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
@@ -467,7 +467,7 @@
   }
 
   /* ================= Beranda & pencarian ================= */
-  // Animasi meja service hanya diputar pada beranda pertama dalam satu kunjungan (tidak diulang saat Back).
+  // Maskot melompat masuk hanya pada beranda pertama dalam satu kunjungan (tidak diulang saat Back).
   let heroIntroDone = false;
   function heroIntroShown() {
     if (heroIntroDone) return true;
@@ -477,51 +477,6 @@
       sessionStorage.setItem('bc-hero-intro', '1');
     } catch (e) { /* tanpa sessionStorage: cukup flag di memori */ }
     return false;
-  }
-  // Meja service 3D (Konsep 1, pemilik 25 Nov 2026): laptop menjalankan bypass ke iPhone di karpet,
-  // Android berdiri di dudukan, Berkahtron melambai lalu mempersilakan ke kolom cari. Hanya hiasan
-  // (aria-hidden); gambar HP dan laptop generik tanpa logo merek. Gaya dasar CSS = frame akhir,
-  // jadi tanpa animasi (kunjungan berikutnya, kurangi gerakan) langsung tampil keadaan selesai.
-  function benchScene(mode) {
-    const d = (cls, ...kids) => h('div', { class: cls }, ...kids);
-    const line = (cls, text) => h('span', { class: 'ln ' + cls, text });
-    return h('div', { class: 'bench ' + mode, 'aria-hidden': 'true' },
-      d('mat',
-        d('lap',
-          d('lap-base', d('lap-keys')),
-          d('lap-lid',
-            d('lap-screen',
-              h('b', { class: 'ln ttl', text: 'BERKAH CELL · Bypass Tool' }),
-              line('l1', 'iPhone terhubung'),
-              line('l2', 'Membaca perangkat…'),
-              line('l3', 'Bypass iCloud…'),
-              d('bar', h('i')),
-              line('l4', '✓ Selesai')))),
-        d('cable'),
-        d('iph', d('iph-screen', h('span', { class: 'hello', text: 'hello' }), h('span', { class: 'ok', text: '✓' })))),
-      h('span', { class: 'tag tag-ip', text: 'iPhone' }),
-      d('and',
-        d('and-phone', d('and-screen', h('i', { class: 'cam' }), d('app'), d('app'), d('app'), d('app'))),
-        d('and-stand'),
-        h('span', { class: 'tag tag-an', text: 'Android' })),
-      d('bt',
-        h('img', { class: 'bt-body', src: 'assets/berkahtron-badan.webp', alt: '', width: 359, height: 439 }),
-        h('img', { class: 'bt-arm', src: 'assets/berkahtron-lengan.webp', alt: '', width: 359, height: 439 })));
-  }
-  // Prototipe 3D sungguhan (WebGL, pemilik 25 Nov 2026): hanya bila beranda dibuka dengan ?hero=3d.
-  // Adegan CSS di atas tetap jadi cadangan: tampil diam selama 3D dimuat, dan diputar bila WebGL gagal.
-  const HERO_3D = new URLSearchParams(location.search).get('hero') === '3d';
-  function mountBench3d(bench, mode) {
-    const host = h('div', { class: 'bench3d' });
-    bench.append(host);
-    const fallback = () => { host.remove(); bench.className = 'bench ' + mode; };
-    requestAnimationFrame(() => {
-      import('./bench3d.js?v=3.8.1').then((m) => m.mount(host, { play: mode === 'play' })).then((dispose) => {
-        if (!host.isConnected) { dispose(); return; }
-        bench.classList.add('ready3d');
-        cleanupFns.push(dispose);
-      }).catch(() => { if (host.isConnected) fallback(); });
-    });
   }
   // Pintasan [iPhone] [Android]; angka dihitung dari daftar harga, tidak tampil sebelum data termuat.
   function deviceLinks(disabled) {
@@ -563,14 +518,12 @@
     const clearBtn = h('button', { type: 'button', class: 'clear', 'aria-label': 'Hapus kata pencarian', hidden: true }, icon('x', 18));
     const form = h('form', { class: 'searchbox' + (disabled ? ' disabled' : ''), role: 'search', onsubmit: (e) => { e.preventDefault(); input.blur(); } },
       h('label', { for: 'q', class: 'vh', text: 'Cari tipe HP' }), icon('search', 22), input, clearBtn);
-    // Hero (pemilik 25 Nov 2026): judul iPhone & Android, meja service 3D, kolom cari, lalu pintasan perangkat.
-    // Saat data dimuat adegan diam di frame awal; animasi diputar sekali saat beranda pertama tampil.
-    const mode = disabled ? 'pre' : heroIntroShown() ? 'done' : 'play';
-    const bench = benchScene(HERO_3D && !disabled ? 'pre has3d' : mode);
-    if (HERO_3D && !disabled) mountBench3d(bench, mode);
-    const hero = h('section', { class: 'hero' }, h('div', { class: 'wrap' },
+    // Hero "Langsung Ketik" (pemilik 25 Nov 2026): judul iPhone & Android, kolom cari, lalu pintasan perangkat.
+    const mascot = h('img', { class: 'mascot', src: 'assets/maskot-melambai.webp', alt: '', width: 66, height: 81 });
+    if (!disabled && !heroIntroShown()) mascot.classList.add('intro');
+    const hero = h('section', { class: 'hero' }, h('div', { class: 'hero-latar', 'aria-hidden': 'true' }), h('div', { class: 'wrap' },
+      mascot,
       h('h1', null, 'Service ', h('span', { class: 'gold', text: 'iPhone & Android' }), ' di Batam'),
-      bench,
       form,
       deviceLinks(disabled),
       specialtyLink(disabled),

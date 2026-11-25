@@ -4,8 +4,7 @@ Website daftar harga servis HP BERKAH CELL.
 
 - `site-live/` — kode website:
   - `index.html`, `styles.css`, `app.js`, `assets/` (termasuk font Plus Jakarta Sans dengan lisensi OFL)
-  - `bench3d.js` + `vendor/three/` — prototipe meja service 3D (WebGL), aktif lewat `/?hero=3d`
-  - `404.html` untuk alamat yang tidak ada
+    - `404.html` untuk alamat yang tidak ada
   - `robots.txt` dan `sitemap.xml`
   - `_headers` untuk header keamanan
 - `PRD.md` — dokumen kebutuhan produk.
@@ -15,7 +14,7 @@ Website daftar harga servis HP BERKAH CELL.
 - `design/mockup-v1/` — mockup yang disetujui sebagai acuan.
 - `tools/cek_data.py` — audit ekspor Price_List (hanya membaca).
 - `tools/buat_aset.js` — membuat gambar tautan (`og-cover.jpg`) dan ikon dari `design/sumber-aset/`.
-- `tools/buat_rig_maskot.js` — memotong Berkahtron asli menjadi lapisan badan dan lengan untuk animasi meja service di beranda.
+- `tools/latar-hero/` — membuat gambar latar samar hero (laptop bypass + iPhone 14 Pro Max ungu).
 - `tools/buat_motif.js` — membuat motif emboss latar (`motif-emboss-terang.svg`, `motif-emboss-gelap.svg`).
 - `tools/buat_video.js` — membuat video promosi 9:16 dari website, versi organik dan iklan (tanpa Bypass), beserta cover.
   - Alur `--alur cari` (default): browser → cari harga → WhatsApp + Lokasi.

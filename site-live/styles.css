@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.6
+/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.7
    Arah desain: Katalog Bertingkat (PRD bagian 5), polesan premium navy & emas.
    Font: Plus Jakarta Sans (OFL, assets/fonts/OFL-plus-jakarta-sans.txt), disimpan di situs sendiri. */
 @font-face{
@@ -60,89 +60,24 @@ main:focus{outline:none}
   -webkit-mask-image:radial-gradient(ellipse 85% 68% at 84% 62%,#000 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 85% 68% at 84% 62%,#000 0%,#000 30%,transparent 100%)}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,rgba(201,165,78,0),rgba(216,181,102,.9),rgba(201,165,78,0))}
 .hero .wrap{position:relative;z-index:1}
+/* Latar samar: laptop bypass + iPhone 14 Pro Max Deep Purple, memudar dari bawah */
+.hero-latar{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;opacity:.4;
+  background:url(assets/latar-hero-m.webp) 30% -64px/auto 96% no-repeat;
+  -webkit-mask-image:linear-gradient(0deg,transparent 18%,#000 62%);mask-image:linear-gradient(0deg,transparent 28%,#000 64%)}
+body.searching .hero-latar{display:none}
+@media (min-width:1024px){.hero-latar{background-image:url(assets/latar-hero-d.webp);background-position:100% 40%;background-size:auto 100%;opacity:.55;
+  -webkit-mask-image:linear-gradient(0deg,transparent 5%,#000 45%),linear-gradient(90deg,transparent 30%,#000 60%);-webkit-mask-composite:source-in;mask-image:linear-gradient(0deg,transparent 5%,#000 45%),linear-gradient(90deg,transparent 30%,#000 60%);mask-composite:intersect}}
 .eyebrow{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--gold-on-navy);text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-top:10px}
 .eyebrow::before{content:"";width:18px;height:2px;border-radius:2px;background:var(--gold-grad)}
-.hero h1{font-size:clamp(26px,7vw,40px);font-weight:800;line-height:1.14;letter-spacing:-.8px;margin-top:14px;max-width:14em}
+.hero h1{font-size:clamp(26px,7vw,40px);font-weight:800;line-height:1.14;letter-spacing:-.8px;margin-top:14px;max-width:14em;padding-right:78px}
 .hero h1 .gold{color:var(--gold-on-navy);background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero .lead{color:#C9D4E8;font-size:15px;margin-top:8px;max-width:30em;padding-right:80px}
-/* ===== Meja service 3D (Konsep 1) =====
-   Gaya dasar = frame akhir (bypass selesai, Berkahtron mempersilakan). .play memutar animasi sekali
-   (hanya transform/opacity); .pre = frame awal saat data masih dimuat. */
-.bench{position:relative;height:176px;margin-top:10px;perspective:620px;perspective-origin:50% -10%;pointer-events:none;user-select:none}
-.mat{position:absolute;left:0;right:0;bottom:6px;height:168px;transform-origin:50% 100%;transform:rotateX(62deg);transform-style:preserve-3d;border-radius:16px;
-  background:radial-gradient(70% 90% at 30% 30%,rgba(216,181,102,.16),rgba(216,181,102,0) 70%),url(assets/motif-emboss-gelap.svg) 0 0/120px 120px,linear-gradient(180deg,#1D467F,#143566);
-  box-shadow:inset 0 0 0 2px rgba(216,181,102,.55),0 30px 30px -10px rgba(0,0,0,.55)}
-.mat::after{content:"";position:absolute;left:10px;right:10px;bottom:-9px;height:9px;border-radius:0 0 12px 12px;background:#0C2347;transform-origin:50% 0;transform:rotateX(-90deg)}
-/* Laptop: alas keyboard rata di karpet, layar berdiri dari engsel belakang */
-.lap{position:absolute;left:5%;top:16%;width:41%;height:34%;transform-style:preserve-3d}
-.lap-base{position:absolute;inset:0;border-radius:6px;background:linear-gradient(180deg,#C9D0DB,#9AA4B4);box-shadow:0 2px 0 #6E7889;transform-style:preserve-3d}
-.lap-keys{position:absolute;left:8%;right:8%;top:12%;bottom:30%;border-radius:3px;background:repeating-linear-gradient(90deg,#2A3342 0 7px,#3A4456 7px 8px),#2A3342;opacity:.9}
-.lap-lid{position:absolute;left:0;right:0;bottom:100%;height:190%;transform-origin:50% 100%;transform:rotateX(-58deg);border-radius:7px 7px 2px 2px;background:#1A2230;padding:5px;box-shadow:inset 0 0 0 1px #3A4456}
-.lap-screen{position:relative;height:100%;border-radius:3px;background:linear-gradient(180deg,#0C1424,#0A1A33);padding:4px 6px;display:flex;flex-direction:column;gap:2px;overflow:hidden;font-size:8.5px;line-height:1.25;color:#CFE0FF;font-weight:600;letter-spacing:0;word-spacing:0;white-space:nowrap}
-.lap-screen .ttl{color:#0A1A33;background:var(--gold-grad);border-radius:2px;padding:1px 4px;font-size:8px;font-weight:800;margin-bottom:1px}
-.lap-screen .l1::before{content:"▸ ";color:var(--gold-on-navy)}
-.lap-screen .l2::before,.lap-screen .l3::before{content:"▸ ";color:var(--gold-on-navy)}
-.lap-screen .l4{color:#7BE0A1;font-weight:800}
-.lap-screen .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden;margin:1px 0}
-.lap-screen .bar i{display:block;height:100%;background:var(--gold-grad);transform-origin:0 50%}
-/* Kabel dari laptop ke port bawah iPhone */
-.cable{position:absolute;left:44%;top:34%;width:16%;height:62%;border:2.5px solid #D6DCE6;border-left:0;border-radius:0 14px 14px 0}
-.cable::after{content:"";position:absolute;inset:-2.5px -2.5px -2.5px 0;border:2.5px solid #F3DC9A;border-left:0;border-radius:inherit;filter:drop-shadow(0 0 4px rgba(243,220,154,.9));opacity:0}
-/* iPhone berbaring di karpet (layar ke atas) */
-.iph{position:absolute;left:38%;top:52%;width:14%;height:42%;border-radius:9px;background:#1B1F27;box-shadow:0 0 0 1.5px #8C96A6,3px 4px 0 rgba(0,0,0,.35);padding:3px}
-.iph-screen{position:relative;height:100%;border-radius:7px;background:linear-gradient(160deg,#F6F4EF,#E5E9F2);overflow:hidden;display:flex;align-items:center;justify-content:center}
-.iph-screen::before{content:"";position:absolute;top:4%;left:35%;width:30%;height:6%;border-radius:4px;background:#1B1F27}
-.iph .hello{position:absolute;font-size:10px;font-weight:700;font-style:italic;color:#1F5FBF;opacity:0}
-.iph .ok{font-size:15px;font-weight:800;color:#2EA66A}
-/* Android berdiri di dudukan */
-.and{position:absolute;right:2%;bottom:30px;width:54px;height:104px;transform:rotateY(-24deg);transform-style:preserve-3d}
-.and-phone{position:absolute;left:4px;right:4px;top:0;bottom:12px;border-radius:9px;background:#0E1118;box-shadow:inset 0 0 0 1.5px #5D6778,-4px 3px 0 #2B3240;padding:3px}
-.and-screen{position:relative;height:100%;border-radius:6px;background:linear-gradient(165deg,#3B7BE0,#1F3F8F 60%,#142D66);display:grid;grid-template-columns:1fr 1fr;align-content:end;gap:4px;padding:14px 5px 8px}
-.and-screen .cam{position:absolute;top:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#05070B;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
-.and-screen .app{height:12px;border-radius:4px;background:rgba(255,255,255,.28)}
-.and-stand{position:absolute;left:8px;right:8px;bottom:0;height:16px;border-radius:3px 3px 6px 6px;background:linear-gradient(180deg,#B7BFCC,#7D8798)}
-/* Label jenis HP */
-.bench .tag{position:absolute;bottom:0;font-size:10.5px;font-weight:800;letter-spacing:.3px;color:#0A1A33;background:var(--gold-grad);border-radius:8px;padding:1px 7px;box-shadow:0 3px 8px rgba(0,0,0,.35)}
-.bench .tag-ip{left:36%}
-.bench .tag-an{right:4%}
-/* Berkahtron: badan + lengan berputar di sendi bahu (assets dari tools/buat_rig_maskot.js) */
-.bt{position:absolute;left:56%;bottom:22px;width:74px;height:90px;transform-origin:50% 100%;transform:rotate(-4deg);filter:drop-shadow(0 8px 10px rgba(0,0,0,.4))}
-.bt img{position:absolute;inset:0;width:100%;height:100%}
-.bt-arm{transform-origin:39% 57.4%;transform:rotate(-80deg)}
-/* Frame awal (data dimuat) */
-.bench.pre .ln:not(.ttl),.bench.pre .ok{opacity:0}
-.bench.pre .bar i{transform:scaleX(0)}
-.bench.pre .hello{opacity:1}
-.bench.pre .bt{transform:none}
-.bench.pre .bt-arm{transform:none}
-/* Animasi sekali jalan (±4,2 dtk) */
-.bench.play{animation:benchIn .5s cubic-bezier(.2,.7,.2,1) both}
-@keyframes benchIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.bench.play .bt-arm{animation:btArm 4s ease-in-out both}
-@keyframes btArm{0%,10%{transform:rotate(0)}15%{transform:rotate(16deg)}20%{transform:rotate(-10deg)}25%{transform:rotate(16deg)}30%,82%{transform:rotate(0)}100%{transform:rotate(-80deg)}}
-.bench.play .bt{animation:btLean 4s ease-in-out both}
-@keyframes btLean{0%,82%{transform:none}100%{transform:rotate(-4deg)}}
-.bench.play .cable::after{animation:cableGlow 3.4s linear both}
-@keyframes cableGlow{0%,15%{opacity:0}25%,88%{opacity:1}100%{opacity:0}}
-.bench.play .ln.l1{animation:lnIn .25s ease-out .9s both}
-.bench.play .ln.l2{animation:lnIn .25s ease-out 1.4s both}
-.bench.play .ln.l3{animation:lnIn .25s ease-out 1.9s both}
-.bench.play .ln.l4,.bench.play .ok{animation:lnIn .3s ease-out 3s both}
-@keyframes lnIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-.bench.play .bar i{animation:barGrow 2.1s cubic-bezier(.4,0,.6,1) .9s both}
-@keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.bench.play .hello{animation:helloOut 3.2s linear both}
-@keyframes helloOut{0%,90%{opacity:1}100%{opacity:0}}
-.hero .bench.play~.searchbox{animation:glint .5s ease-out 3.9s both}
-/* Prototipe 3D (WebGL, ?hero=3d): kanvas di atas adegan CSS; adegan CSS disembunyikan setelah 3D siap */
-.bench.has3d{height:206px}
-.bench3d{position:absolute;inset:-6px -16px -4px;pointer-events:auto;opacity:0;transition:opacity .45s ease}
-.bench3d.ready{opacity:1}
-.bench.ready3d>:not(.bench3d){visibility:hidden}
-.bench3d-canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
-.bench3d.dragging .bench3d-canvas{cursor:grabbing}
-.bench3d::after{content:"⟲ Geser untuk memutar";position:absolute;right:18px;top:4px;font-size:11px;font-weight:700;color:#EFE2BF;background:rgba(10,26,51,.55);border:1px solid rgba(216,181,102,.45);border-radius:10px;padding:2px 8px;pointer-events:none;transition:opacity .3s}
-.bench3d[data-touched]::after{opacity:0}
+.hero .mascot{position:absolute;right:12px;top:4px;width:70px;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
+/* Maskot melompat masuk sekali lalu diam, condong ke kolom cari (hanya transform/opacity). */
+.hero .mascot{width:60px;top:-4px;transform:rotate(-6deg);transform-origin:50% 100%}
+.hero .mascot.intro{animation:hop .6s cubic-bezier(.2,.7,.2,1) .15s both}
+@keyframes hop{0%{opacity:0;transform:translateY(18px) scale(.85)}60%{opacity:1;transform:translateY(-6px) scale(1.04)}100%{opacity:1;transform:rotate(-6deg)}}
+.hero .mascot.intro~.searchbox{animation:glint .5s ease-out .7s both}
 @keyframes glint{0%{box-shadow:0 0 0 0 rgba(216,181,102,0),0 14px 34px -14px rgba(0,0,0,.55)}45%{box-shadow:0 0 0 3px rgba(216,181,102,.9),0 14px 34px -14px rgba(0,0,0,.55)}100%{box-shadow:0 0 0 0 rgba(216,181,102,0),0 14px 34px -14px rgba(0,0,0,.55)}}
 .searchbox{margin-top:16px;height:58px;background:#fff;border-radius:var(--r-md);display:flex;align-items:center;gap:8px;padding:0 6px 0 16px;color:var(--ink);box-shadow:0 14px 34px -14px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.6);transition:box-shadow .18s var(--ease)}
 .searchbox:focus-within{box-shadow:0 0 0 3px var(--gold),0 14px 34px -14px rgba(0,0,0,.55)}
@@ -175,7 +110,7 @@ main:focus{outline:none}
 .trust{list-style:none;display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:13px;font-weight:600;color:#D5DEEC}
 .trust li{display:inline-flex;align-items:center;gap:7px}
 .trust svg{flex:0 0 auto;width:18px;height:18px;padding:3px;border-radius:50%;background:rgba(216,181,102,.16);color:var(--gold-on-navy)}
-body.searching .hero .bench,body.searching .hero .devices,body.searching .hero .eyebrow,body.searching .hero h1,body.searching .hero .lead,body.searching .hero .mascot,body.searching .hero .trust,body.searching .hero .andalan{display:none}
+body.searching .hero .devices,body.searching .hero .eyebrow,body.searching .hero h1,body.searching .hero .lead,body.searching .hero .mascot,body.searching .hero .trust,body.searching .hero .andalan{display:none}
 body.searching .hero{padding-top:4px;padding-bottom:16px}
 body.searching .hero .searchbox{margin-top:8px}
 
@@ -369,6 +304,7 @@ body.searching .hero .searchbox{margin-top:8px}
 .ftr a:hover{text-decoration-color:var(--gold-on-navy)}
 .ftr .ftr-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 18px}
 .ftr .fine-print{display:block;margin-top:6px;color:#AEBBD0}
+.ftr .fine-print.attr{font-size:11px;color:#8FA0BD}
 .ftr .ver{display:block;margin-top:6px;color:#9FB0CC;font-size:12px}
 body.has-cta .ftr{padding-bottom:calc(var(--cta-h) + 24px)}
 body.has-cta main{padding-bottom:32px}
@@ -405,7 +341,6 @@ body.locked{overflow:hidden}
 @media (min-width:640px){
   .grid-brands{grid-template-columns:repeat(4,1fr);gap:12px}
   .devices{grid-template-columns:repeat(2,minmax(0,260px))}
-  .bench{max-width:460px;margin-left:auto;margin-right:auto;height:190px}
   .trust{font-size:13.5px}
   .steps-list{display:grid;grid-template-columns:repeat(3,1fr);padding:4px 0}
   .steps-list li{flex-direction:column;gap:10px;padding:14px 18px}
@@ -421,20 +356,9 @@ body.locked{overflow:hidden}
   .services{display:block;columns:2;column-gap:14px}
   .services .svc{break-inside:avoid;margin-bottom:14px}
   .hero{padding:22px 0 40px}
-  .hero h1{font-size:46px;letter-spacing:-1.2px}
-  .hero .lead{font-size:16.5px}
-  /* Meja service di kanan; judul, kolom cari, dan tombol di kiri */
-  .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) 440px;column-gap:40px;align-items:start}
-  .hero .wrap>*{grid-column:1}
-  .hero .bench{grid-column:2;grid-row:1 / span 6;align-self:center;height:250px;margin:0;max-width:none;perspective:760px}
-  .hero .bench.has3d{height:320px}
-  .hero .bench .mat{height:230px}
-  .hero .bench .bt{width:104px;height:127px}
-  .hero .bench .and{width:72px;height:140px}
-  .hero .bench .lap-screen{font-size:11px;padding:6px 9px;gap:3px}
-  .hero .bench .lap-screen .ttl{font-size:10.5px}
-  .hero .bench .iph .hello{font-size:13px}
-  .hero .bench .iph .ok{font-size:20px}
+  .hero h1{font-size:46px;letter-spacing:-1.2px;padding-right:140px}
+  .hero .lead{font-size:16.5px;padding-right:140px}
+  .hero .mascot{width:96px;top:4px;right:24px}
   .searchbox{height:62px;margin-top:24px}
   .trust{margin-top:18px}
   .dev h1{font-size:36px}

@@ -162,29 +162,12 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **A21** diperbaiki: uji kini menunggu kartu merek asli, bukan kerangka memuat (penyebab gagal sesekali sebelumnya).
 - **Belum diuji:** kehalusan animasi di HP sungguhan (dicek pemilik lewat link preview).
 
-## Versi 3.7 (preview): meja service 3D + kata "service" (25 Nov 2026)
+## Versi 3.7 (preview): latar samar laptop bypass + iPhone 14 Pro Max (25 Nov 2026)
 
-- **HERO, LULUS (emulasi Chromium):**
-  - Adegan meja service tidak menutupi judul maupun kolom cari; kolom cari, tombol iPhone/Android, dan badge tetap terlihat tanpa menggulir di 360×640.
-  - Laptop menampilkan "BERKAH CELL · Bypass Tool" → "iPhone terhubung" → "Membaca perangkat…" → "Bypass iCloud…" → "✓ Selesai" (tanpa nama atau logo software pihak lain).
-  - Animasi (`btArm`, `barGrow`) hanya pada kunjungan pertama; Back dan "kurangi gerakan" langsung menampilkan keadaan selesai. Saat data dimuat atau gagal, adegan diam di frame awal.
-  - Kolom cari bisa diketik saat animasi berjalan; saat mengetik adegan disembunyikan.
-- **Kata "service":** semua uji pesan WhatsApp (A07, A17, A18, A20, A24) dan label memakai "service".
-- **A13** disesuaikan: hero lebih tinggi, jadi uji menggulir kartu Oppo ke tengah layar sebelum mengklik.
-- **Berkahtron bergerak:** lapisan badan dan lengan dibuat dari gambar asli (`tools/buat_rig_maskot.js`), sambungan dicek lewat pratinjau sudut 0°, ±14°, −45°, −80°.
-- **Belum diuji:** kehalusan animasi di HP sungguhan (dicek pemilik lewat link preview).
-
-## Versi 3.8 (preview): prototipe meja service 3D WebGL (25 Nov 2026)
-
-- **HERO3D, LULUS (Chromium tanpa GPU, WebGL perangkat lunak):**
-  - Beranda biasa tidak memuat Three.js; mode 3D hanya lewat `?hero=3d`.
-  - Kanvas WebGL menggantikan adegan CSS; kolom cari tetap di layar pertama; `touch-action: pan-y` sehingga geser vertikal di HP tetap menggulir halaman.
-  - Drag memutar adegan (±0,95 rad); saat mengetik adegan disembunyikan; tanpa error JS dan tanpa request luar.
-  - Bila `bench3d.js` gagal dimuat, adegan CSS diputar sebagai cadangan.
-- **Catatan kinerja:** di Chromium tanpa GPU hanya ±18 fps; HP sungguhan memakai GPU. Kehalusan, panas, dan baterai perlu dicoba pemilik.
-- **Laporan pemilik (25 Nov 2026):** mode 3D lancar di HP pemilik, tanpa patah-patah.
-- **Berkahtron 3D:** kepala bola + wajah asli (proyeksi dari depan, ±72°), badan, jubah, lengan bersendi, kaki; dicek di sudut 0 dan ±0,95 rad serta frame animasi 0–4,2 dtk.
-- **Ditemukan saat uji:** kelas `.grab` bentrok dengan gaya panel (kanvas menyusut saat drag), diganti `.dragging`.
+- Pemilik membatalkan meja service CSS 3D dan prototipe WebGL; desain kembali ke hero "Langsung Ketik".
+- **HERO, LULUS (emulasi Chromium):** latar `.hero-latar` (WebP, aria-hidden, tanpa sentuhan) tampil di belakang teks; ikon iPhone (3 kamera) dan robot Android hijau dengan atribusi CC BY 3.0; kolom cari dan tombol tetap di layar pertama 360×640.
+- **Kata "service"** di semua teks dan pesan WhatsApp; **A13** menggulir kartu Oppo ke tengah sebelum diklik.
+- **Belum diuji:** tampilan di HP sungguhan (dicek pemilik lewat preview).
 
 ## Temuan data (tanpa mengubah Sheet)
 

@@ -199,19 +199,9 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.4, mockup revisi `bf9b25c` (`design/moc
 - Maskot: kelas `intro` (animasi `hop`, hanya transform/opacity) sekali per kunjungan lewat `sessionStorage` `bc-hero-intro`; kolom cari mendapat kilau `glint` setelahnya.
 - Ikon `i-iphone` dan `i-android` di sprite `index.html`: siluet generik tanpa logo merek.
 
-## Meja service 3D (Versi 3.7)
-- `benchScene(mode)` di `site-live/app.js`: div berlapis dengan CSS 3D (`perspective`, `preserve-3d`), tanpa WebGL atau library. Mode `play` (kunjungan pertama), `done` (Back/kunjungan berikutnya), `pre` (data dimuat/gagal).
-- Gaya dasar CSS = frame akhir, jadi `prefers-reduced-motion` (aturan global) otomatis menampilkan keadaan selesai.
-- Berkahtron: `assets/berkahtron-badan.webp` + `berkahtron-lengan.webp` dari `tools/buat_rig_maskot.js`; lengan diputar di `transform-origin: 39% 57.4%` (sendi bahu).
-- Desktop ≥ 1024 px: hero dua kolom, adegan di kanan.
-
-## Prototipe meja service 3D WebGL (Versi 3.8, `?hero=3d`)
-- `site-live/bench3d.js` (modul ES) dimuat dengan `import()` hanya bila `?hero=3d`. Three.js r170 (MIT) disimpan di `site-live/vendor/three/` beserta `RoundedBoxGeometry.js` dan `RoomEnvironment.js` (impor diarahkan ke `three.module.min.js`), jadi CSP `script-src 'self'` tidak berubah.
-- Render sesuai kebutuhan: hanya saat animasi pembuka, drag, dan inersia. Tekstur layar laptop/iPhone/Android dan karpet digambar dengan canvas.
-- Kontrol sendiri (bukan OrbitControls): drag horizontal memutar, drag vertikal (mouse) memiringkan; di HP sentuhan vertikal tetap menggulir halaman.
-- Jarak kamera dihitung dari ukuran kanvas agar karpet selalu mengisi bingkai.
-- Berkahtron 3D: bentuk dasar Three.js (Sphere, Capsule, Torus, Cylinder terbuka untuk jubah); wajah = `assets/berkahtron-badan.webp` dipetakan lurus dari depan ke tutup bola ±72°. Lengan kanan: bahu → siku → tangan, pose diam/lambai/silakan dicampur per waktu.
-- Kait uji: `benchYaw`, `benchSeek(t)`, `benchView(yaw)` di elemen `.bench3d`.
+## Latar samar hero (Versi 3.7)
+- `.hero-latar` di awal `section.hero` (dibuat `heroBlock()`), gambar `assets/latar-hero-m.webp`/`-d.webp`, opacity ±0,4 dan `mask-image` memudar dari bawah (desktop juga dari kiri).
+- Gambar dibuat sekali dengan Three.js (`tools/latar-hero/`); website tidak memuat Three.js.
 
 ## Data
 

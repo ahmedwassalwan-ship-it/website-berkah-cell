@@ -48,7 +48,7 @@
       "✓ Saringan di halaman merek juga menerima \"vivoy91\"",
       "✓ Saringan di halaman iPhone menerima nama layanan \"bypass\"",
       "✓ Saringan di halaman Samsung menerima \"galaxy a10\"",
-      "✓ Hasil pencarian muncul dalam 20 ms (target < 300 ms, emulasi desktop)"
+      "✓ Hasil pencarian muncul dalam 18 ms (target < 300 ms, emulasi desktop)"
     ]
   },
   "A03": {
@@ -377,30 +377,19 @@
   "HERO": {
     "status": "LULUS",
     "notes": [
-      "✓ Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, meja service, dan tombol perangkat disembunyikan",
+      "✓ Kolom cari langsung bisa diketik saat animasi berjalan; saat mengetik, judul, maskot, dan tombol perangkat disembunyikan seperti sebelumnya",
       "✓ Judul hero menyebut iPhone & Android",
       "✓ Di layar 360×640, kolom cari, tombol iPhone/Android, dan badge terlihat tanpa menggulir; tanpa gulir ke samping",
-      "✓ Meja service tidak menutupi judul maupun kolom cari",
-      "✓ Meja service (hiasan, aria-hidden): laptop tool bypass generik tanpa merek pihak lain, berakhir \"✓ Selesai\", Berkahtron mempersilakan",
+      "✓ Maskot tidak menutupi kolom cari",
       "✓ Tombol [iPhone] dan [Android] dengan angka dari daftar harga (18 tipe iPhone, 9 merek Android), area sentuh ≥ 44 px",
+      "✓ Latar samar laptop bypass + iPhone 14 Pro Max ungu di belakang teks hero (hiasan, tidak menerima sentuhan)",
+      "✓ Ikon tombol: iPhone dengan modul 3 kamera (tanpa logo Apple), robot Android hijau dengan atribusi CC BY 3.0 di footer",
       "✓ Tombol Android menggulir ke \"Pilih merek\" tanpa mengubah alamat atau riwayat",
       "✓ Tombol iPhone membuka 18 tipe iPhone; Back kembali ke beranda tanpa mengulang animasi",
       "✓ Tanpa error JavaScript dan tanpa request luar baru",
-      "✓ Animasi meja service diputar sekali; dengan pengaturan kurangi gerakan, tanpa animasi dan langsung tampil keadaan selesai",
+      "✓ Maskot melompat masuk sekali (animasi \"hop\"); dengan pengaturan kurangi gerakan, tanpa animasi",
       "✓ Tombol hanya tampil untuk jenis HP yang ada di daftar harga; tidak tampil saat daftar harga gagal dimuat",
       "✓ Dinilai lewat emulasi Chromium; kehalusan animasi perlu dicoba pemilik di HP sungguhan."
-    ]
-  },
-  "HERO3D": {
-    "status": "LULUS",
-    "notes": [
-      "✓ Tanpa ?hero=3d, beranda tidak memuat Three.js (tetap ringan)",
-      "✓ Dengan ?hero=3d: kanvas WebGL tampil menggantikan adegan CSS; kolom cari tetap di layar pertama; geser vertikal di HP tetap menggulir halaman",
-      "✓ Drag memutar adegan 3D",
-      "✓ Saat mengetik, adegan 3D disembunyikan",
-      "✓ Tanpa error JavaScript dan tanpa request luar (Three.js disimpan di situs sendiri)",
-      "✓ Bila 3D gagal dimuat, adegan CSS diputar sebagai cadangan",
-      "✓ Dinilai di Chromium tanpa GPU (WebGL perangkat lunak); kehalusan dan panas HP perlu dicoba pemilik di HP sungguhan."
     ]
   },
   "A11": {
