@@ -1,10 +1,10 @@
 # PRD Website Daftar Harga Servis BERKAH CELL
 
-Versi 0.8 · 29 Oktober 2026 · Bahasa Indonesia
+Versi 0.9 · 26 November 2026 · Bahasa Indonesia
 
 **Status:** Tujuh pengembangan navigasi dan bantuan katalog beserta seluruh aturan pendukungnya telah disetujui pemilik pada 5 Oktober 2026. Pada 6 Oktober 2026 pemilik menyetujui arah desain Katalog Bertingkat, menyetujui mockup revisi sebagai acuan implementasi preview, serta menetapkan aturan harga, garansi, arti “Jasa”, nomor WhatsApp, dan normalisasi merek (bagian 9). Setelah meninjau preview, pemilik menyetujui paket peningkatan profesional: tautan berbagi, tampilan tautan saat dibagikan, ikon, dan informasi toko (bagian 9). Desain final website, keputusan operasional yang masih terbuka, dan kesiapan publikasi belum ditetapkan.
 
-**Berkas acuan:** PRD.md. Versi 0.8 menggantikan versi 0.7 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
+**Berkas acuan:** PRD.md. Versi 0.9 menggantikan versi 0.8 sebagai dokumen kebutuhan terbaru. Persetujuan kebutuhan tercatat pada bagian 9; status implementasi dan hasil pengujian dicatat terpisah.
 
 **Pemilik produk:** Pemilik BERKAH CELL. **Pengguna dokumen:** Pemilik, desainer, developer, serta AI yang membantu pengembangan berikutnya.
 
@@ -426,6 +426,7 @@ Keputusan berikut tidak menghalangi penyimpanan PRD. Isilah sebelum bagian yang 
 - **Versi 0.6, 8 Oktober 2026:** atas permintaan pemilik, F02 dan A02 mencakup ketikan tanpa spasi atau dengan spasi berbeda (“vivoy91”, “y 91”), karena banyak pelanggan mengetik tipe HP tanpa spasi; alias pencarian “galaxy” untuk Samsung (F10) ditambahkan atas persetujuan pemilik. D01 mencatat motif emboss jalur PCB di latar. Pada polesan terakhir, F19 dan A24 ditambah status buka/tutup dari jam pemilik (WIB) serta tiga langkah servis di beranda; nomor WhatsApp ditulis 0896-2505-0525. D10 mencatat keahlian andalan Bypass iCloud iPhone, dan F02 mencakup pencarian nama layanan. Atas permintaan pemilik, tipe iPhone diurutkan menurut generasi: X, XR, XS, dan XS Max berada di antara 8 Plus dan 11. Prioritas P0/P1 tidak berubah.
 - **Versi 0.7, 9 Oktober 2026:** atas permintaan pemilik, F19 dan A24 menambah tombol “Lokasi” di samping “Tanya via WhatsApp” setelah layanan dipilih, supaya pelanggan bisa langsung chat atau datang ke toko. Website menjadi Versi 3.4. Prioritas P0/P1 tidak berubah.
 - **Versi 0.8, 29 Oktober 2026:** atas permintaan pemilik, F20 menambah halaman Kebijakan Privasi dan Syarat Layanan dari draft pemilik untuk aplikasi TikTok. Website menjadi Versi 3.5. Prioritas lain tidak berubah.
+- **Versi 0.9, 26 November 2026:** atas permintaan pemilik, kata "servis" diganti "service" di semua teks website termasuk pesan WhatsApp otomatis, dan judul beranda menjadi "Service iPhone & Android di Batam". Percobaan desain hero lain (3D, meja service, latar) dibatalkan pemilik. Website menjadi Versi 3.6. Prioritas tidak berubah.
 
 Persetujuan seluruh baseline dapat menghasilkan versi 1.0. Koreksi atau perluasan terbatas menaikkan versi minor; perubahan besar pada cakupan atau aturan bisnis memerlukan versi mayor dan penjelasan dampak.
 
@@ -441,7 +442,7 @@ Simpan PRD bersama bukti desain dan kode agar pekerjaan dapat dilanjutkan tanpa 
 
 Simpan berkas ini sebagai docs/PRD.md di repository website. Jika repository belum memakai folder dokumentasi, PRD.md pada root juga dapat dipilih. Tentukan satu lokasi sebagai acuan utama dan tautkan dari README proyek. Markdown adalah sumber yang diedit; HTML merupakan salinan baca yang diperbarui dari sumber yang sama.
 
-Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.8 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
+Gunakan riwayat commit untuk melacak perubahan. Contoh pesan commit: docs: approve navigation and catalog assistance requirements v0.2. Versi sebelumnya dapat disimpan sebagai arsip; developer dan AI memakai versi 0.9 sebagai acuan terbaru. Penyimpanan di GitHub tidak menandai website sebagai sudah dipublikasikan atau fitur sebagai sudah diuji.
 
 ### Susunan folder yang disarankan
 
