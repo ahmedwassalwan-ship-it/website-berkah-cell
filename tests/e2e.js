@@ -231,7 +231,7 @@ async function testDetailData() {
   await p.goto(base + '?merek=iphone&tipe=7'); await ready(p);
   const i7 = await p.$$eval('.var', (e) => e.map((x) => x.innerText.replace(/\s+/g, ' ')));
   const kunci = i7.find((t) => /Rp 50\.000/.test(t));
-  expect('A04', kunci && /Jasa servis/.test(kunci) && /Tanpa garansi/.test(kunci), 'Kualitas "Jasa" tampil sebagai label "Jasa servis", bukan harga atau gratis', i7);
+  expect('A04', kunci && /Jasa service/.test(kunci) && /Tanpa garansi/.test(kunci), 'Kualitas "Jasa" tampil sebagai label "Jasa service", bukan harga atau gratis', i7);
   await p.goto(base + '?merek=iphone&tipe=8+plus'); await ready(p);
   const p8 = await p.$$eval('.var', (e) => e.map((x) => ({ t: x.innerText.replace(/\s+/g, ' '), q: x.querySelector('.q') ? x.querySelector('.q').textContent : null })));
   const bk = p8.find((x) => /Rp 150\.000/.test(x.t) && x.q === null);
@@ -298,15 +298,15 @@ async function testWhatsApp() {
   await p.click('.var >> nth=0');
   const a = decodeWa(await p.getAttribute('.cta a.btn-pri', 'href'));
   expect('A07', a.host === 'wa.me' && a.path === '/6289625050525', 'Tautan ke wa.me/6289625050525', a);
-  expect('A07', a.text === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.', 'Layanan terpilih → pesan berisi tipe, layanan, kualitas, harga', a.text);
+  expect('A07', a.text === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.', 'Layanan terpilih → pesan berisi tipe, layanan, kualitas, harga', a.text);
   const c = decodeWa(await p.getAttribute('a.link-btn[href*="wa.me"]', 'href'));
-  expect('A07', c.path === '/6289625050525' && c.text.includes('mengonfirmasi harga servis iPhone 11') && c.text.includes('Ganti LCD (Incel)'), 'Konfirmasi ke owner memakai nomor yang sama dengan isi sesuai tujuan', c.text);
+  expect('A07', c.path === '/6289625050525' && c.text.includes('mengonfirmasi harga service iPhone 11') && c.text.includes('Ganti LCD (Incel)'), 'Konfirmasi ke owner memakai nomor yang sama dengan isi sesuai tujuan', c.text);
   const all = await p.$$eval('a[href*="wa.me"]', (e) => e.map((x) => new URL(x.href).pathname));
   expect('A07', all.length > 0 && all.every((x) => x === '/6289625050525'), 'Semua tautan WhatsApp menuju satu nomor toko', all);
   await p.goto(base + '?merek=iphone&tipe=8'); await ready(p);
-  await p.click('.var:has-text("Jasa servis")');
+  await p.click('.var:has-text("Jasa service")');
   const j = decodeWa(await p.getAttribute('.cta a.btn-pri', 'href'));
-  expect('A07', j.text === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 8: Bypass (jasa servis). Harga di website Rp100.000.', 'Baris "Jasa" → pesan tanpa menyebut kualitas komponen', j.text);
+  expect('A07', j.text === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 8: Bypass (jasa service). Harga di website Rp100.000.', 'Baris "Jasa" → pesan tanpa menyebut kualitas komponen', j.text);
   expect('A07', p.__requests.every((u) => !u.startsWith('https://wa.me')), 'Tidak ada pesan yang terkirim otomatis (WhatsApp tidak dibuka tanpa ketukan)');
   await p.context().close();
 }
@@ -520,10 +520,10 @@ async function testGanti() {
   await p.click('.list a:has-text("XR")'); await p.waitForSelector('.dev h1');
   expect('A17', (await p.textContent('.dev h1')) === 'iPhone XR' && (await p.$$('.var')).length === 3, 'Identitas dan daftar layanan berganti ke iPhone XR');
   await p.click('.cta button'); await p.waitForSelector('.sheet');
-  expect('A17', (await p.textContent('#panel-judul')) === 'Tanya servis iPhone XR' && (await p.textContent('.preview')).includes('iPhone XR'), 'Panel WhatsApp memakai konteks iPhone XR');
+  expect('A17', (await p.textContent('#panel-judul')) === 'Tanya service iPhone XR' && (await p.textContent('.preview')).includes('iPhone XR'), 'Panel WhatsApp memakai konteks iPhone XR');
   await p.keyboard.press('Escape'); await sleep(250);
   await p.click('.var >> nth=0');
-  expect('A17', decodeWa(await p.getAttribute('.cta a.btn-pri', 'href')).text.includes('servis iPhone XR: Ganti LCD (Incel)'), 'Pesan layanan terpilih memakai iPhone XR');
+  expect('A17', decodeWa(await p.getAttribute('.cta a.btn-pri', 'href')).text.includes('service iPhone XR: Ganti LCD (Incel)'), 'Pesan layanan terpilih memakai iPhone XR');
   await p.goBack(); await p.waitForSelector('.notice');
   expect('A17', p.url().endsWith('?merek=iphone'), 'Back → daftar tipe (layar yang dilalui)');
   await p.goBack(); await p.waitForSelector('.dev h1');
@@ -540,7 +540,7 @@ async function testNotFound() {
   await shot(p, 'tidak-ditemukan-390');
   await p.click('main .state button:has-text("Tanyakan lewat WhatsApp")'); await p.waitForSelector('.sheet');
   const skip = decodeWa(await p.getAttribute('.skip', 'href')).text;
-  expect('A18', skip === 'Halo BERKAH CELL, saya mencari harga servis samsung a55, tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.', '"Tanyakan lewat WhatsApp" → pesan sesuai PRD', skip);
+  expect('A18', skip === 'Halo BERKAH CELL, saya mencari harga service samsung a55, tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.', '"Tanyakan lewat WhatsApp" → pesan sesuai PRD', skip);
   await p.click('.opt[data-need="lcd"]');
   expect('A18', decodeWa(await p.getAttribute('.sheet .btn-pri', 'href')).text === 'Halo BERKAH CELL, saya ingin menanyakan harga ganti LCD atau layar samsung a55. Harganya belum tercantum di website.', 'Dengan kebutuhan LCD → pesan sesuai contoh PRD');
   await p.click('.x-btn'); await sleep(250);
@@ -572,13 +572,13 @@ async function testPanel() {
   await p.click('.cta button'); await p.waitForSelector('.sheet');
   const opts = await p.$$eval('.opt', (e) => e.map((x) => x.textContent.trim()));
   expect('A20', JSON.stringify(opts) === JSON.stringify(['Ganti LCD atau layar', 'Ganti baterai', 'Layanan lainnya', 'Belum tahu, ingin menjelaskan keluhan']), 'Empat pilihan kebutuhan sesuai PRD', opts);
-  expect('A20', decodeWa(await p.getAttribute('.skip', 'href')).text === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11.', '"Lewati" langsung ke WhatsApp tanpa memilih');
+  expect('A20', decodeWa(await p.getAttribute('.skip', 'href')).text === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11.', '"Lewati" langsung ke WhatsApp tanpa memilih');
   const msgs = {};
   for (const id of ['lcd', 'baterai', 'lainnya', 'keluhan']) {
     await p.click(`.opt[data-need="${id}"]`);
     msgs[id] = decodeWa(await p.getAttribute('.sheet .btn-pri', 'href')).text;
   }
-  expect('A20', msgs.keluhan === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11. Kebutuhan: belum tahu, ingin menjelaskan keluhan.' && msgs.lcd.endsWith('Kebutuhan: ganti LCD atau layar.'), 'Setiap pilihan menghasilkan pesan berkonteks; "Belum tahu" tanpa teks tambahan tetap bisa dikirim', msgs);
+  expect('A20', msgs.keluhan === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11. Kebutuhan: belum tahu, ingin menjelaskan keluhan.' && msgs.lcd.endsWith('Kebutuhan: ganti LCD atau layar.'), 'Setiap pilihan menghasilkan pesan berkonteks; "Belum tahu" tanpa teks tambahan tetap bisa dikirim', msgs);
   expect('A20', (await p.$$('.sheet [required]')).length === 0, 'Tidak ada isian wajib');
   await p.click('.opt[data-need="baterai"]'); await p.fill('#panel-ket', 'Baterai cepat habis');
   expect('A20', (await p.textContent('.preview')).endsWith('Kebutuhan: ganti baterai. Keterangan: Baterai cepat habis'), 'Keterangan tambahan masuk ke pesan');
@@ -589,7 +589,7 @@ async function testPanel() {
   await p.click('.x-btn'); await sleep(250);
   let s = await p.evaluate(() => ({ open: !document.getElementById('panel-layer').hidden, y: window.scrollY, url: location.search }));
   expect('PANEL', !s.open && Math.abs(s.y - yBefore) <= 2 && s.url === '?merek=iphone&tipe=11', 'X menutup panel; perangkat dan posisi gulir tetap', { s, yBefore });
-  expect('PANEL', (await focusName()) === 'Tanya servis via WhatsApp', 'Fokus kembali ke tombol pembuka setelah X');
+  expect('PANEL', (await focusName()) === 'Tanya service via WhatsApp', 'Fokus kembali ke tombol pembuka setelah X');
   // Isian tetap untuk perangkat yang sama
   await p.click('.cta button'); await p.waitForSelector('.sheet');
   expect('PANEL', (await p.getAttribute('.opt[data-need="baterai"]', 'aria-pressed')) === 'true' && (await p.inputValue('#panel-ket')) === 'Baterai cepat habis', 'Isian dipertahankan selama perangkat sama');
@@ -841,7 +841,7 @@ async function testStore() {
     });
     const msg = bar && decodeWa(await pl.getAttribute('.cta a.btn-pri', 'href')).text;
     expect('A24', bar && bar.wa === 'Tanya via WhatsApp' && bar.loc === 'Lokasi' && bar.href === STORE.maps && bar.target === '_blank' && /noopener/.test(bar.rel)
-      && bar.fits && bar.sameRow && bar.waH <= 60 && bar.locH >= 44 && bar.right <= w && !bar.wide && msg === 'Halo BERKAH CELL, saya ingin menanyakan servis iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.',
+      && bar.fits && bar.sameRow && bar.waH <= 60 && bar.locH >= 44 && bar.right <= w && !bar.wide && msg === 'Halo BERKAH CELL, saya ingin menanyakan service iPhone 11: Ganti LCD (Incel). Harga di website Rp300.000.',
       `Layanan terpilih (${w} px): tombol WhatsApp dan Lokasi sebaris, tidak terpotong, pesan WhatsApp tetap sama`, { bar, msg });
     await pl.context().close();
   }
@@ -852,7 +852,7 @@ async function testStore() {
   await q.goto(base + '?merek=iphone&tipe=11'); await ready(q);
   await q.click('.var >> nth=0'); await sleep(100);
   const nl = await q.evaluate(() => ({ loc: !!document.querySelector('.cta a.btn-loc'), wa: document.querySelector('.cta a.btn-pri').textContent.trim() }));
-  expect('A24', !nl.loc && nl.wa === 'Tanya servis ini via WhatsApp', 'Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh', nl);
+  expect('A24', !nl.loc && nl.wa === 'Tanya service ini via WhatsApp', 'Tanpa data toko: tidak ada tombol Lokasi, label WhatsApp kembali penuh', nl);
   rec('A24', 'LULUS', 'Tautan Maps dari pemilik (diganti 7 Okt 2026 ke maps.app.goo.gl). Tautan pendek tidak bisa dibuka dari sesi ini; tujuannya dicek pemilik di HP setelah rilis.');
   await q.context().close();
 }
@@ -902,7 +902,7 @@ async function testPolish() {
     'Motif emboss (permintaan pemilik 8 Okt 2026) termuat dari situs sendiri di latar halaman, hero, dan footer', motif);
   const steps = await p.$$eval('.steps li', (e) => e.map((x) => x.querySelector('b').textContent + ' | ' + x.querySelector('p').textContent));
   expect('POLES', JSON.stringify(steps) === JSON.stringify(['Cek harga di sini | Cari tipe HP kamu, lalu pilih layanan yang dibutuhkan.', 'Tanya lewat WhatsApp | Pesan sudah berisi tipe HP dan layanan pilihanmu.', 'Bawa HP ke toko | ' + STORE.address + '. Pemeriksaan gratis.']),
-    'Beranda: "Cara servis" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)', steps);
+    'Beranda: "Cara service" 3 langkah, hanya berisi fakta (cara kerja situs, alamat, pemeriksaan gratis)', steps);
   const trust = await p.$$eval('.hero .trust li', (e) => e.map((x) => x.textContent.trim()));
   expect('POLES', JSON.stringify(trust) === JSON.stringify(['Pemeriksaan gratis', 'Harga termasuk jasa pemasangan', 'Garansi tertera per layanan']), 'Baris kepercayaan hanya berisi ketentuan yang diputuskan pemilik', trust);
   const badge = await p.$eval('a.andalan', (a) => ({ text: a.textContent.trim(), href: a.getAttribute('href'), h: a.getBoundingClientRect().height })).catch(() => null);
@@ -942,6 +942,11 @@ async function testPolish() {
   const flHome = await ftrLinks(fl); await fl.goto(base + '404.html'); const fl404 = await ftrLinks(fl);
   expect('POLES', [flHome, fl404].every((x) => x === 'Kebijakan Privasi=/privacy,Syarat Layanan=/terms'), 'Link kecil "Kebijakan Privasi" dan "Syarat Layanan" ada di footer beranda dan 404', { flHome, fl404 });
   await fl.context().close();
+  // Judul hero (pemilik 26 Nov 2026) dan kata "service" di semua teks
+  const hj = await newPage({ viewport: { width: 360, height: 640 } }); await hj.goto(base); await ready(hj);
+  const hv = await hj.evaluate(() => ({ h1: document.querySelector('.hero h1').textContent, sb: Math.round(document.querySelector('.searchbox').getBoundingClientRect().bottom), wide: document.documentElement.scrollWidth > innerWidth, servis: /servis/i.test(document.body.innerText + document.title) }));
+  await shot(hj, 'hero-judul-360x640'); await hj.context().close();
+  expect('POLES', hv.h1 === 'Service iPhone & Android di Batam' && hv.sb <= 640 && !hv.wide && !hv.servis, 'Judul hero "Service iPhone & Android di Batam"; kolom cari tetap di layar pertama 360×640; tidak ada kata "servis"', hv);
   const read = (f) => fs.readFileSync(path.join(__dirname, '..', 'site-live', f), 'utf8');
   expect('POLES', /Sitemap: https:\/\/berkahcellbatam\.com\/sitemap\.xml/.test(read('robots.txt')) && ['/', '/privacy', '/terms'].every((u) => read('sitemap.xml').includes('<loc>https://berkahcellbatam.com' + u + '</loc>')), 'robots.txt dan sitemap.xml mengarah ke domain resmi');
   const hdrs = read('_headers');

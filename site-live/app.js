@@ -1,4 +1,4 @@
-/* BERKAH CELL — Daftar Harga Servis HP · Versi 3.5
+/* BERKAH CELL — Daftar Harga Service HP · Versi 3.6
  * Acuan: PRD v0.5, docs/RENCANA-TEKNIS.md.
  * Aturan keamanan: teks dari Sheet SELALU dimasukkan sebagai teks (textContent /
  * createTextNode). Tidak ada innerHTML berisi data dan tidak ada atribut onclick.
@@ -17,7 +17,7 @@
     // File publik "Berkah Cell - Harga Publik (website)": hanya kolom pelanggan,
     // disalin dari file utama lewat IMPORTRANGE. JANGAN arahkan ke file utama.
     SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/1mgN8N15Tu-KvNLs2IblKTKVbbtoIiaPOBd-MiFoL5gA/gviz/tq?tqx=out:csv&gid=0',
-    WA_NUMBER: '6289625050525', // satu nomor toko untuk servis dan komplain (PRD v0.4)
+    WA_NUMBER: '6289625050525', // satu nomor toko untuk service dan komplain (PRD v0.4)
     WA_DISPLAY: '0896-2505-0525',
     LOAD_TIMEOUT_MS: 15000,
     URL_DEBOUNCE_MS: 300,
@@ -171,7 +171,7 @@
   function kualitasInfo(raw) {
     const k = lower(raw);
     if (!k || k === 'tidak ada') return { kind: 'none', text: '' };
-    if (k === 'jasa') return { kind: 'jasa', text: 'Jasa servis' };
+    if (k === 'jasa') return { kind: 'jasa', text: 'Jasa service' };
     return { kind: 'quality', text: clean(raw) };
   }
   function garansiText(raw) {
@@ -371,7 +371,7 @@
   function setView(title, ...nodes) {
     main.textContent = '';
     appendAll(main, nodes);
-    document.title = title ? title + ' | BERKAH CELL' : 'BERKAH CELL — Daftar Harga Servis HP Batam';
+    document.title = title ? title + ' | BERKAH CELL' : 'BERKAH CELL — Daftar Harga Service HP Batam';
     const help = document.querySelector('.btn-help');
     if (help) { if (readRoute().name === 'help') help.setAttribute('aria-current', 'page'); else help.removeAttribute('aria-current'); }
   }
@@ -442,7 +442,7 @@
     });
   }
 
-  // Alur servis di beranda: hanya fakta yang sudah ada (cara kerja situs, alamat, pemeriksaan gratis).
+  // Alur service di beranda: hanya fakta yang sudah ada (cara kerja situs, alamat, pemeriksaan gratis).
   function stepsBlock() {
     const s = hasStore() ? CONFIG.STORE : null;
     const steps = [
@@ -451,7 +451,7 @@
       ['Bawa HP ke toko', (s ? s.address + '. ' : '') + 'Pemeriksaan gratis.'],
     ];
     return h('section', { class: 'steps', 'aria-labelledby': 'judul-langkah' },
-      h('h2', { class: 'sec-title', id: 'judul-langkah', text: 'Cara servis di BERKAH CELL' }),
+      h('h2', { class: 'sec-title', id: 'judul-langkah', text: 'Cara service di BERKAH CELL' }),
       h('ol', { class: 'steps-list' }, steps.map(([t, d], i) =>
         h('li', null, h('span', { class: 'n', 'aria-hidden': 'true', text: String(i + 1) }), h('div', null, h('b', { text: t }), h('p', { text: d }))))));
   }
@@ -486,13 +486,13 @@
       h('label', { for: 'q', class: 'vh', text: 'Cari tipe HP' }), icon('search', 22), input, clearBtn);
     const hero = h('section', { class: 'hero' }, h('div', { class: 'wrap' },
       h('img', { class: 'mascot', src: 'assets/maskot-melambai.webp', alt: '', width: 66, height: 81 }),
-      h('p', { class: 'eyebrow', text: 'Daftar harga servis HP' }),
-      h('h1', null, 'Cari harga ', h('span', { class: 'gold', text: 'servis' }), ' untuk HP kamu'),
+      h('p', { class: 'eyebrow', text: 'Daftar harga service HP' }),
+      h('h1', null, 'Service ', h('span', { class: 'gold', text: 'iPhone & Android' }), ' di Batam'),
       h('p', { class: 'lead', text: 'Ketik tipe HP atau pilih merek di bawah.' }),
       form,
       specialtyLink(disabled),
       // Hanya fakta yang sudah diputuskan pemilik (PRD v0.4): tidak boleh ada klaim karangan.
-      h('ul', { class: 'trust', 'aria-label': 'Ketentuan servis' },
+      h('ul', { class: 'trust', 'aria-label': 'Ketentuan service' },
         h('li', null, icon('check', 18), 'Pemeriksaan gratis'),
         h('li', null, icon('check', 18), 'Harga termasuk jasa pemasangan'),
         h('li', null, icon('check', 18), 'Garansi tertera per layanan'))));
@@ -580,7 +580,7 @@
       if (!n) {
         status.hidden = true; status.textContent = '';
         appendAll(body, brandGrid(), stepsBlock(), helpCard('Tipe HP kamu belum ada?', 'Daftar harga terus dilengkapi. Tanyakan langsung ke kami.',
-          'Tanya servis via WhatsApp', () => openPanel({ kind: 'general' })), storeBlock());
+          'Tanya service via WhatsApp', () => openPanel({ kind: 'general' })), storeBlock());
         return;
       }
       let res = search(n).map((m) => ({ m }));
@@ -599,7 +599,7 @@
       const svcNames = [...new Set(res.map((x) => (x.svc ? x.svc.name : '')))];
       status.textContent = res.length + ' tipe ' + (svcNames.length === 1 && svcNames[0] ? 'dengan layanan ' + svcNames[0] : 'cocok dengan “' + n + '”');
       appendAll(body, h('ul', { class: 'list' }, res.map((x) => modelItem(x.m, { svc: x.svc }))),
-        helpCard('Bukan tipe yang kamu cari?', 'Tanyakan tipe lain lewat WhatsApp.', 'Tanya servis via WhatsApp',
+        helpCard('Bukan tipe yang kamu cari?', 'Tanyakan tipe lain lewat WhatsApp.', 'Tanya service via WhatsApp',
           () => openPanel({ kind: 'notfound', query: n })));
     }
 
@@ -649,7 +649,7 @@
         h('div', { class: 'filter' }, h('label', { for: 'f', class: 'vh', text: 'Cari tipe ' + b.name }), icon('search', 18), filterInput),
         ganti ? h('p', { class: 'notice' }, icon('swap', 16), h('span', null, 'Ganti dari ', h('b', { text: ganti.fullName }), '. Pilih tipe lain di bawah.')) : null,
         listWrap,
-        helpCard('Tipe ' + b.name + ' kamu belum ada?', 'Daftar harga terus dilengkapi. Tanyakan langsung ke kami.', 'Tanya servis via WhatsApp',
+        helpCard('Tipe ' + b.name + ' kamu belum ada?', 'Daftar harga terus dilengkapi. Tanyakan langsung ke kami.', 'Tanya service via WhatsApp',
           () => openPanel({ kind: 'brand', brand: b }))));
     function update(f) {
       const n = lower(f);
@@ -689,17 +689,17 @@
   }
   function qualPart(v) {
     if (v.kualitas.kind === 'quality') return ' (' + v.kualitas.text + ')';
-    if (v.kualitas.kind === 'jasa') return ' (jasa servis)';
+    if (v.kualitas.kind === 'jasa') return ' (jasa service)';
     return '';
   }
   function selectedMessage(m, sel) {
-    let t = 'Halo BERKAH CELL, saya ingin menanyakan servis ' + m.fullName + ': ' + sel.service.name + qualPart(sel.variant) + '.';
+    let t = 'Halo BERKAH CELL, saya ingin menanyakan service ' + m.fullName + ': ' + sel.service.name + qualPart(sel.variant) + '.';
     if (sel.variant.price.ok) t += ' Harga di website ' + formatRpCompact(sel.variant.price.value) + '.';
     return t;
   }
   function complaintMessage(m, sel) {
-    if (!m) return 'Halo BERKAH CELL, saya ingin mengonfirmasi harga servis yang berbeda dengan daftar harga di website. Mohon dibantu cek.';
-    let t = 'Halo BERKAH CELL, saya ingin mengonfirmasi harga servis ' + m.fullName + '. Harga yang saya terima berbeda dengan yang tertera di website.';
+    if (!m) return 'Halo BERKAH CELL, saya ingin mengonfirmasi harga service yang berbeda dengan daftar harga di website. Mohon dibantu cek.';
+    let t = 'Halo BERKAH CELL, saya ingin mengonfirmasi harga service ' + m.fullName + '. Harga yang saya terima berbeda dengan yang tertera di website.';
     if (sel) t += ' Layanan: ' + sel.service.name + qualPart(sel.variant) + (sel.variant.price.ok ? ', harga di website ' + formatRpCompact(sel.variant.price.value) : '') + '.';
     return t + ' Mohon dibantu cek.';
   }
@@ -710,7 +710,7 @@
     note.textContent = ''; // live region tetap ada di DOM supaya pesan dibacakan pembaca layar
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Harga servis ' + m.fullName + ' — BERKAH CELL', text: 'Cek harga servis ' + m.fullName + ' di BERKAH CELL:', url });
+        await navigator.share({ title: 'Harga service ' + m.fullName + ' — BERKAH CELL', text: 'Cek harga service ' + m.fullName + ' di BERKAH CELL:', url });
         return;
       } catch (e) {
         if (e && e.name === 'AbortError') return; // dibatalkan pelanggan
@@ -788,7 +788,7 @@
         storeLine(),
         hasStore() ? mapsLink('link-btn', 'Buka lokasi toko di Google Maps') : null));
 
-    setView(m.fullName + ' — Harga Servis',
+    setView(m.fullName + ' — Harga Service',
       crumb([{ label: 'Semua merek', href: urlFor({ name: 'home' }) }, { label: b.name, href: brandHref(b) }, { label: m.name }]),
       devHead, content);
 
@@ -824,11 +824,11 @@
           h('span', { class: 'p', text: sel.variant.price.ok ? formatRp(sel.variant.price.value) : 'Tanyakan harga' }));
         ctaCtx.hidden = false;
         // Setelah memilih layanan: chat WhatsApp atau langsung ke lokasi toko (pemilik 9 Okt 2026).
-        const wa = waLink(selectedMessage(m, sel), hasStore() ? 'Tanya via WhatsApp' : 'Tanya servis ini via WhatsApp', 'btn-pri');
+        const wa = waLink(selectedMessage(m, sel), hasStore() ? 'Tanya via WhatsApp' : 'Tanya service ini via WhatsApp', 'btn-pri');
         ctaSlot.append(hasStore() ? h('div', { class: 'cta-row' }, wa, mapsLink('btn-loc', 'Lokasi')) : wa);
       } else {
         ctaCtx.hidden = true;
-        ctaSlot.append(h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'device', model: m }) }, waIcon(), 'Tanya servis via WhatsApp'));
+        ctaSlot.append(h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'device', model: m }) }, waIcon(), 'Tanya service via WhatsApp'));
       }
       complaintLink.href = waUrl(complaintMessage(m, sel));
     }
@@ -858,16 +858,16 @@
         h('section', { class: 'box' },
           h('h2', { text: 'Ketentuan harga' }),
           h('ul', null,
-            h('li', { text: 'Harga servis yang tercantum sudah termasuk jasa pemasangan untuk layanan tersebut.' }),
+            h('li', { text: 'Harga service yang tercantum sudah termasuk jasa pemasangan untuk layanan tersebut.' }),
             h('li', { text: 'Pemeriksaan tidak dikenakan biaya.' }),
             h('li', { text: 'Garansi mengikuti keterangan pada setiap layanan.' }),
             h('li', { text: 'Estimasi waktu adalah perkiraan, bukan janji pasti.' }),
             h('li', { text: 'Tipe atau layanan yang belum tercantum tetap bisa ditanyakan. Daftar harga terus dilengkapi.' }))),
         h('section', { class: 'box' },
-          h('h2', { text: 'Tanya servis' }),
+          h('h2', { text: 'Tanya service' }),
           h('p', null, 'WhatsApp BERKAH CELL: ', h('span', { class: 'phone-no', text: CONFIG.WA_DISPLAY })),
           h('div', { class: 'acts' },
-            h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya servis via WhatsApp'))),
+            h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya service via WhatsApp'))),
         storeBlock(),
         h('section', { class: 'box' },
           h('h2', { text: 'Harga berbeda dari yang ditagih?' }),
@@ -898,8 +898,8 @@
     setView('Daftar harga belum tersedia', h('div', { class: 'wrap' }, h('div', { class: 'state' },
       h('div', { class: 'ico' }, icon('list', 30)),
       h('h1', { text: 'Daftar harga belum tersedia' }),
-      h('p', { text: 'Tanyakan harga servis langsung ke BERKAH CELL.' }),
-      h('div', { class: 'acts' }, h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya servis via WhatsApp'))),
+      h('p', { text: 'Tanyakan harga service langsung ke BERKAH CELL.' }),
+      h('div', { class: 'acts' }, h('button', { type: 'button', class: 'btn-pri', onclick: () => openPanel({ kind: 'general' }) }, waIcon(), 'Tanya service via WhatsApp'))),
       storeBlock()));
   }
 
@@ -937,28 +937,28 @@
     return 'g';
   }
   function panelTitle(ctx) {
-    if (ctx.model) return 'Tanya servis ' + ctx.model.fullName;
-    if (ctx.kind === 'notfound') return 'Tanya servis ' + clean(ctx.query);
-    if (ctx.brand) return 'Tanya servis HP ' + ctx.brand.name;
-    return 'Tanya servis HP';
+    if (ctx.model) return 'Tanya service ' + ctx.model.fullName;
+    if (ctx.kind === 'notfound') return 'Tanya service ' + clean(ctx.query);
+    if (ctx.brand) return 'Tanya service HP ' + ctx.brand.name;
+    return 'Tanya service HP';
   }
   const NEED_TEXT = { lcd: 'ganti LCD atau layar', baterai: 'ganti baterai', lainnya: 'layanan lainnya', keluhan: 'belum tahu, ingin menjelaskan keluhan' };
   function panelMessage(ctx, need, note) {
     const tail = clean(note) ? ' Keterangan: ' + clean(note) : '';
     if (ctx.kind === 'notfound') {
       const q = clean(ctx.query);
-      if (!need) return 'Halo BERKAH CELL, saya mencari harga servis ' + q + ', tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.' + tail;
+      if (!need) return 'Halo BERKAH CELL, saya mencari harga service ' + q + ', tetapi belum menemukannya di website. Saya ingin menanyakan layanan dan harganya.' + tail;
       if (need === 'lcd') return 'Halo BERKAH CELL, saya ingin menanyakan harga ganti LCD atau layar ' + q + '. Harganya belum tercantum di website.' + tail;
       if (need === 'baterai') return 'Halo BERKAH CELL, saya ingin menanyakan harga ganti baterai ' + q + '. Harganya belum tercantum di website.' + tail;
       if (need === 'lainnya') return 'Halo BERKAH CELL, saya ingin menanyakan layanan lain untuk ' + q + '. Harganya belum tercantum di website.' + tail;
       return 'Halo BERKAH CELL, saya ingin menjelaskan keluhan pada ' + q + ' karena belum tahu layanan yang dibutuhkan. Tipe ini belum tercantum di website.' + tail;
     }
     let base;
-    if (ctx.kind === 'device') base = 'Halo BERKAH CELL, saya ingin menanyakan servis ' + ctx.model.fullName + '.';
+    if (ctx.kind === 'device') base = 'Halo BERKAH CELL, saya ingin menanyakan service ' + ctx.model.fullName + '.';
     else if (ctx.kind === 'unlisted') base = 'Halo BERKAH CELL, saya ingin menanyakan layanan untuk ' + ctx.model.fullName + ' yang belum tercantum di website.';
-    else if (ctx.kind === 'brand') base = 'Halo BERKAH CELL, saya ingin menanyakan servis HP ' + ctx.brand.name + '. Tipe saya belum tercantum di website.';
-    else if (ctx.kind === 'error') base = 'Halo BERKAH CELL, saya ingin menanyakan harga servis HP. Daftar harga di website belum bisa dibuka.';
-    else base = 'Halo BERKAH CELL, saya ingin menanyakan servis HP.';
+    else if (ctx.kind === 'brand') base = 'Halo BERKAH CELL, saya ingin menanyakan service HP ' + ctx.brand.name + '. Tipe saya belum tercantum di website.';
+    else if (ctx.kind === 'error') base = 'Halo BERKAH CELL, saya ingin menanyakan harga service HP. Daftar harga di website belum bisa dibuka.';
+    else base = 'Halo BERKAH CELL, saya ingin menanyakan service HP.';
     return base + (need ? ' Kebutuhan: ' + NEED_TEXT[need] + '.' : '') + tail;
   }
 
@@ -1003,7 +1003,7 @@
     const sheet = h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'panel-judul' },
       h('div', { class: 'grab', 'aria-hidden': 'true' }),
       h('div', { class: 'sheet-head' }, h('div', null, title, h('p', { class: 'lead', text: lead })), closeBtn),
-      h('div', { class: 'opts', role: 'group', 'aria-label': 'Kebutuhan servis (opsional)' }, optButtons),
+      h('div', { class: 'opts', role: 'group', 'aria-label': 'Kebutuhan service (opsional)' }, optButtons),
       h('label', { class: 'note-label', for: 'panel-ket', text: 'Keterangan tambahan (opsional)' }), note,
       h('p', { class: 'preview', 'aria-live': 'polite' }, h('b', { text: 'Pesan yang disiapkan' }), previewText),
       go, skip,

@@ -150,6 +150,12 @@ Tanggal: 6 Oktober 2026 · Acuan: PRD v0.5 · Kode: `site-live/` di branch `clau
 - **Email Routing:** `bc@berkahcellbatam.com` sudah aktif dan diuji pemilik (email dari Gmail lain masuk).
 - **Belum diuji:** halaman di domain produksi dan HP sungguhan (dicek pemilik setelah rilis).
 
+## Versi 3.6: kata "service" dan judul baru (26 Nov 2026)
+
+- **POLES, LULUS (emulasi Chromium):** judul hero "Service iPhone & Android di Batam"; kolom cari tetap di layar pertama 360×640; tidak ada kata "servis" di halaman.
+- Semua uji pesan WhatsApp memakai "service" dan tetap LULUS.
+- **Belum diuji:** tampilan di HP sungguhan (dicek pemilik lewat preview).
+
 ## Temuan data (tanpa mengubah Sheet)
 
 Laporan lengkap ada di `tests/hasil/laporan-data-2026-10-06.txt` (`python3 tools/cek_data.py <ekspor.csv>`).
